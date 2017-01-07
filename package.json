@@ -1,0 +1,28 @@
+{
+  "name": "full-js-project-init",
+  "version": "0.0.1",
+  "description": "A JS web project",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/facundovictor/full-js-project-init.git"
+  },
+  "keywords": [
+    "js",
+    "express",
+    "sequelizejs",
+    "swagger",
+    "web"
+  ],
+  "author": "Facundo Victor <facundovt@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/facundovictor/full-js-project-init/issues"
+  },
+  "homepage": "https://github.com/facundovictor/full-js-project-init#readme"
+}
