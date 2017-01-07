@@ -1,3 +1,6 @@
 # vim temporal files
 *.swp
 *.swo
+
+# Node JS modules
+node_modules
