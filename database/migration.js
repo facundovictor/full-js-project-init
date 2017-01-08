@@ -29,6 +29,8 @@ const conf = require(config_path).development;
 /*
  * Get the mysql connector
  *
+ * Reference: http://docs.sequelizejs.com/en/v3/docs/getting-started/
+ *
  * @return {Object} Sequelize instance connected to the database
  */
 function dbConnect () {
@@ -42,12 +44,11 @@ function dbConnect () {
 /*
  * Return the umzug migrator, connected to the database through Sequelize
  *
+ * Reference: https://github.com/sequelize/umzug#configuration
+ *
  * @return {Object} Umzug instance connected to the database
  */
 function initializeMigrator () {
-  let db = dbConnect();
-
-  // See --> https://github.com/sequelize/umzug#configuration
   return new umzug({
     storage        : 'sequelize',
     upName         : 'up',
@@ -73,19 +74,14 @@ function initializeMigrator () {
 }
 
 /*
- * List all pending migrations.
+ * Properly ends the process by closing the database connection first.
  */
-function listPending () {
-  migrator.pending().then((migrations) => {
-    let amount = migrations.length;
-    console.log(`Pending migrations : ${amount}`);
-    for (var i=0; i<amount; i++)
-      console.log(` [${i}] - ${migrations[i].file}`);
-  });
+function exit() {
+  db.close();
+  process.exit();
 }
 
 /* Main **********************************************************************/
 
+var db       = dbConnect();
 var migrator = initializeMigrator();
-
-listPending();
