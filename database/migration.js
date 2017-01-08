@@ -164,8 +164,58 @@ function listExecuted () {
 }
 
 /*
- * Given the action ('up' or 'down'), and a migration file, it executes the
- * migration (or it reverts it).
+ * Creates a readline interface, for getting the user standard input
+ *
+ * Reference : https://nodejs.org/api/readline.html
+ *
+ * @return {Interface} A new readline.Interface instance
+ */
+function getReadLineInterface () {
+    return readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+}
+
+/*
+ * Ask user for confirmation before proceeding with migrations.
+ */
+function askUserConfirmation(action, migration) {
+  return new P((resolve, reject) => {
+    const rl = getReadLineInterface();
+    let description;
+
+    if (action === 'up') {
+      if (migration) {
+        description = `Execute all migrations up to ${migration}`;
+      } else {
+        description = 'Execute all pending migrations';
+      }
+    } else if (action === 'down') {
+      if (migration) {
+        description = `Revert all migrations down to ${migration}`;
+      } else {
+        description = 'Revert the last migration';
+      }
+    }
+
+    console.log(description);
+
+    return rl.question('[Y/n] ', (answer) => {
+      rl.close();
+      if (answer !== 'y' && answer !== 'Y') {
+        console.log('Aborting...');
+        exit();
+      }
+      resolve(true);
+    });
+  });
+};
+
+/*
+ * Given the action ('up' or 'down'), and a migration file, it executes all
+ * pending migrations up to the specified migration (or it reverts all down to
+ * it).
  *
  * When the migration target is unspecified, if the action is 'up', this will
  * run all pending migrations, otherwise, it will revert the last migration.
@@ -175,27 +225,29 @@ function listExecuted () {
  *                            target.
  */
 function runMigration(action, migration) {
-  var params;
+  askUserConfirmation(action, migration).then((confirmed) => {
+    var params;
 
-  if (!action) {
-    console.log('Error: action unspecified. Aborting...');
-    exit();
-  }
+    if (!action) {
+      console.log('Error: action unspecified. Aborting...');
+      exit();
+    }
 
-  if (migration) {
-    params = {
-      to : migration
-    };
-  }
+    if (migration) {
+      params = {
+        to : migration
+      };
+    }
 
-  /* WARNING :
-   * If action == 'down' and params == {}, it will revert all the migrations.
-   */
-  return migrator[action](params).then((migrations) => {
-    let amount = migrations.length;
-    console.log(`Executed migrations : ${amount}`);
-    for (var i=0; i<amount; i++)
-      console.log(` [${i}] - ${migrations[i].file}`);
+    /* WARNING :
+     * If action == 'down' and params == {}, it will revert all the migrations.
+     */
+    return migrator[action](params).then((migrations) => {
+      let amount = migrations.length;
+      console.log(`Executed migrations : ${amount}`);
+      for (var i=0; i<amount; i++)
+        console.log(` [${i}] - ${migrations[i].file}`);
+    });
   });
 }
 
@@ -206,10 +258,7 @@ function runMigration(action, migration) {
  */
 function getMigrationFileDescription () {
   return new Promise((resolve, reject) => {
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
+    const rl = getReadLineInterface();
 
     rl.question('Enter a description, or [q] for abort: ', (answer) => {
       // For readability, avoid using uppercase letters along with lowercase
@@ -268,9 +317,9 @@ if (commander.pending) {
 } else if (commander.new) {
     createMigrationFile().then(() => exit());
 } else if (commander.up) {
-    console.log('up' , commander.up);
+    runMigration('up', commander.up);
 } else if (commander.down) {
-    console.log('down' , commander.down);
+    runMigration('down', commander.down);
 } else {
     commander.help();
     exit();
