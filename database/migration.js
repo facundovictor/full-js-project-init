@@ -68,7 +68,9 @@ module.exports = {
       // Use transactions whenever possible
       /*
       db.transaction((transaction) => {
-        db.query(sql, {transaction});
+        db.query(sql, {transaction})
+          .then((results) => resolve(results))
+          .catch((error)  => reject(error));
       });
       */
     });
@@ -83,7 +85,9 @@ module.exports = {
       // Use transactions whenever possible
       /*
       db.transaction((transaction) => {
-        db.query(sql, {transaction});
+        db.query(sql, {transaction})
+          .then((results) => resolve(results))
+          .catch((error)  => reject(error));
       });
       */
     });
