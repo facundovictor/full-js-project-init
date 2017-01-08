@@ -60,17 +60,32 @@ const migration_template = `/*
 
 // Reference : https://github.com/sequelize/umzug#getting-all-pending-migrations
 module.exports = {
-  up: function () {
+  up: function (db, queryInterface) {
     return new Promise((resolve, reject) => {
       // Describe how to achieve the task.
       // Call resolve/reject at some point.
+
+      // Use transactions whenever possible
+      /*
+      db.transaction((transaction) => {
+        db.query(sql, {transaction});
+      });
+      */
     });
   },
 
-  down: function () {
+  // Create the revert function whenver possible
+  down: function (db, queryInterface) {
     return new Promise((resolve, reject) => {
-      // Describe how to revert the task.
+      // Describe how to achieve the task.
       // Call resolve/reject at some point.
+
+      // Use transactions whenever possible
+      /*
+      db.transaction((transaction) => {
+        db.query(sql, {transaction});
+      });
+      */
     });
   }
 };
@@ -118,7 +133,7 @@ function initializeMigrator () {
     },
     migrations: {
       // The params that gets passed to the migrations.
-      params: [db],
+      params: [db, db.getQueryInterface()],
       // The path to the migrations directory.
       path: migrations_path,
       // The pattern that determines whether or not a file is a migration.
