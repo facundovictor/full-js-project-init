@@ -13,6 +13,7 @@
     "commander": "^2.9.0"
   },
   "scripts": {
+    "migration": "node ./database/migration.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
