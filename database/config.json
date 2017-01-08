@@ -1,0 +1,10 @@
+{
+  "development": {
+    "username": "web_user",
+    "password": "web..",
+    "database": "web_development",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "dialect": "mysql"
+  }
+}
