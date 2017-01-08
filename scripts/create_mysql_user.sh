@@ -12,9 +12,9 @@
 
 # Configuration ---------------------------------------------------------------
 USER="root"
-DB="webdb"
-DB_USER="webdb_user"
-DB_PASS="webdb.."
+DB="web_development"
+DB_USER="web_user"
+DB_PASS="web.."
 CLIENT_HOST="localhost"
 # -----------------------------------------------------------------------------
 
