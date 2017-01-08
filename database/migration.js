@@ -68,10 +68,9 @@ module.exports = {
       // Use transactions whenever possible
       /*
       db.transaction((transaction) => {
-        db.query(sql, {transaction})
-          .then((results) => resolve(results))
-          .catch((error)  => reject(error));
-      });
+        return db.query(sql, {transaction})
+      }).then((results) => resolve(results))
+        .catch((error)  => reject(error));
       */
     });
   },
@@ -85,10 +84,9 @@ module.exports = {
       // Use transactions whenever possible
       /*
       db.transaction((transaction) => {
-        db.query(sql, {transaction})
-          .then((results) => resolve(results))
-          .catch((error)  => reject(error));
-      });
+        return db.query(sql, {transaction})
+      }).then((results) => resolve(results))
+        .catch((error)  => reject(error));
       */
     });
   }
@@ -244,29 +242,40 @@ function askUserConfirmation(action, migration) {
  *                            target.
  */
 function runMigration(action, migration) {
-  askUserConfirmation(action, migration).then((confirmed) => {
-    var params;
+  return new Promise ((resolve, reject) => {
+    // If the migration isn't specified, the value is 'true'
+    if (typeof migration !== "string")
+      migration = false;
 
-    if (!action) {
-      console.log('Error: action unspecified. Aborting...');
-      exit();
-    }
+    askUserConfirmation(action, migration).then((confirmed) => {
+      if (!confirmed)
+        exit();
 
-    if (migration) {
-      params = {
-        to : migration
-      };
-    }
+      if (!action) {
+        console.log('Error: action unspecified. Aborting...');
+        exit();
+      }
 
-    /* WARNING :
-     * If action == 'down' and params == {}, it will revert all the migrations.
-     */
-    return migrator[action](params).then((migrations) => {
-      let amount = migrations.length;
-      console.log(`Executed migrations : ${amount}`);
-      for (var i=0; i<amount; i++)
-        console.log(` [${i}] - ${migrations[i].file}`);
-    });
+      var params;
+
+      if (migration) {
+        params = {
+          to : migration
+        };
+      }
+
+      /* WARNING :
+       * If action == 'down' and params == {}, it will revert all migrations.
+       */
+      return migrator[action](params).then((migrations) => {
+        let amount      = migrations.length,
+            description = action === 'up' ? 'Executed' : 'Reverted';
+        console.log(`${description} migrations : ${amount}`);
+        for (var i=0; i<amount; i++)
+          console.log(` [${i}] - ${migrations[i].file}`);
+        resolve();
+      });
+    }).catch((error) => reject(error));
   });
 }
 
@@ -329,17 +338,28 @@ function createMigrationFile () {
 var db       = dbConnect();
 var migrator = initializeMigrator();
 
-if (commander.pending) {
-    listPending().then(() => exit());
-} else if (commander.executed) {
-    listExecuted().then(() => exit());
-} else if (commander.new) {
-    createMigrationFile().then(() => exit());
-} else if (commander.up) {
-    runMigration('up', commander.up);
-} else if (commander.down) {
-    runMigration('down', commander.down);
-} else {
+Promise.resolve().then(() => {
+  if (commander.pending) {
+    return listPending();
+  } else if (commander.executed) {
+    return listExecuted();
+  } else if (commander.new) {
+    return createMigrationFile();
+  } else if (commander.up) {
+    return runMigration('up', commander.up);
+  } else if (commander.down) {
+    return runMigration('down', commander.down);
+  } else {
     commander.help();
     exit();
-}
+  }
+}).then(() => {
+  exit();
+}).catch((error) => {
+  if (commander.verbose)
+    console.log(error);
+  else
+    console.log(error.message);
+
+  exit();
+});
