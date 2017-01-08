@@ -74,6 +74,20 @@ function initializeMigrator () {
 }
 
 /*
+ * List all pending migrations.
+ *
+ * Reference: https://github.com/sequelize/umzug#getting-all-pending-migrations
+ */
+function listPending () {
+  return migrator.pending().then((migrations) => {
+    let amount = migrations.length;
+    console.log(`Pending migrations : ${amount}`);
+    for (var i=0; i<amount; i++)
+      console.log(` [${i}] - ${migrations[i].file}`);
+  });
+}
+
+/*
  * Properly ends the process by closing the database connection first.
  */
 function exit() {
@@ -85,3 +99,5 @@ function exit() {
 
 var db       = dbConnect();
 var migrator = initializeMigrator();
+
+listPending().then(() => exit());
