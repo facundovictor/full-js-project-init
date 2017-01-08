@@ -61,14 +61,14 @@ const migration_template = `/*
 // Reference : https://github.com/sequelize/umzug#getting-all-pending-migrations
 module.exports = {
   up: function () {
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject) => {
       // Describe how to achieve the task.
       // Call resolve/reject at some point.
     });
   },
 
   down: function () {
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject) => {
       // Describe how to revert the task.
       // Call resolve/reject at some point.
     });
@@ -156,6 +156,42 @@ function listPending () {
  */
 function listExecuted () {
   return migrator.executed().then((migrations) => {
+    let amount = migrations.length;
+    console.log(`Executed migrations : ${amount}`);
+    for (var i=0; i<amount; i++)
+      console.log(` [${i}] - ${migrations[i].file}`);
+  });
+}
+
+/*
+ * Given the action ('up' or 'down'), and a migration file, it executes the
+ * migration (or it reverts it).
+ *
+ * When the migration target is unspecified, if the action is 'up', this will
+ * run all pending migrations, otherwise, it will revert the last migration.
+ *
+ * @param action {String}, ['up' | 'down'] Action to perform
+ * @param migration {String}, Optional file name that contains the migration
+ *                            target.
+ */
+function runMigration(action, migration) {
+  var params;
+
+  if (!action) {
+    console.log('Error: action unspecified. Aborting...');
+    exit();
+  }
+
+  if (migration) {
+    params = {
+      to : migration
+    };
+  }
+
+  /* WARNING :
+   * If action == 'down' and params == {}, it will revert all the migrations.
+   */
+  return migrator[action](params).then((migrations) => {
     let amount = migrations.length;
     console.log(`Executed migrations : ${amount}`);
     for (var i=0; i<amount; i++)
