@@ -200,7 +200,7 @@ function getReadLineInterface () {
  * Ask user for confirmation before proceeding with migrations.
  */
 function askUserConfirmation(action, migration) {
-  return new P((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const rl = getReadLineInterface();
     let description;
 
