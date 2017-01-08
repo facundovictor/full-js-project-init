@@ -4,6 +4,7 @@
   "description": "A JS web project",
   "main": "index.js",
   "dependencies": {
+    "moment": "^2.17.1",
     "mysql": "^2.12.0",
     "sequelize": "^3.29.0",
     "umzug": "^1.11.0"
