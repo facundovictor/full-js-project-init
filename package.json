@@ -9,7 +9,9 @@
     "sequelize": "^3.29.0",
     "umzug": "^1.11.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "commander": "^2.9.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

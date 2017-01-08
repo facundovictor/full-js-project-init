@@ -8,14 +8,35 @@
 
 'use strict';
 
+// Node imports
+const path      = require('path');
+const readline  = require('readline');
+const fs        = require('fs');
+
+// Library imports
 // http://docs.sequelizejs.com/en/latest/docs/migrations/
 const sequelize = require('sequelize');
 // https://github.com/sequelize/umzug
 const umzug     = require('umzug');
-const path      = require('path');
-const readline  = require('readline');
+// http://momentjs.com/docs/
 const moment    = require('moment');
-const fs        = require('fs');
+// https://github.com/tj/commander.js/
+const commander = require('commander');
+
+
+/* Command configuration *****************************************************/
+commander
+  .option('-u, --up [migration]', 'Execute all migrations up to the specified'+
+                                  " one. If it's not specified, then execute "+
+                                  'it up to the newest one')
+  .option('-d, --down [migration]', 'Undo all migrations down to the specifie'+
+                                    "d one. If it's not specified, then rever"+
+                                    ' only the latest migration')
+  .option('-n, --new', 'Generate a new migration')
+  .option('-e, --executed', 'List the already executed migrations')
+  .option('-p, --pending', 'List all pending migrations (Default behavior)')
+  .option('-v, --verbose', 'Show more information on the stdout')
+  .parse(process.argv);
 
 
 /* Globals *******************************************************************/
@@ -66,10 +87,11 @@ module.exports = {
  * @return {Object} Sequelize instance connected to the database
  */
 function dbConnect () {
+  let logger = commander.verbose ? console.log : null;
   return new sequelize(conf.database, conf.username, conf.password, {
     dialect : conf.dialect,
     port    : conf.port,
-    logging : console.log
+    logging : logger
   });
 }
 
@@ -185,7 +207,7 @@ function getMigrationFileDescription () {
 function createMigrationFile () {
   console.log("> New migration file");
 
-  getMigrationFileDescription().then((description) => {
+  return getMigrationFileDescription().then((description) => {
     const file_name = `${moment().format('YYYYMMDDHHmmss')}-${description}.js`,
           file_path = `${migrations_path}/${file_name}`;
 
@@ -198,11 +220,22 @@ function createMigrationFile () {
   });
 }
 
-
 /* Main **********************************************************************/
 
 var db       = dbConnect();
 var migrator = initializeMigrator();
 
-// listPending().then(() => exit());
-createMigrationFile();
+if (commander.pending) {
+    listPending().then(() => exit());
+} else if (commander.executed) {
+    listExecuted().then(() => exit());
+} else if (commander.new) {
+    createMigrationFile().then(() => exit());
+} else if (commander.up) {
+    console.log('up' , commander.up);
+} else if (commander.down) {
+    console.log('down' , commander.down);
+} else {
+    commander.help();
+    exit();
+}
