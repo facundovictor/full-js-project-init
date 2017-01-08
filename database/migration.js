@@ -26,6 +26,9 @@ const database_path   = path.dirname(__dirname) + '/database',
 // Database configuration
 const conf = require(config_path).development;
 
+
+/* Templates *****************************************************************/
+
 // Migration file template
 const migration_template = `/*
  * Author      : <your name>
@@ -51,6 +54,7 @@ module.exports = {
   }
 };
 `;
+
 
 /* Functions *****************************************************************/
 
@@ -118,6 +122,20 @@ function listPending () {
   return migrator.pending().then((migrations) => {
     let amount = migrations.length;
     console.log(`Pending migrations : ${amount}`);
+    for (var i=0; i<amount; i++)
+      console.log(` [${i}] - ${migrations[i].file}`);
+  });
+}
+
+/*
+ * List all executed migrations.
+ *
+ * Reference: https://github.com/sequelize/umzug#getting-all-executed-migrations
+ */
+function listExecuted () {
+  return migrator.executed().then((migrations) => {
+    let amount = migrations.length;
+    console.log(`Executed migrations : ${amount}`);
     for (var i=0; i<amount; i++)
       console.log(` [${i}] - ${migrations[i].file}`);
   });
