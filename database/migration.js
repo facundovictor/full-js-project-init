@@ -99,16 +99,20 @@ module.exports = {
 /*
  * Get the mysql connector
  *
- * Reference: http://docs.sequelizejs.com/en/v3/docs/getting-started/
+ * References: http://docs.sequelizejs.com/en/v3/docs/getting-started/
+ *             http://docs.sequelizejs.com/en/1.7.0/docs/usage/
  *
  * @return {Object} Sequelize instance connected to the database
  */
 function dbConnect () {
   let logger = commander.verbose ? console.log : null;
   return new sequelize(conf.database, conf.username, conf.password, {
-    dialect : conf.dialect,
-    port    : conf.port,
-    logging : logger
+    dialect        : conf.dialect,
+    port           : conf.port,
+    logging        : logger,
+    dialectOptions : {
+      multipleStatements : true
+    }
   });
 }
 
