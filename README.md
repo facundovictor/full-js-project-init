@@ -27,13 +27,13 @@ For running migrations, the script to use is `npm run migration`:
 
 Here some examples:
 
-* For showing the pending migrations : `npm run migration --pending` or `npm run migration -p`
-* For showing the executed migrations : `npm run migration --executed` or `npm run migration -e`
-* For creating a new migration file : `npm run migration --new` or `npm run migration -n`
-* For reverting the last migration : `npm run migration --down` or `npm run migration -d`
-* For reverting all migrations down to `migration-file.js` : `npm run migration --down migration-file.js` or `npm run migration -d migration-file.js`
-* For executing all the pending migrations : `npm run migration --up` or `npm run migration -u`
-* For executing all migrations up to `migration-file.js` : `npm run migration --up migration-file.js` or `npm run migration -u migration-file.js`
+* For showing the pending migrations : `npm run migration -- --pending` or `npm run migration -- -p`
+* For showing the executed migrations : `npm run migration -- --executed` or `npm run migration -- -e`
+* For creating a new migration file : `npm run migration -- --new` or `npm run migration -- -n`
+* For reverting the last migration : `npm run migration -- --down` or `npm run migration -- -d`
+* For reverting all migrations down to `migration-file.js` : `npm run migration -- --down migration-file.js` or `npm run migration -- -d migration-file.js`
+* For executing all the pending migrations : `npm run migration -- --up` or `npm run migration -- -u`
+* For executing all migrations up to `migration-file.js` : `npm run migration -- --up migration-file.js` or `npm run migration -- -u migration-file.js`
 
 ### MySQL quick setup on Fedora
 
