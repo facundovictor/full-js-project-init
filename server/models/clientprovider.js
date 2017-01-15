@@ -1,7 +1,7 @@
 /*
  * Author : Facundo Victor <facundovt@gmail.com>
  *
- * Model for the entity Provider.
+ * Model for the relatinship Client <-> Provider.
  *
  * References:
  *  http://docs.sequelizejs.com/en/v3/docs/models-definition/#data-types
@@ -11,34 +11,22 @@
 "use strict";
 
 module.exports = function(sequelize, DataTypes) {
-  let provider = sequelize.define("provider", {
-    id   : {
+  let client_provider = sequelize.define("client_provider", {
+    client_id   : {
       type       : DataTypes.INTEGER,
       allowNull  : false,
       primaryKey : true
     },
-    name : {
-      type      : DataTypes.STRING(50),
-      allowNull : false
+    provider_id : {
+      type       : DataTypes.INTEGER,
+      allowNull  : false,
+      primaryKey : true
     }
   }, {
     // don't add the timestamp attributes (updatedAt, createdAt)
     timestamps   : false,
-
-    tableName    : 'provider',
-
-    classMethods : {
-      associate: function(models) {
-        provider.belongsToMany(models.client, {
-          through  : {
-            model  : models.client_provider,
-            unique : false
-          },
-          foreignKey : 'client_id'
-        });
-      }
-    }
+    tableName    : 'client_provider'
   });
 
-  return provider;
+  return client_provider;
 };

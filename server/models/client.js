@@ -3,14 +3,15 @@
  *
  * Model for the entity Client.
  *
- * Reference:
- *      http://docs.sequelizejs.com/en/v3/docs/models-definition/#data-types
+ * References:
+ *  http://docs.sequelizejs.com/en/v3/docs/models-definition/#data-types
+ *  http://docs.sequelizejs.com/en/latest/docs/models-definition/#configuration
  */
 
 "use strict";
 
 module.exports = function(sequelize, DataTypes) {
-  let Client = sequelize.define("Client", {
+  let client = sequelize.define("client", {
     id   : {
       type       : DataTypes.INTEGER,
       allowNull  : false,
@@ -22,23 +23,33 @@ module.exports = function(sequelize, DataTypes) {
     },
     email : {
       type      : DataTypes.STRING(50),
-      allowNull : false
+      allowNull : false,
+      validate  : {
+        isEmail : true
+      }
     },
     phone : {
       type      : DataTypes.STRING(50),
       allowNull : false
     }
   }, {
-    classMethods: {
+    // don't add the timestamp attributes (updatedAt, createdAt)
+    timestamps   : false,
+
+    tableName    : 'client',
+
+    classMethods : {
       associate: function(models) {
-        Client.belongsToMany(models.Provider, {
-          as         : 'providers',
-          through    : 'client_provider',
-          foreignKey : 'client_id'
+        client.belongsToMany(models.provider, {
+          through  : {
+            model  : models.client_provider,
+            unique : false
+          },
+          foreignKey : 'provider_id'
         });
       }
     }
   });
 
-  return Client;
+  return client;
 };
