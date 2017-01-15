@@ -5,11 +5,10 @@
  * in the current directory and it loads it.
  */
 
- 'use strict';
+'use strict';
 
 // Node imports
 const fs   = require('fs');
-const path = require('path');
 
 // Library imports
 const Sequelize = require('sequelize');

@@ -34,7 +34,7 @@ module.exports = function(sequelize, DataTypes) {
             model  : models.client_provider,
             unique : false
           },
-          foreignKey : 'client_id'
+          foreignKey : 'provider_id'
         });
       }
     }
