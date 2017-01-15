@@ -12,11 +12,14 @@
 'use strict';
 
 // Node imports
-const path      = require('path');
+const path = require('path');
 
 // Library imports
 const express = require('express');
 const app     = express();
+
+// Project imports
+const models = require('./models');
 
 /* Globals *******************************************************************/
 const base_path            = path.dirname(__dirname),
@@ -25,9 +28,12 @@ const base_path            = path.dirname(__dirname),
       server_config_path   = server_path + '/config.json',
       database_config_path = database_path + '/config.json';
 
-// Database configuration
-let conf = require(server_config_path).development;
-conf.database = require(database_config_path).development;
+// Server configuration
+global.conf = require(server_config_path).development;
+global.conf.database = require(database_config_path).development;
+
+if (global.conf.verbose)
+    global.conf.database.logging = console.log;
 
 /* Routes ********************************************************************/
 
@@ -37,6 +43,8 @@ app.get('/', function (req, res) {
 
 
 /* INIT **********************************************************************/
+
+models.initialize(global.conf.database);
 
 app.listen(conf.port, conf.host, function () {
   console.log(`Server started listening on ${conf.host}:${conf.port}`);

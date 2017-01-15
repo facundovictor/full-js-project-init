@@ -1,6 +1,7 @@
 {
   "development": {
     "host": "localhost", 
-    "port": 8000
+    "port": 8000,
+    "verbose": true
   }
 }
