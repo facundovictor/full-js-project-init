@@ -15,7 +15,7 @@ const fs        = require('fs');
 
 // Library imports
 // http://docs.sequelizejs.com/en/latest/docs/migrations/
-const sequelize = require('sequelize');
+const Sequelize = require('sequelize');
 // https://github.com/sequelize/umzug
 const umzug     = require('umzug');
 // http://momentjs.com/docs/
@@ -106,9 +106,10 @@ module.exports = {
  */
 function dbConnect () {
   let logger = commander.verbose ? console.log : null;
-  return new sequelize(conf.database, conf.username, conf.password, {
+  return new Sequelize(conf.database, conf.username, conf.password, {
     dialect        : conf.dialect,
     port           : conf.port,
+    host           : conf.host,
     logging        : logger,
     dialectOptions : {
       multipleStatements : true
