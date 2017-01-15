@@ -6,6 +6,7 @@
  * References:
  *  http://docs.sequelizejs.com/en/v3/docs/models-definition/#data-types
  *  http://docs.sequelizejs.com/en/latest/docs/models-definition/#configuration
+ *  http://docs.sequelizejs.com/en/latest/docs/associations/#nm
  */
 
 "use strict";
