@@ -6,6 +6,8 @@
  * References:
  *  http://docs.sequelizejs.com/en/v3/docs/models-definition/#data-types
  *  http://docs.sequelizejs.com/en/latest/docs/models-definition/#configuration
+ *  http://docs.sequelizejs.com/en/v3/docs/models-definition/#definition
+ *  http://docs.sequelizejs.com/en/latest/docs/associations/#nm
  */
 
 "use strict";
@@ -36,6 +38,7 @@ module.exports = function(sequelize, DataTypes) {
     // don't add the timestamp attributes (updatedAt, createdAt)
     timestamps   : false,
 
+    // Configure the real database table name
     tableName    : 'client',
 
     classMethods : {
