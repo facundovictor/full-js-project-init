@@ -8,7 +8,7 @@
 'use strict';
 
 // Node imports
-const fs   = require('fs');
+const fs = require('fs');
 
 // Library imports
 const Sequelize = require('sequelize');

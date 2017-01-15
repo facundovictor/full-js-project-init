@@ -19,7 +19,8 @@ const express = require('express');
 const app     = express();
 
 // Project imports
-const models = require('./models');
+const models      = require('./models');
+const controllers = require('./controllers');
 
 /* Globals *******************************************************************/
 const base_path            = path.dirname(__dirname),
@@ -37,10 +38,8 @@ if (global.conf.verbose)
 
 /* Routes ********************************************************************/
 
-app.get('/', function (req, res) {
-  res.send('In progress...');
-});
-
+app.use(controllers.client);
+app.use(controllers.provider);
 
 /* INIT **********************************************************************/
 
