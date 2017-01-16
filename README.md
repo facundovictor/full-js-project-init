@@ -16,9 +16,14 @@ project
 |   README.md
 |   package.json
 |
-└───server
-|   |   config.json
+└───api
 |   |   app.js
+|   |
+|   └───config
+|   |   |   default.json
+|   |
+|   └───swagger
+|   |   |   swagger.yaml
 |   |
 |   └───models
 |   |   |   index.js
@@ -26,9 +31,11 @@ project
 |   |   |   provider.js
 |   |
 |   └───controllers
-|       |   index.js
-|       |   client.js
-|       |   provider.js
+|   |   |   client.js
+|   |   |   provider.js
+|   |
+|   └───mocks
+|   └───test
 |
 └───scripts
 |   |   create_mysql_user.sh
