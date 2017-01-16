@@ -49,6 +49,14 @@ project
         |   20170115014801-add-dummy-data.js
 ```
 
+### Scripts
+
+* Running the server: `npm run server`
+* Edit the API specifications: `npm run edit`  ( This will open the default browser with the swagger editor ).
+* Run the tests with real data: `npm run test`
+* Run the tests with Swagger mocked mode: `npm run test-mocked`
+* Run migrations: Please read the below description ↓
+
 ### Database Migrations
 
 For running migrations, the script to use is `npm run migration`:
