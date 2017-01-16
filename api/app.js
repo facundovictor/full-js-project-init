@@ -23,7 +23,7 @@ const models = require('./models');
 
 /* Globals *******************************************************************/
 const base_path            = path.dirname(__dirname),
-      server_path          = base_path + '/server',
+      server_path          = base_path + '/api',
       database_path        = base_path + '/database',
       server_config_path   = server_path + '/config/default.json',
       database_config_path = database_path + '/config.json';
