@@ -6,24 +6,36 @@
 
 'use strict';
 
-// Library Imports
-const router = require('express').Router();
-
 // Project imports
 const models = require('../models');
 
 
-router.get('/client', (req, res) => {
+function client (req, res) {
 
-  // models.client.findAll({
-  //   include : [ models.provider ]
-  // }).then((clients) => {
-  //   clients.forEach((client) => {
-  //       console.log(`Client : ${client.name}, providers : ${client.providers}`);
-  //   });
-  // });
+  models.client.findAll({
+    include : [ models.provider ]
+  }).then((clients) => {
+    let response = [];
+    clients.forEach((client) => {
+      let current_client = {
+         id        : client.id,
+         name      : client.name,
+         email     : client.email,
+         phone     : client.phone,
+         providers : []
+      };
 
-  res.send('Client: In progress...');
-});
+      client.providers.forEach((provider) => {
+        current_client.providers.push({
+          id : provider.id
+        });
+      });
 
-module.exports = router;
+      response.push(current_client);
+    });
+    res.json(response);
+  });
+
+};
+
+module.exports = { client };

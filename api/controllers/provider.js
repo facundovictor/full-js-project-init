@@ -6,24 +6,16 @@
 
 'use strict';
 
-// Library Imports
-const router = require('express').Router();
-
 // Project imports
 const models = require('../models');
 
 
-router.get('/provider', (req, res) => {
+function provider (req, res) {
 
-  // models.provider.findAll({
-  //   include : [ models.client ]
-  // }).then((providers) => {
-  //   providers.forEach((provider) => {
-  //       console.log(`Provider : ${provider.name}, clients : ${provider.clients}`);
-  //   });
-  // });
+  models.provider.findAll().then((providers) => {
+    res.json(providers);
+  });
 
-  res.send('Provider: In progress...');
-});
+};
 
-module.exports = router;
+module.exports = { provider };
