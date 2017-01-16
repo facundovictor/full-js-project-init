@@ -15,36 +15,44 @@
 const path = require('path');
 
 // Library imports
-const express = require('express');
-const app     = express();
+const SwaggerExpress = require('swagger-express-mw');
+const express        = require('express');
 
 // Project imports
-const models      = require('./models');
-const controllers = require('./controllers');
+const models = require('./models');
 
 /* Globals *******************************************************************/
 const base_path            = path.dirname(__dirname),
       server_path          = base_path + '/server',
       database_path        = base_path + '/database',
-      server_config_path   = server_path + '/config.json',
+      server_config_path   = server_path + '/config/default.json',
       database_config_path = database_path + '/config.json';
 
 // Server configuration
-global.conf = require(server_config_path).development;
-global.conf.database = require(database_config_path).development;
+global.conf = require(server_config_path);
+// Server path
+global.conf.swagger.appRoot = server_path;
+// Swagger path
+global.conf.swagger.swaggerFile = server_path + '/swagger/swagger.yaml';
 
+// Database configuration
+global.conf.database = require(database_config_path).development;
 if (global.conf.verbose)
     global.conf.database.logging = console.log;
 
-/* Routes ********************************************************************/
-
-app.use(controllers.client);
-app.use(controllers.provider);
-
 /* INIT **********************************************************************/
+const app = express();
 
 models.initialize(global.conf.database);
 
-app.listen(conf.port, conf.host, function () {
-  console.log(`Server started listening on ${conf.host}:${conf.port}`);
+SwaggerExpress.create(global.conf.swagger, (err, swaggerExpress) => {
+  if (err)
+    throw err;
+
+  // Install middleware
+  swaggerExpress.register(app);
+
+  app.listen(conf.server.port, conf.server.host, () => {
+    console.log(`Server started listening on ${conf.server.host}:${conf.server.port}`);
+  });
 });
