@@ -4,3 +4,6 @@
 
 # Node JS modules
 node_modules
+
+# Logs
+*.log

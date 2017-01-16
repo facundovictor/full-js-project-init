@@ -7,6 +7,41 @@ So far, I'm building the initial structure using:
 - npm 4.0.5
 - MySQL 5.6.30
 
+### Project directory strcture
+
+Structure in development..
+
+```
+project
+|   README.md
+|   package.json
+|
+└───server
+|   |   config.json
+|   |   app.js
+|   |
+|   └───models
+|   |   |   index.js
+|   |   |   client.js
+|   |   |   provider.js
+|   |
+|   └───controllers
+|       |   index.js
+|       |   client.js
+|       |   provider.js
+|
+└───scripts
+|   |   create_mysql_user.sh
+|
+└───database
+    |   config.json
+    |   migration.js
+    |
+    └───migrations
+        |   20170112165345-database-init.js
+        |   20170115014801-add-dummy-data.js
+```
+
 ### Database Migrations
 
 For running migrations, the script to use is `npm run migration`:
