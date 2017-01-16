@@ -18,25 +18,37 @@ consumes:
 produces:
   - application/json
 paths:
-  /hello:
+  /client:
     # binds a127 app logic to a route
-    x-swagger-router-controller: hello
+    x-swagger-router-controller: client
     get:
-      description: Returns 'Hello' to the caller
+      description: Returns all the clients with the providers identifiers
       # used as the method name of the controller
-      operationId: hello
-      parameters:
-        - name: name
-          in: query
-          description: The name of the person to whom to say hello
-          required: false
-          type: string
+      operationId: client
       responses:
         "200":
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
+            $ref: "#/definitions/ClientWithProviders"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /provider:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: provider
+    get:
+      description: Returns all the providers
+      # used as the method name of the controller
+      operationId: provider
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Providers"
         # responses may fall through to errors
         default:
           description: Error
@@ -46,12 +58,41 @@ paths:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
 definitions:
-  HelloWorldResponse:
+  ClientWithProviders:
     required:
-      - message
+      - clients
     properties:
-      message:
-        type: string
+      clients:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+            phone:
+              type: string
+            providers:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: number
+  Providers:
+    required:
+      - providers
+    properties:
+      providers:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: number
+            name:
+              type: string
   ErrorResponse:
     required:
       - message
