@@ -43,7 +43,9 @@ if (global.conf.verbose)
 /* INIT **********************************************************************/
 const app = express();
 
+// Initialize the database and all the models
 models.initialize(global.conf.database);
+
 
 SwaggerExpress.create(global.conf.swagger, (err, swaggerExpress) => {
   if (err)

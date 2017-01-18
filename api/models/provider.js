@@ -15,9 +15,9 @@
 module.exports = function(sequelize, DataTypes) {
   let provider = sequelize.define("provider", {
     id   : {
-      type       : DataTypes.INTEGER,
-      allowNull  : false,
-      primaryKey : true
+      type          : DataTypes.INTEGER,
+      primaryKey    : true,
+      autoIncrement : true
     },
     name : {
       type      : DataTypes.STRING(50),
