@@ -29,6 +29,7 @@ project
 |   |   |   index.js
 |   |   |   client.js
 |   |   |   provider.js
+|   |   |   clientprovider.js
 |   |
 |   └───controllers
 |   |   |   client.js
@@ -52,6 +53,7 @@ project
 ### Scripts
 
 * Running the server: `npm run server`
+* Running the server in debug mode: `npm run debug`
 * Edit the API specifications: `npm run edit`  ( This will open the default browser with the swagger editor ).
 * Run the tests with real data: `npm run test`
 * Run the tests with Swagger mocked mode: `npm run test-mocked`
