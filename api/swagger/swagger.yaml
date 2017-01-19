@@ -1,98 +1,256 @@
+#
+# Author: Facundo Victor <facundovt@gmail.com>
+#
+# Swagger REAT API that serves clients and providers.
+#
+# References:
+#   http://swagger.io/specification/
+#   http://swagger.io/specification/#mimeTypes
+#
+###############################################################################
+
+
+# Required. Specifies the Swagger Specification version being used. It can be
+# used by the Swagger UI and other clients to interpret the API listing. The
+# value MUST be "2.0".
 swagger: "2.0"
+
+
+# Required. Provides metadata about the API.
 info:
   version: "0.0.1"
   title: "Client Providers"
-# during dev, should point to your local machine
+
+
+# The host (name or ip) serving the API. This MUST be the host only and does
+# not include the scheme nor sub-paths. It MAY include a port. If the host is
+# not included, the host serving the documentation is to be used (including the
+# port). The host does not support path templating.
 host: localhost:8000
-# basePath prefixes all resource paths 
+
+
+# The base path on which the API is served, which is relative to the host.
+# basePath prefixes all resource paths.
 basePath: /
-# 
+
+
+# The transfer protocol of the API. Values MUST be from the list: "http",
+# "https", "ws", "wss".
 schemes:
-  # tip: remove http to make production-grade
   - http
   - https
-# format of bodies a client can send (Content-Type)
+
+
+# Format of bodies a client can send (Content-Type). A list of MIME types the
+# APIs can consume. This is global to all APIs but can be overridden on
+# specific API calls.
+# Mime types --> http://swagger.io/specification/#mimeTypes
 consumes:
   - application/json
-# format of the responses to the client (Accepts)
+
+
+# Format of the responses to the client (Accepts). A list of MIME types the
+# APIs can produce. This is global to all APIs but can be overridden on
+# specific API calls.
+# Mime types --> http://swagger.io/specification/#mimeTypes
 produces:
   - application/json
+
+
+# Required. The available paths and operations for the API.
 paths:
+
   /client:
     # binds a127 app logic to a route
     x-swagger-router-controller: client
     get:
+      # Controller
+      operationId: getAllClients
       description: Returns all the clients with the providers identifiers
-      # used as the method name of the controller
-      operationId: client
+
       responses:
         "200":
           description: Success
           schema:
-            # a pointer to a definition
             $ref: "#/definitions/ClientWithProviders"
         # responses may fall through to errors
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /provider:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: provider
-    get:
-      description: Returns all the providers
-      # used as the method name of the controller
-      operationId: provider
+
+    post:
+      # Controller
+      operationId: addClient
+      description: Adds a new client
+
+      parameters:
+        - name: client
+          description: Client
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Client"
+
       responses:
         "200":
           description: Success
           schema:
-            # a pointer to a definition
+            $ref: "#/definitions/Client"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /client/{id}:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: client
+    get:
+      # Controller
+      operationId: getClient
+      description: Returns the client that corresponds to the identifiers (if exists).
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Client"
+        "404":
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    delete:
+      # Controller
+      operationId: deleteClient
+      description: Removes the client that corresponds to the identifiers (if exists).
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    put:
+      # Controller
+      operationId: updateClient
+      description: Updates the client that corresponds to the identifiers (if exists).
+
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+        - name: client
+          description: Client
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Client"
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Client"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /provider:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: provider
+    get:
+      # Controller
+      description: Returns all the providers
+      operationId: provider
+
+      responses:
+        "200":
+          description: Success
+          schema:
             $ref: "#/definitions/Providers"
         # responses may fall through to errors
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+
+
+  # https://github.com/swagger-api/swagger-node/blob/master/docs/configuration.md#swagger_raw
+  # This serves this current file.
   /swagger:
     x-swagger-pipe: swagger_raw
-# complex objects have schema definitions
+
+
+###############################################################################
+# Object that holds data types produced and consumed by operations.
 definitions:
+
+  # Array of clients that contains its list of provider ids
   ClientWithProviders:
+    type: array
+    items:
+      $ref: "#/definitions/Client"
+
+  # Client with provider id list
+  Client:
     required:
-      - clients
+      - name
+      - email
+      - phone
+    type: object
     properties:
-      clients:
-        type: array
-        items:
-          type: object
-          properties:
-            name:
-              type: string
-            email:
-              type: string
-            phone:
-              type: string
-            providers:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: number
-  Providers:
-    required:
-      - providers
-    properties:
+      name:
+        type: string
+      email:
+        type: string
+      phone:
+        type: string
       providers:
-        type: array
-        items:
-          type: object
-          properties:
-            id:
-              type: number
-            name:
-              type: string
+        $ref: "#/definitions/Providers"
+
+  # Array of providers
+  Providers:
+    type: array
+    items:
+      $ref: "#/definitions/Provider"
+
+  # Provider structure
+  Provider:
+    required:
+      - id
+    type: object
+    properties:
+      id:
+        type: number
+      name:
+        type: string
+
+  # Error Response with a message description
   ErrorResponse:
     required:
       - message
