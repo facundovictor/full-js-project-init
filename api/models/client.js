@@ -108,6 +108,62 @@ module.exports = function(sequelize, DataTypes) {
         });
 
         return clientPromise;
+      },
+
+      /*
+       * Given an existent client identified by the id. It updates the client
+       * with the new data, including the nested associated providers data.
+       *
+       * @param id {Number} , The client id
+       * @param data {JSON} , The Swagger client data values.
+       *
+       * @return {Promise} , The promise of the updated client.
+       *
+       * @throw {Error} , An error if the passed data is wrong.
+       */
+      updateClientWithProviders : function (id, data) {
+        let models = this.models;
+
+        let clientPromise = models.client.find({
+          where   : { id },
+          include : [ models.provider ]
+        }).then( client => {
+          if (client == null) {
+            // TODO: Create custom errors
+            let error = new Error("Trying to update a non-existent client");
+            error.wrongData = true;
+            throw error;
+          }
+
+          return models.provider.findAll({
+            where : {
+              id : {
+                $or : data.providers.map((provider) => provider.id)
+              }
+            }
+          }).then((providers) => {
+            if (providers.length !== data.providers.length) {
+              // TODO: Create custom errors
+              let error = new Error("Trying to associate a non-existent provider");
+              error.wrongData = true;
+              throw error;
+            }
+
+            return client.update(data, {
+              where : { id }
+            }).then(() => {
+              if (providers.length) {
+                // Set the providers
+                return client.setProviders(providers).then(() => {
+                    return client;
+                });
+              }
+              return client;
+            });
+          });
+        });
+
+        return clientPromise;
       }
     }
   });
