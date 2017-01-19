@@ -42,7 +42,17 @@ module.exports = function(sequelize, DataTypes) {
     tableName    : 'client',
 
     classMethods : {
+
+      /*
+       * Load the model associations with other models.
+       *
+       * @param models {Array} , Array of all the registered models
+       */
       associate: function(models) {
+
+        // Save the models reference
+        this.models = models;
+
         client.belongsToMany(models.provider, {
           through  : {
             model  : models.client_provider,
@@ -50,6 +60,54 @@ module.exports = function(sequelize, DataTypes) {
           },
           foreignKey : 'client_id'
         });
+      },
+
+      /*
+       * Given a new client data with the nested associated providers data, it
+       * creates the new client, and associates it to the providers.
+       *
+       * @param data {JSON} , The Swagger client data values.
+       *
+       * @return {Promise} , The promise of the created client.
+       *
+       * @throw {Error} , An error if the passed data is wrong.
+       */
+      createClientWithProviders : function (data) {
+        let models = this.models;
+
+        let clientPromise = models.provider.findAll({
+          where : {
+            id : {
+              $or : data.providers.map((provider) => provider.id)
+            }
+          }
+        }).then( providers => {
+          if (providers.length !== data.providers.length) {
+            // TODO: Create custom errors
+            let error = new Error("Trying to associate a non-existent provider");
+            error.wrongData = true;
+            throw error;
+          }
+
+          // Create the client
+          return models.client.create(data).then( new_client => {
+            if (providers.length) {
+              // Add the providers
+              return new_client.addProviders(providers).then(() => {
+                  return new_client;
+              });
+            }
+            return new_client;
+          });
+        }).then( new_client => {
+          // Get the nested client data
+          return models.client.find({
+            where   : { id : new_client.id },
+            include : [ models.provider ]
+          });
+        });
+
+        return clientPromise;
       }
     }
   });
