@@ -20,6 +20,7 @@
   },
   "scripts": {
     "server": "node ./api/app.js",
+    "debug": "node debug ./api/app.js",
     "migration": "node ./database/migration.js",
     "edit": "swagger_swagger_editorDir=node_modules/swagger-editor ./node_modules/swagger/bin/swagger.js project edit",
     "test": "NODE_CONFIG_DIR=./api/config/ ./node_modules/swagger/bin/swagger.js project test ./api/",
