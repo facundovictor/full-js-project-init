@@ -8,15 +8,23 @@
     "moment": "^2.17.1",
     "mysql": "^2.12.0",
     "sequelize": "^3.29.0",
+    "swagger-express-mw": "^0.7.0",
     "umzug": "^1.11.0"
   },
   "devDependencies": {
-    "commander": "^2.9.0"
+    "commander": "^2.9.0",
+    "should": "^11.1.2",
+    "supertest": "^2.0.1",
+    "swagger": "^0.7.5",
+    "swagger-editor": "^2.10.4"
   },
   "scripts": {
-    "server": "node ./server/app.js",
+    "server": "node ./api/app.js",
+    "debug": "node debug ./api/app.js",
     "migration": "node ./database/migration.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "edit": "swagger_swagger_editorDir=node_modules/swagger-editor ./node_modules/swagger/bin/swagger.js project edit",
+    "test": "NODE_CONFIG_DIR=./api/config/ ./node_modules/swagger/bin/swagger.js project test ./api/",
+    "test-mocked": "NODE_CONFIG_DIR=./api/config/ ./node_modules/swagger/bin/swagger.js project test -m ./api/"
   },
   "repository": {
     "type": "git",

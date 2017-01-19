@@ -6,6 +6,7 @@
  * References:
  *  http://docs.sequelizejs.com/en/v3/docs/models-definition/#data-types
  *  http://docs.sequelizejs.com/en/latest/docs/models-definition/#configuration
+ *  http://docs.sequelizejs.com/en/v3/docs/models-definition/#definition
  *  http://docs.sequelizejs.com/en/latest/docs/associations/#nm
  */
 
@@ -25,8 +26,10 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     // don't add the timestamp attributes (updatedAt, createdAt)
-    timestamps   : false,
-    tableName    : 'client_provider'
+    timestamps : false,
+
+    // Configure the real database table name
+    tableName  : 'client_provider'
   });
 
   return client_provider;
