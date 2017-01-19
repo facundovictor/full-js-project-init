@@ -112,15 +112,15 @@ function addClient (req, res) {
   let client = req.swagger.params.client.value;
 
   models.client.createClientWithProviders(client).then( new_client => {
-      /* The standard specifies that on success, the answer should contain
-       * the header 'location' with the URI that references to the new re-
-       * source.
-       * But, answering with the complete resource, gives a fastest and com-
-       * plete representation of the resource state. Also, it avoids a second
-       * hit to the API.
-       */
-      // res.location(`/client/${new_client.id}`);
-      res.status(201).json(getClientData(new_client));
+    /* The standard specifies that on success, the answer should contain
+     * the header 'location' with the URI that references to the new re-
+     * source.
+     * But, answering with the complete resource, gives a fastest and com-
+     * plete representation of the resource state. Also, it avoids a second
+     * hit to the API.
+     */
+    // res.location(`/client/${new_client.id}`);
+    res.status(201).json(getClientData(new_client));
   }).catch( error => {
     console.log(error);
     if (global.conf.verbose)
@@ -149,7 +149,7 @@ function updateClient (req, res) {
       client = req.swagger.params.client.value;
 
   models.client.updateClientWithProviders(id, client).then( updated_client => {
-      res.status(200).json(getClientData(updated_client));
+    res.status(200).json(getClientData(updated_client));
   }).catch( error => {
     console.log(error);
     if (global.conf.verbose)
