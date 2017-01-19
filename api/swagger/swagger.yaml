@@ -60,9 +60,11 @@ produces:
 # Required. The available paths and operations for the API.
 paths:
 
+
   /client:
     # binds a127 app logic to a route
     x-swagger-router-controller: client
+
     get:
       # Controller
       operationId: getAllClients
@@ -103,9 +105,11 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
+
   /client/{id}:
     # binds a127 app logic to a route
     x-swagger-router-controller: client
+
     get:
       # Controller
       operationId: getClient
@@ -180,19 +184,99 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
+
   /provider:
     # binds a127 app logic to a route
     x-swagger-router-controller: provider
     get:
       # Controller
+      operationId: getAllProviders
       description: Returns all the providers
-      operationId: provider
 
       responses:
         "200":
           description: Success
           schema:
             $ref: "#/definitions/Providers"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    post:
+      # Controller
+      operationId: addProvider
+      description: Adds a new provider
+
+      parameters:
+        - name: provider
+          description: Provider
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/NewProvider"
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Provider"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+
+  /provider/{id}:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: provider
+
+    delete:
+      # Controller
+      operationId: deleteProvider
+      description: Removes the provider that corresponds to the id (if exists).
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    put:
+      # Controller
+      operationId: updateProvider
+      description: Updates the provider that corresponds to the id (if exists).
+
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+        - name: provider
+          description: Provider
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Provider"
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Client"
         # responses may fall through to errors
         default:
           description: Error
@@ -249,6 +333,16 @@ definitions:
         type: number
       name:
         type: string
+
+  # New Provider structure
+  NewProvider:
+    required:
+      - name
+    type: object
+    properties:
+      name:
+        type: string
+
 
   # Error Response with a message description
   ErrorResponse:
