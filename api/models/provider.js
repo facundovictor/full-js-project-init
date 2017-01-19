@@ -31,13 +31,56 @@ module.exports = function(sequelize, DataTypes) {
     tableName    : 'provider',
 
     classMethods : {
+
+      /*
+       * Load the model associations with other models.
+       *
+       * @param models {Array} , Array of all the registered models
+       */
       associate: function(models) {
+
+        // Save the models reference
+        this.models = models;
+
         provider.belongsToMany(models.client, {
           through  : {
             model  : models.client_provider,
             unique : false
           },
           foreignKey : 'provider_id'
+        });
+      },
+
+
+      /*
+       * Given an existent provider identified by the id. It updates it
+       * with the new data.
+       *
+       * @param id {Number} , The provider id
+       * @param data {JSON} , The Swagger provider data values.
+       *
+       * @return {Promise} , The promise of the updated provider.
+       *
+       * @throw {Error} , An error if the passed data is wrong.
+       */
+      updateProvider : function (id, data) {
+        let models = this.models;
+
+        return models.provider.find({
+          where : { id }
+        }).then( provider => {
+          if (provider == null) {
+            // TODO: Create custom errors
+            let error = new Error("Trying to update a non-existent provider");
+            error.wrongData = true;
+            throw error;
+          }
+
+          return provider.update(data, {
+            where : { id }
+          }).then(() => {
+            return provider;
+          });
         });
       }
     }
