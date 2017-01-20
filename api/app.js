@@ -43,6 +43,9 @@ if (global.conf.verbose)
 /* INIT **********************************************************************/
 const app = express();
 
+// Export the app module to allow it to be tested
+module.exports = app;
+
 // Initialize the database and all the models
 models.initialize(global.conf.database);
 

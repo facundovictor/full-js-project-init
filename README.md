@@ -55,8 +55,8 @@ project
 * Running the server: `npm run server`
 * Running the server in debug mode: `npm run debug`
 * Edit the API specifications: `npm run edit`  ( This will open the default browser with the swagger editor ).
-* Run the tests with real data: `npm run test`
-* Run the tests with Swagger mocked mode: `npm run test-mocked`
+* Run the tests with Swagger mocked mode: `npm run test`
+* Run the integration tests with real data: `npm run test-integration`
 * Run migrations: Please read the below description ↓
 
 ### Database Migrations

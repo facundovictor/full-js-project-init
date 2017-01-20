@@ -95,8 +95,8 @@ paths:
             $ref: "#/definitions/Client"
 
       responses:
-        "200":
-          description: Success
+        "201":
+          description: Created
           schema:
             $ref: "#/definitions/Client"
         # responses may fall through to errors
@@ -218,8 +218,8 @@ paths:
             $ref: "#/definitions/NewProvider"
 
       responses:
-        "200":
-          description: Success
+        "201":
+          description: Created
           schema:
             $ref: "#/definitions/Provider"
         # responses may fall through to errors
@@ -306,6 +306,7 @@ definitions:
       - name
       - email
       - phone
+      - providers
     type: object
     properties:
       name:
@@ -315,7 +316,7 @@ definitions:
       phone:
         type: string
       providers:
-        $ref: "#/definitions/Providers"
+        $ref: "#/definitions/ProvidersWithOptionalName"
 
   # Array of providers
   Providers:
@@ -323,10 +324,28 @@ definitions:
     items:
       $ref: "#/definitions/Provider"
 
-  # Provider structure
+  # Array of providers that doesn't requires a name
+  ProvidersWithOptionalName:
+    type: array
+    items:
+      $ref: "#/definitions/ProviderWithOptionalName"
+
+  # Provider structure that doesn't requires a name
+  ProviderWithOptionalName:
+    required:
+      - id
+    type: object
+    properties:
+      id:
+        type: number
+      name:
+        type: string
+
+  # Provider structure that requires a name
   Provider:
     required:
       - id
+      - name
     type: object
     properties:
       id:
