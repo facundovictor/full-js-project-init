@@ -306,6 +306,7 @@ definitions:
       - name
       - email
       - phone
+      - providers
     type: object
     properties:
       name:
