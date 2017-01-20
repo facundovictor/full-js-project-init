@@ -44,7 +44,7 @@ describe('controllers', function() {
           })
           .set('Accept', 'application/json')
           .expect('Content-Type', /json/)
-          .expect(200)
+          .expect(201)
           .end(function(err, res) {
             should.not.exist(err);
             res.body.should.be.an.Object();
@@ -59,10 +59,10 @@ describe('controllers', function() {
       it('Should return return 204', function(done) {
 
         request(server)
-          .delete('/provider/{id}')
+          .delete('/provider/1')
           .set('Accept', 'application/json')
           // TODO: Fix the mocked API that is returning 500
-          // .expect(204)
+          .expect(204)
           .end(function(err, res) {
             should.not.exist(err);
             res.body.should.be.empty();
@@ -76,9 +76,9 @@ describe('controllers', function() {
       it('Should return the modified provider', function(done) {
 
         request(server)
-          .put('/provider/1')
+          .put('/provider/2')
           .send({
-            id   : 1,
+            id   : 2,
             name : 'Some provider',
           })
           .set('Accept', 'application/json')
@@ -89,7 +89,7 @@ describe('controllers', function() {
             res.body.should.be.an.Object();
             // TODO: Fix the mocked api that is returning a client instead of
             //       a provider.
-            // validateProvider(res.body);
+            validateProvider(res.body);
             done();
           });
       });

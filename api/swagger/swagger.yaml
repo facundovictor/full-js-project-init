@@ -95,8 +95,8 @@ paths:
             $ref: "#/definitions/Client"
 
       responses:
-        "200":
-          description: Success
+        "201":
+          description: Created
           schema:
             $ref: "#/definitions/Client"
         # responses may fall through to errors
@@ -218,8 +218,8 @@ paths:
             $ref: "#/definitions/NewProvider"
 
       responses:
-        "200":
-          description: Success
+        "201":
+          description: Created
           schema:
             $ref: "#/definitions/Provider"
         # responses may fall through to errors
