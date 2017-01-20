@@ -316,7 +316,7 @@ definitions:
       phone:
         type: string
       providers:
-        $ref: "#/definitions/Providers"
+        $ref: "#/definitions/ProvidersWithOptionalName"
 
   # Array of providers
   Providers:
@@ -324,10 +324,28 @@ definitions:
     items:
       $ref: "#/definitions/Provider"
 
-  # Provider structure
+  # Array of providers that doesn't requires a name
+  ProvidersWithOptionalName:
+    type: array
+    items:
+      $ref: "#/definitions/ProviderWithOptionalName"
+
+  # Provider structure that doesn't requires a name
+  ProviderWithOptionalName:
+    required:
+      - id
+    type: object
+    properties:
+      id:
+        type: number
+      name:
+        type: string
+
+  # Provider structure that requires a name
   Provider:
     required:
       - id
+      - name
     type: object
     properties:
       id:
