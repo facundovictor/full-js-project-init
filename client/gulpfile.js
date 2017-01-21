@@ -72,13 +72,13 @@ gulp.task('js', () => {
   gulp.src(js_src)
     .pipe(concat('app.js'))
     .pipe(minifier({}, uglify))
-    .pipe(gulp.dest('./public/js/'));
+    .pipe(gulp.dest('./public/'));
 });
 
 // Copy the files
 gulp.task('js_reload', () => {
   gulp.src(js_src)
-    .pipe(gulp.dest('./public/js/'))
+    .pipe(gulp.dest('./public/'))
     .pipe(connect.reload());
 });
 
@@ -142,7 +142,7 @@ gulp.task('dependencies', () => {
     bootstrap_src,
     font_awesome_src
   ], {
-    base: './src/lib'
+    base: './src/assets/lib'
   }).pipe(gulp.dest('./public/lib/'));
 });
 
