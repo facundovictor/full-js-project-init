@@ -8,12 +8,18 @@
  *   https://github.com/visionmedia/supertest
  */
 
-var should = require('should');
-var request = require('supertest');
-var server = require('../../app');
+// Library imports
+const should = require('should');
+const request = require('supertest');
 
+// Project imports
+const server = require('../../app');
+const api_path = '/api/';
 
+// Environment variables
 const isIntegrationTest = process.env.INTEGRATION;
+
+/* Test helpers **************************************************************/
 
 /*
  * Given a client, it validates that it respects the schema.
@@ -34,6 +40,7 @@ function validateClientWithProvider (client) {
     });
 }
 
+/* Tests *********************************************************************/
 
 describe('controllers', function() {
 
@@ -41,15 +48,15 @@ describe('controllers', function() {
 
     let client_id = 1;
 
-    describe('GET /client', function() {
+    describe(`GET ${api_path}client`, function() {
 
       it('should return a list of valid clients', function(done) {
 
         request(server)
-          .get('/client')
+          .get(`${api_path}client`)
           .set('Accept', 'application/json')
-          .expect('Content-Type', /json/)
           .expect(200)
+          .expect('Content-Type', /json/)
           .end(function(err, res) {
             should.not.exist(err);
             res.body.should.be.an.Array();
@@ -61,12 +68,12 @@ describe('controllers', function() {
       });
     });
 
-    describe('POST /client', function() {
+    describe(`POST ${api_path}client`, function() {
 
       it('Should return a new valid client', function(done) {
 
         request(server)
-          .post('/client')
+          .post(`${api_path}client`)
           .send({
             name      : 'Some client',
             email     : 'some@email.com',
@@ -76,8 +83,8 @@ describe('controllers', function() {
             }]
           })
           .set('Accept', 'application/json')
-          .expect('Content-Type', /json/)
           .expect(201)
+          .expect('Content-Type', /json/)
           .end(function(err, res) {
             should.not.exist(err);
             res.body.should.be.an.Object();
@@ -94,15 +101,15 @@ describe('controllers', function() {
       });
     });
 
-    describe('GET /client/{id}', function() {
+    describe(`GET ${api_path}client/{id}`, function() {
 
       it('should return a valid client', function(done) {
 
         request(server)
-          .get('/client/'+client_id)
+          .get(`${api_path}client/${client_id}`)
           .set('Accept', 'application/json')
-          .expect('Content-Type', /json/)
           .expect(200)
+          .expect('Content-Type', /json/)
           .end(function(err, res) {
             should.not.exist(err);
             res.body.should.be.an.Object();
@@ -112,12 +119,12 @@ describe('controllers', function() {
       });
     });
 
-    describe('PUT /client/{id}', function() {
+    describe(`PUT ${api_path}client/{id}`, function() {
 
       it('Should return the modified client', function(done) {
 
         request(server)
-          .put('/client/'+client_id)
+          .put(`${api_path}client/${client_id}`)
           .send({
             id        : client_id,
             name      : 'Some client',
@@ -128,8 +135,8 @@ describe('controllers', function() {
             }]
           })
           .set('Accept', 'application/json')
-          .expect('Content-Type', /json/)
           .expect(200)
+          .expect('Content-Type', /json/)
           .end(function(err, res) {
             should.not.exist(err);
             res.body.should.be.an.Object();
@@ -139,12 +146,12 @@ describe('controllers', function() {
       });
     });
 
-    describe('DELETE /client/{id}', function() {
+    describe(`DELETE ${api_path}client/{id}`, function() {
 
       it('Should return return 204', function(done) {
 
         request(server)
-          .delete('/client/'+client_id)
+          .delete(`${api_path}client/${client_id}`)
           .set('Accept', 'application/json')
           // TODO: Fix the mocked API that is returning 500
           .expect(204)
