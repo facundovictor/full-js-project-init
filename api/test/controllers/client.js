@@ -1,9 +1,28 @@
+/*
+ * Author : Facundo Victor <facundovt@gmail.com>
+ *
+ * Tests for the client controller.
+ *
+ * References:
+ *   https://shouldjs.github.io/
+ *   https://github.com/visionmedia/supertest
+ */
+
 var should = require('should');
 var request = require('supertest');
 var server = require('../../app');
 
 
+const isIntegrationTest = process.env.INTEGRATION;
 
+/*
+ * Given a client, it validates that it respects the schema.
+ *
+ * TODO: Implement this by recovering the schema from swagger, and compare it
+ *       against the real schema.
+ *
+ * @param client {Object}, Object to validate if it's a client.
+ */
 function validateClientWithProvider (client) {
     client.should.have.property('name');
     client.should.have.property('email');
@@ -64,8 +83,10 @@ describe('controllers', function() {
             res.body.should.be.an.Object();
             validateClientWithProvider(res.body);
 
-            /* If it's an integration test, save the id to run the next tests */
-            if (res.body.id)
+            /* If it's an integration test, save the id to use it on the next
+             * tests.
+             */
+            if (isIntegrationTest)
               client_id = res.body.id;
 
             done();
