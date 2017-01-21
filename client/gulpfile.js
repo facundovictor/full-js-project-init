@@ -80,6 +80,7 @@ gulp.task('js', () => {
 // Copy the files
 gulp.task('js_reload', () => {
   gulp.src([app_src, js_src])
+    .pipe(concat('app.js'))
     .pipe(gulp.dest('./public/'))
     .pipe(connect.reload());
 });
@@ -135,7 +136,7 @@ const bootstrap_src = './src/assets/lib/bootstrap-3.3.7/**/*';
 const font_awesome_src = './src/assets/lib/font-awesome-4.7.0/**/*';
 
 // Angular
-const angular_src = './src/assets/lib/angular.min.js';
+const angular_src = './src/assets/lib/angular/**/*';
 
 // JQuery
 const jquery_src = './src/assets/lib/jquery.min.js';
