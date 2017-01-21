@@ -9,11 +9,12 @@
  */
 
 // Library imports
-var should = require('should');
-var request = require('supertest');
+const should = require('should');
+const request = require('supertest');
 
 // Project imports
-var server = require('../../app');
+const server = require('../../app');
+const api_path = '/api/';
 
 // Environment variables
 const isIntegrationTest = process.env.INTEGRATION;
@@ -41,15 +42,15 @@ describe('controllers', function() {
 
     let provider_id = 1;
 
-    describe('GET /provider', function() {
+    describe(`GET ${api_path}provider`, function() {
 
       it('should return a list of valid providers', function(done) {
 
         request(server)
-          .get('/provider')
+          .get(`${api_path}provider`)
           .set('Accept', 'application/json')
-          .expect('Content-Type', /json/)
           .expect(200)
+          .expect('Content-Type', /json/)
           .end(function(err, res) {
             should.not.exist(err);
             res.body.should.be.an.Array();
@@ -61,18 +62,18 @@ describe('controllers', function() {
       });
     });
 
-    describe('POST /provider', function() {
+    describe(`POST ${api_path}provider`, function() {
 
       it('Should return a new valid provider', function(done) {
 
         request(server)
-          .post('/provider')
+          .post(`${api_path}provider`)
           .send({
             name : 'Some provider',
           })
           .set('Accept', 'application/json')
-          .expect('Content-Type', /json/)
           .expect(201)
+          .expect('Content-Type', /json/)
           .end(function(err, res) {
             should.not.exist(err);
             res.body.should.be.an.Object();
@@ -89,19 +90,19 @@ describe('controllers', function() {
       });
     });
 
-    describe('PUT /provider/{id}', function() {
+    describe(`PUT ${api_path}provider/{id}`, function() {
 
       it('Should return the modified provider', function(done) {
 
         request(server)
-          .put('/provider/'+provider_id)
+          .put(`${api_path}provider/${provider_id}`)
           .send({
             id   : 2,
             name : 'Some provider',
           })
           .set('Accept', 'application/json')
-          .expect('Content-Type', /json/)
           .expect(200)
+          .expect('Content-Type', /json/)
           .end(function(err, res) {
             should.not.exist(err);
             res.body.should.be.an.Object();
@@ -113,12 +114,12 @@ describe('controllers', function() {
       });
     });
 
-    describe('DELETE /provider/{id}', function() {
+    describe(`DELETE ${api_path}provider/{id}`, function() {
 
       it('Should return return 204', function(done) {
 
         request(server)
-          .delete('/provider/'+provider_id)
+          .delete(`${api_path}provider/${provider_id}`)
           .set('Accept', 'application/json')
           // TODO: Fix the mocked API that is returning 500
           .expect(204)

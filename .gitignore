@@ -1,3 +1,6 @@
+# Build folder
+client/public
+
 # vim temporal files
 *.swp
 *.swo

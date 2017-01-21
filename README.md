@@ -35,8 +35,31 @@ project
 |   |   |   client.js
 |   |   |   provider.js
 |   |
-|   └───mocks
 |   └───test
+|       └───controllers
+|           |   client.js
+|           |   provider.js
+|
+└───client
+|   |   gulpfile.js
+|   |
+|   └───public
+|   |
+|   └───src
+|       └───lib
+|       |   |   angular.min.js
+|       |   |
+|       |   └───bootstrap
+|       |   └───font-awesome
+|       |
+|       └───scss
+|       |   |   all.scss
+|       |
+|       └───js
+|       |   |   app.js
+|       |
+|       └───html
+|           |   index.html
 |
 └───scripts
 |   |   create_mysql_user.sh
@@ -52,6 +75,8 @@ project
 
 ### Scripts
 
+* Build front-end SPA: `npm run build`
+* Start developing the front-end SPA with browser auto-reload: `npm run dev`
 * Running the server: `npm run server`
 * Running the server in debug mode: `npm run debug`
 * Edit the API specifications: `npm run edit`  ( This will open the default browser with the swagger editor ).

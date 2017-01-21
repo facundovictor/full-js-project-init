@@ -23,6 +23,7 @@ const models = require('./models');
 
 /* Globals *******************************************************************/
 const base_path            = path.dirname(__dirname),
+      client_path          = base_path + '/client/public',
       server_path          = base_path + '/api',
       database_path        = base_path + '/database',
       server_config_path   = server_path + '/config/default.json',
@@ -49,6 +50,8 @@ module.exports = app;
 // Initialize the database and all the models
 models.initialize(global.conf.database);
 
+// Load the front-end app files
+app.use(express.static(client_path));
 
 SwaggerExpress.create(global.conf.swagger, (err, swaggerExpress) => {
   if (err)
