@@ -25,7 +25,8 @@
     "should": "^11.1.2",
     "supertest": "^2.0.1",
     "swagger": "^0.7.5",
-    "swagger-editor": "^2.10.4"
+    "swagger-editor": "^2.10.4",
+    "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"
   },
   "scripts": {
     "server": "node ./api/app.js",

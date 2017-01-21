@@ -16,7 +16,8 @@ const fs = require('fs');
 const gulp         = require('gulp'),
       watch        = require('gulp-watch'),
       concat       = require('gulp-concat'),
-      uglify       = require('gulp-uglify'),
+      uglify       = require('uglify-js'),
+      minifier     = require('gulp-uglify/minifier'),
       sass         = require('gulp-sass'),
       postcss      = require('gulp-postcss'),
       cssnano      = require('gulp-cssnano'),
@@ -64,13 +65,13 @@ gulp.task('connect', connect.server({
 /* js ************************************************************************/
 // Concatenation and minification
 
-const js_src = './src/js/**/*.js';
+const js_src = './src/app/**/*.js';
 
 // Concatenation and minification
 gulp.task('js', () => {
   gulp.src(js_src)
     .pipe(concat('app.js'))
-    .pipe(uglify())
+    .pipe(minifier({}, uglify))
     .pipe(gulp.dest('./public/js/'));
 });
 
@@ -84,7 +85,7 @@ gulp.task('js_reload', () => {
 /* SASS **********************************************************************/
 // Compilation task with connection reload for developing
 
-const sass_src = './src/scss/**/*.scss';
+const sass_src = './src/assets/scss/**/*.scss';
 
 // Less production build task
 gulp.task('sass', () => {
@@ -98,29 +99,27 @@ gulp.task('sass', () => {
 
 // Quick reload the browser on changes
 gulp.task('sass_reload', () => {
-  const processors = [ autoprefixer ];
-
   gulp.src(sass_src)
     .pipe(sass())
-    .pipe(postcss(processors))
+    .pipe(postcss([ autoprefixer ]))
     .pipe(gulp.dest('./public/css/'))
     .pipe(connect.reload());
 });
 
 /* HTML **********************************************************************/
-const html_src = './src/html/**/*.html';
+const html_src = './src/app/**/*.html';
 
 // Copy All dependencies
 gulp.task('html', () => {
   gulp.src([ html_src ], {
-    base: './src/html'
+    base: './src/app'
   }).pipe(gulp.dest('./public/'));
 });
 
 // Quick reload the browser on changes
 gulp.task('html_reload', () => {
   gulp.src([ html_src ], {
-    base: './src/html'
+    base: './src/app'
   }).pipe(gulp.dest('./public/'))
     .pipe(connect.reload());
 });
@@ -128,13 +127,13 @@ gulp.task('html_reload', () => {
 /* Dependencies **************************************************************/
 
 // Bootstrap
-const bootstrap_src = './src/lib/bootstrap-3.3.7/**/*';
+const bootstrap_src = './src/assets/lib/bootstrap-3.3.7/**/*';
 
 // Font Awesome
-const font_awesome_src = './src/lib/font-awesome-4.7.0/**/*';
+const font_awesome_src = './src/assets/lib/font-awesome-4.7.0/**/*';
 
 // Angular
-const angular_src = './src/lib/angular.min.js';
+const angular_src = './src/assets/lib/angular.min.js';
 
 // Copy All dependencies
 gulp.task('dependencies', () => {
