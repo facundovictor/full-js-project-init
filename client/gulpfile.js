@@ -3,7 +3,7 @@
  *
  * This is a gulp script for:
  *   - Production build: Concatenate all js and css files and uglify them.
- *   - Add support for less, and autoprefixer.
+ *   - Add support for sass, and autoprefixer.
  *   - Fast auto reload style changes (watcher)
  */
 
@@ -17,7 +17,7 @@ const gulp         = require('gulp'),
       watch        = require('gulp-watch'),
       concat       = require('gulp-concat'),
       uglify       = require('gulp-uglify'),
-      less         = require('gulp-less'),
+      sass         = require('gulp-sass'),
       postcss      = require('gulp-postcss'),
       cssnano      = require('gulp-cssnano'),
       autoprefixer = require('autoprefixer');
@@ -81,27 +81,27 @@ gulp.task('js_reload', () => {
     .pipe(connect.reload());
 });
 
-/* Less **********************************************************************/
+/* SASS **********************************************************************/
 // Compilation task with connection reload for developing
 
-const less_src = './src/less/**/*.less';
+const sass_src = './src/scss/**/*.scss';
 
 // Less production build task
-gulp.task('less', () => {
-  const processors = [ autoprefixer, cssnano ];
-
-  gulp.src(less_src)
-    .pipe(less())
-    .pipe(postcss(processors))
+gulp.task('sass', () => {
+  gulp.src(sass_src)
+    .pipe(sass().on('error', sass.logError))
+    .pipe(postcss([ autoprefixer ]))
+    .pipe(cssnano())
+    .pipe(concat('all.css'))
     .pipe(gulp.dest('./public/css/'));
 });
 
 // Quick reload the browser on changes
-gulp.task('less_reload', () => {
+gulp.task('sass_reload', () => {
   const processors = [ autoprefixer ];
 
-  gulp.src(less_src)
-    .pipe(less())
+  gulp.src(sass_src)
+    .pipe(sass())
     .pipe(postcss(processors))
     .pipe(gulp.dest('./public/css/'))
     .pipe(connect.reload());
@@ -133,9 +133,13 @@ const bootstrap_src = './src/lib/bootstrap-3.3.7/**/*';
 // Font Awesome
 const font_awesome_src = './src/lib/font-awesome-4.7.0/**/*';
 
+// Angular
+const angular_src = './src/lib/angular.min.js';
+
 // Copy All dependencies
 gulp.task('dependencies', () => {
   gulp.src([
+    angular_src,
     bootstrap_src,
     font_awesome_src
   ], {
@@ -153,7 +157,7 @@ gulp.task('clear', () => {
 // Watch task
 gulp.task('watch', function () {
   gulp.watch([js_src], ['js_reload']);
-  gulp.watch([less_src], ['less_reload']);
+  gulp.watch([sass_src], ['sass_reload']);
   gulp.watch([html_src], ['html_reload']);
 });
 
@@ -163,7 +167,7 @@ gulp.task('build', [
   'dependencies',
   'js',
   'html',
-  'less'
+  'sass'
 ]);
 
 // Reloadable build, requires a previous connection
@@ -172,7 +176,7 @@ gulp.task('reloadable_build', [
   'dependencies',
   'html',
   'js_reload',
-  'less_reload'
+  'sass_reload'
 ]);
 
 // Build, Launch a server and watch for fast reload
