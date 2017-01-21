@@ -35,8 +35,31 @@ project
 |   |   |   client.js
 |   |   |   provider.js
 |   |
-|   └───mocks
 |   └───test
+|       └───controllers
+|           |   client.js
+|           |   provider.js
+|
+└───client
+|   |   gulpfile.js
+|   |
+|   └───public
+|   |
+|   └───src
+|       └───lib
+|       |   |   angular.min.js
+|       |   |
+|       |   └───bootstrap
+|       |   └───font-awesome
+|       |
+|       └───scss
+|       |   |   all.scss
+|       |
+|       └───js
+|       |   |   app.js
+|       |
+|       └───html
+|           |   index.html
 |
 └───scripts
 |   |   create_mysql_user.sh
