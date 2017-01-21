@@ -20,6 +20,8 @@ describe('controllers', function() {
 
   describe('client', function() {
 
+    let client_id = 1;
+
     describe('GET /client', function() {
 
       it('should return a list of valid clients', function(done) {
@@ -61,6 +63,11 @@ describe('controllers', function() {
             should.not.exist(err);
             res.body.should.be.an.Object();
             validateClientWithProvider(res.body);
+
+            /* If it's an integration test, save the id to run the next tests */
+            if (res.body.id)
+              client_id = res.body.id;
+
             done();
           });
       });
@@ -71,7 +78,34 @@ describe('controllers', function() {
       it('should return a valid client', function(done) {
 
         request(server)
-          .get('/client/2')
+          .get('/client/'+client_id)
+          .set('Accept', 'application/json')
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            validateClientWithProvider(res.body);
+            done();
+          });
+      });
+    });
+
+    describe('PUT /client/{id}', function() {
+
+      it('Should return the modified client', function(done) {
+
+        request(server)
+          .put('/client/'+client_id)
+          .send({
+            id        : client_id,
+            name      : 'Some client',
+            email     : 'some@email.com',
+            phone     : '1242342343',
+            providers : [{
+              id : 3
+            }]
+          })
           .set('Accept', 'application/json')
           .expect('Content-Type', /json/)
           .expect(200)
@@ -89,40 +123,13 @@ describe('controllers', function() {
       it('Should return return 204', function(done) {
 
         request(server)
-          .delete('/client/1')
+          .delete('/client/'+client_id)
           .set('Accept', 'application/json')
           // TODO: Fix the mocked API that is returning 500
           .expect(204)
           .end(function(err, res) {
             should.not.exist(err);
             res.body.should.be.empty();
-            done();
-          });
-      });
-    });
-
-    describe('PUT /client/{id}', function() {
-
-      it('Should return the modified client', function(done) {
-
-        request(server)
-          .put('/client/2')
-          .send({
-            id        : 2,
-            name      : 'Some client',
-            email     : 'some@email.com',
-            phone     : '1242342343',
-            providers : [{
-              id : 3
-            }]
-          })
-          .set('Accept', 'application/json')
-          .expect('Content-Type', /json/)
-          .expect(200)
-          .end(function(err, res) {
-            should.not.exist(err);
-            res.body.should.be.an.Object();
-            validateClientWithProvider(res.body);
             done();
           });
       });

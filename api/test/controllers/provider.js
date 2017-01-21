@@ -13,6 +13,8 @@ describe('controllers', function() {
 
   describe('provider', function() {
 
+    let provider_id = 1;
+
     describe('GET /provider', function() {
 
       it('should return a list of valid providers', function(done) {
@@ -49,23 +51,11 @@ describe('controllers', function() {
             should.not.exist(err);
             res.body.should.be.an.Object();
             validateProvider(res.body);
-            done();
-          });
-      });
-    });
 
-    describe('DELETE /provider/{id}', function() {
+            /* If it's an integration test, save the id to run the next tests */
+            if (res.body.id)
+              provider_id = res.body.id;
 
-      it('Should return return 204', function(done) {
-
-        request(server)
-          .delete('/provider/1')
-          .set('Accept', 'application/json')
-          // TODO: Fix the mocked API that is returning 500
-          .expect(204)
-          .end(function(err, res) {
-            should.not.exist(err);
-            res.body.should.be.empty();
             done();
           });
       });
@@ -76,7 +66,7 @@ describe('controllers', function() {
       it('Should return the modified provider', function(done) {
 
         request(server)
-          .put('/provider/2')
+          .put('/provider/'+provider_id)
           .send({
             id   : 2,
             name : 'Some provider',
@@ -95,5 +85,21 @@ describe('controllers', function() {
       });
     });
 
+    describe('DELETE /provider/{id}', function() {
+
+      it('Should return return 204', function(done) {
+
+        request(server)
+          .delete('/provider/'+provider_id)
+          .set('Accept', 'application/json')
+          // TODO: Fix the mocked API that is returning 500
+          .expect(204)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.empty();
+            done();
+          });
+      });
+    });
   });
 });
