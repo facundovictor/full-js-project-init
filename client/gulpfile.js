@@ -65,13 +65,14 @@ gulp.task('connect', connect.server({
 /* js ************************************************************************/
 // Concatenation and minification
 
-const js_src = './src/app/**/*.js',
-      app_src = './src/app/app.js';
+const js_src       = './src/app/**/*.js',
+      app_src      = './src/app/app.js',
+      services_src = './src/app/**/*Service.js';
 
 // Concatenation and minification
 gulp.task('js', () => {
   // NOTE: The app.js should be first in order to be accessible to controllers
-  gulp.src([app_src, js_src])
+  gulp.src([app_src, services_src, js_src])
     .pipe(concat('app.js'))
     .pipe(minifier({}, uglify))
     .pipe(gulp.dest('./public/'));
@@ -79,7 +80,7 @@ gulp.task('js', () => {
 
 // Copy the files
 gulp.task('js_reload', () => {
-  gulp.src([app_src, js_src])
+  gulp.src([app_src, services_src, js_src])
     .pipe(concat('app.js'))
     .pipe(gulp.dest('./public/'))
     .pipe(connect.reload());
