@@ -12,3 +12,7 @@ var app = angular.module('publicApp', [
       redirectTo : '/clients'
     });
 });
+
+app.constant('apiConfig', {
+  apiUrl : 'http://localhost:8000'
+});
