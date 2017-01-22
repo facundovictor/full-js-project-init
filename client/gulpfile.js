@@ -65,14 +65,15 @@ gulp.task('connect', connect.server({
 /* js ************************************************************************/
 // Concatenation and minification
 
-const js_src       = './src/app/**/*.js',
-      app_src      = './src/app/app.js',
-      services_src = './src/app/**/*Service.js';
+const js_src         = './src/app/**/*.js',
+      app_src        = './src/app/app.js',
+      services_src   = './src/app/**/*Service.js',
+      directives_src = './src/app/**/*Directive.js';
 
 // Concatenation and minification
 gulp.task('js', () => {
   // NOTE: The app.js should be first in order to be accessible to controllers
-  gulp.src([app_src, services_src, js_src])
+  gulp.src([app_src, services_src, directives_src, js_src])
     .pipe(concat('app.js'))
     .pipe(minifier({}, uglify))
     .pipe(gulp.dest('./public/'));
@@ -80,7 +81,7 @@ gulp.task('js', () => {
 
 // Copy the files
 gulp.task('js_reload', () => {
-  gulp.src([app_src, services_src, js_src])
+  gulp.src([app_src, services_src, directives_src, js_src])
     .pipe(concat('app.js'))
     .pipe(gulp.dest('./public/'))
     .pipe(connect.reload());
@@ -89,11 +90,13 @@ gulp.task('js_reload', () => {
 /* SASS **********************************************************************/
 // Compilation task with connection reload for developing
 
-const sass_src = './src/assets/scss/**/*.scss';
+const sass_src = './src/assets/scss/**/*.scss',
+      vars_src = './src/assets/scss/variables.scss';
 
 // Less production build task
 gulp.task('sass', () => {
-  gulp.src(sass_src)
+  gulp.src([vars_src, sass_src])
+    .pipe(concat('all.scss'))
     .pipe(sass().on('error', sass.logError))
     .pipe(postcss([ autoprefixer ]))
     .pipe(cssnano())
@@ -103,9 +106,11 @@ gulp.task('sass', () => {
 
 // Quick reload the browser on changes
 gulp.task('sass_reload', () => {
-  gulp.src(sass_src)
-    .pipe(sass())
+  gulp.src([vars_src, sass_src])
+    .pipe(concat('all.scss'))
+    .pipe(sass().on('error', sass.logError))
     .pipe(postcss([ autoprefixer ]))
+    .pipe(concat('all.css'))
     .pipe(gulp.dest('./public/css/'))
     .pipe(connect.reload());
 });
