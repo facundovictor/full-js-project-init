@@ -1,8 +1,11 @@
-<div class="client-list">
-  <h2>List of Clients<h2>
+<div class="list client-list">
+  <div class="title">List of Clients</div>
   <div class="grid">
     <div class="toolbar">
-
+      <div class="toolbar-title">Clients</div>
+      <div class="buttons">
+        <button class="add">New Client</button>
+      </div>
     </div>
     <div class="table">
       <div class="header">
@@ -10,7 +13,7 @@
         <span class="column">Email</span>
         <span class="column">Phone</span>
         <span class="column">Providers</span>
-        <span class="column"></span>
+        <span class="column column-small"></span>
       </div>
       <div class="body">
         <div class="row" data-ng-repeat="client in vm.clients">
@@ -18,7 +21,7 @@
           <span class="cell">{{client.email}}</span>
           <span class="cell">{{client.phone}}</span>
           <span class="cell">{{client.providers}}</span>
-          <span class="cell"><a href data-ng-click="vm.editClient('edit')">Edit</a></span>
+          <span class="cell cell-small"><a href data-ng-click="vm.editClient(client.id)">Edit</a></span>
         </div>
       </div>
     </div>
