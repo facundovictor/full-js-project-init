@@ -1,4 +1,10 @@
+/*
+ * Author : Facundo Victor <facundovt@gmail.com>
+ *
+ * Angular app for managing clients and providers.
+ */
 
+// The app will be accessible from all the modules
 var app = angular.module('publicApp', [
   'ngRoute'
 ]).config(function ($routeProvider) {
@@ -6,13 +12,15 @@ var app = angular.module('publicApp', [
     .when('/clients', {
       templateUrl  : 'components/client/clientView.html',
       controller   : 'clientController',
-      controllerAs : 'client'
+      controllerAs : 'vm'
     })
     .otherwise({
       redirectTo : '/clients'
     });
 });
 
-app.constant('apiConfig', {
-  apiUrl : 'http://localhost:8000'
+// APP Configuration
+app.constant('appConfig', {
+  apiUrl      : 'http://localhost:8000',
+  environment : 'development'
 });
