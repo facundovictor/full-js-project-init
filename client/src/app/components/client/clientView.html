@@ -9,10 +9,10 @@
     </div>
     <div class="table">
       <div class="header">
-        <span class="column">Name</span>
-        <span class="column">Email</span>
-        <span class="column">Phone</span>
-        <span class="column">Providers</span>
+        <span class="column" ng-click="vm.setOrderBy('name')">Name</span>
+        <span class="column" ng-click="vm.setOrderBy('email')">Email</span>
+        <span class="column" ng-click="vm.setOrderBy('phone')">Phone</span>
+        <span class="column" ng-click="vm.setOrderBy('providers')">Providers</span>
         <span class="column column-small"></span>
       </div>
       <div class="body">
