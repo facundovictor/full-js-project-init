@@ -1,0 +1,18 @@
+.modal-error.modal-shadow {
+  .modal-content {
+    background : $color-red;
+    color      : $color-white;
+
+    .modal-header {
+      border : 0px;
+
+      .close {
+        text-shadow : none;
+      }
+    }
+
+    .modal-footer {
+      display : none;
+    }
+  }
+}
