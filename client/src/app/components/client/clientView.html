@@ -1,0 +1,29 @@
+<div class="client-list">
+  <h2>List of Clients<h2>
+  <div class="grid">
+    <div class="toolbar">
+
+    </div>
+    <div class="table">
+      <div class="header">
+        <span class="column">Name</span>
+        <span class="column">Email</span>
+        <span class="column">Phone</span>
+        <span class="column">Providers</span>
+        <span class="column"></span>
+      </div>
+      <div class="body">
+        <div class="row" data-ng-repeat="client in vm.clients">
+          <span class="cell">{{client.name}}</span>
+          <span class="cell">{{client.email}}</span>
+          <span class="cell">{{client.phone}}</span>
+          <span class="cell">{{client.providers}}</span>
+          <span class="cell"><a href data-ng-click="vm.editClient('edit')">Edit</a></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal support for showing errors -->
+<modal-error></modal-error>
