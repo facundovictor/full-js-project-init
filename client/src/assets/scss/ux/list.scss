@@ -28,6 +28,7 @@ $row-height    : $header-height;
           box-shadow   : inset 0 0 0px 1px rgba(0,0,0,0.2);
           color        : $color-dark-grey;
           cursor       : pointer;
+          display      : flex;
           flex-grow    : 1;
           font-weight  : bold;
           height       : $header-height;
@@ -37,6 +38,14 @@ $row-height    : $header-height;
 
           &.column-small {
             max-width : 80px;
+          }
+
+          p {
+            margin-right : auto;
+          }
+
+          i {
+            margin : auto 10px;
           }
         }
       }
