@@ -16,7 +16,7 @@
         <span class="column column-small"></span>
       </div>
       <div class="body">
-        <div class="row" data-ng-repeat="client in vm.clients">
+        <div class="row" data-ng-repeat="client in vm.clients | orderBy : vm.listOrder.column : vm.listOrder.reverse ">
           <span class="cell">{{client.name}}</span>
           <span class="cell">{{client.email}}</span>
           <span class="cell">{{client.phone}}</span>

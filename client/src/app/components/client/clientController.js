@@ -11,6 +11,11 @@ class clientController {
     this.clientService = clientService;
     this.appConfig = appConfig;
 
+    this.listOrder = {
+      column  : 'name',
+      reverse : false
+    }
+
     // Initialize
     this.loadClientList();
   }
