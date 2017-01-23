@@ -36,13 +36,14 @@ $row-height    : $header-height;
           width        : 25%;
 
           &.column-small {
-            max-width : 60px;
+            max-width : 80px;
           }
         }
       }
 
       .body {
-        overflow : scroll;
+        max-height : calc(100vh - 150px);
+        overflow-y : scroll;
 
         .row {
           display     : flex;
@@ -58,7 +59,7 @@ $row-height    : $header-height;
             width        : 25%;
 
             &.cell-small {
-              max-width : 60px;
+              max-width : 65px;
             }
           }
         }
