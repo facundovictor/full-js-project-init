@@ -37,7 +37,10 @@
           <span class="cell">{{client.email}}</span>
           <span class="cell">{{client.phone}}</span>
           <span class="cell">{{client.providers}}</span>
-          <span class="cell cell-small"><a href data-ng-click="vm.editClient(client.id)">Edit</a></span>
+          <span class="cell cell-small">
+            <a href data-ng-click="vm.editClient(client.id)">Edit</a>
+            <i class="fa fa-trash" data-ng-click="vm.deleteClient(client.id, $index)" aria-hidden="true"></i>
+          </span>
         </div>
       </div>
     </div>

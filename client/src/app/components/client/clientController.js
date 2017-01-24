@@ -31,6 +31,18 @@ class clientController {
   }
 
   /*
+   * Deletes the client at the position 'index' and identified by the client_id.
+   *
+   * @param client_id {Number}, The client identifier.
+   * @param index {Number}, the client's position on the list.
+   */
+  deleteClient (client_id, index) {
+    this.clientService.deleteClient(client_id).then(() => {
+      this.clients.splice(index, 1);
+    }).catch(this.showError.bind(this));
+  }
+
+  /*
    * It sorts the list by the passed column, if the list is already sorted by
    * the passed column, it reverts the order.
    *
