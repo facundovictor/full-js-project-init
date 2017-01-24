@@ -47,6 +47,10 @@ $row-height    : $header-height;
           i {
             margin : auto 10px;
           }
+
+          &:hover > i {
+            color : $color-blue;
+          }
         }
       }
 
