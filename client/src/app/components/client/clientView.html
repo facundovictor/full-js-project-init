@@ -3,6 +3,10 @@
   <div class="grid">
     <div class="toolbar">
       <div class="toolbar-title">Clients</div>
+      <div class="toolbar-search">
+        <input class="toolbar-search-input" type="text" data-ng-model="vm.searchField" placeholder="Search..."/>
+        <i class="fa fa-times-circle" data-ng-show="!!vm.searchField" data-ng-click="vm.searchField=''" aria-hidden="true"></i>
+      </div>
       <div class="buttons">
         <button class="add">New Client</button>
       </div>
@@ -28,7 +32,7 @@
         <span class="column column-small"></span>
       </div>
       <div class="body">
-        <div class="row" data-ng-repeat="client in vm.clients | orderBy : vm.listOrder.column : vm.listOrder.reverse ">
+        <div class="row" data-ng-repeat="client in vm.clients | orderBy : vm.listOrder.column : vm.listOrder.reverse | filter : vm.searchField">
           <span class="cell">{{client.name}}</span>
           <span class="cell">{{client.email}}</span>
           <span class="cell">{{client.phone}}</span>

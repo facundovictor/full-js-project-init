@@ -12,6 +12,37 @@
     margin-left : 10px;
   }
 
+  .toolbar-search {
+    display    : flex;
+    flex-basis : 400px;
+    position   : relative;
+
+    input {
+      border        : 0;
+      border-radius : 4px;
+      box-shadow    : inset 0 0 1px 0 $color-black;
+      flex-grow     : 1;
+      margin        : 10px 0 10px 30px;
+      padding-left  : 10px;
+    }
+
+    i {
+      cursor   : pointer;
+      display  : flex;
+      height   : 100%;
+      position : absolute;
+      right    : 10px;
+
+      &:before {
+        margin : auto;
+      }
+
+      &:hover {
+        color : $color-blue;
+      }
+    }
+  }
+
   .buttons {
     display      : flex;
     margin-left  : auto;
