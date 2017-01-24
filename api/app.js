@@ -20,6 +20,7 @@ const express        = require('express');
 
 // Project imports
 const models = require('./models');
+const cors   = require('./middleware/cors');
 
 /* Globals *******************************************************************/
 const base_path            = path.dirname(__dirname),
@@ -49,6 +50,9 @@ module.exports = app;
 
 // Initialize the database and all the models
 models.initialize(global.conf.database);
+
+// Load CORS
+app.use(cors);
 
 // Load the front-end app files
 app.use(express.static(client_path));
