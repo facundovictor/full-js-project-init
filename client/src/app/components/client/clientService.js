@@ -9,7 +9,7 @@
 class ClientService {
   constructor ($http, appConfig) {
     this.$http = $http;
-    this.appConfig = appConfig
+    this.appConfig = appConfig;
   }
 
   /*
