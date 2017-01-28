@@ -32,14 +32,19 @@
 -->
 
 <div class="modal-shadow modal-form" data-ng-class="{ 'hide' : !vm.form.visible }">
-  <div class="modal-content">
+  <form name="form" class="modal-content" data-ng-submit="vm.form.save.fn()">
     <div class="modal-header">
       <p class="modal-title">{{vm.form.title}}</p>
     </div>
     <div class="modal-body">
       <div class="field" data-ng-repeat="field in vm.form.fields">
         <div class="field-label">{{field.label}}:</div>
-        <input class="field-input" type="{{field.type}}" placeholder="{{field.placeholder}}" ng-model="field.value"/>
+        <input class="field-input"
+               type="{{field.type}}"
+               placeholder="{{field.placeholder}}"
+               data-ng-attr-pattern="{{field.pattern}}"
+               data-ng-model="field.value"
+               data-ng-required="field.required"/>
       </div>
       <ng-transclude></ng-transclude>
     </div>
@@ -49,8 +54,8 @@
               data-ng-click="vm.form.delete.fn(); vm.form.visible=false">
         {{vm.form.delete.text}}
       </button>
-      <button type="button" class="btn-cancel" data-ng-click="vm.form.visible=false">Cancel</button>
-      <button type="button" class="btn-save" data-ng-click="vm.form.save.fn()">{{vm.form.save.text}}</button>
+      <button type="reset" class="btn-cancel" data-ng-click="vm.form.visible=false">Cancel</button>
+      <button type="submit" data-ng-disabled="form.$pristine || form.$invalid" class="btn-save">{{vm.form.save.text}}</button>
     </div>
-  </div>
+  </form>
 </div>
