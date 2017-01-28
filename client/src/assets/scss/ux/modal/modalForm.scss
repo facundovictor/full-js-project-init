@@ -1,0 +1,53 @@
+.modal-form.modal-shadow {
+  .modal-content {
+    height     : 50vh;
+    width      : 50vw;
+    min-height : 200px;
+    min-width  : 50vw;
+
+    .modal-header {
+      padding : 0px 15px;
+
+      .modal-title {
+        color       : $color-blue;
+        font-size   : $toolbar-title-font-size;
+        font-weight : bold;
+        height      : 40px;
+        line-height : 40px;
+      }
+    }
+
+    .modal-body {
+      .field {
+        display : flex;
+        height  : 50px;
+        padding : 10px;
+
+        .field-label {
+          font-weight : bold;
+          line-height : 30px;
+          text-align  : right;
+          width       : 15vw;
+        }
+        .field-input {
+          margin-left  : 10px;
+          padding-left : 15px;
+          width      : 20vw;
+        }
+      }
+    }
+
+    .modal-footer {
+      button {
+        &.btn-delete {
+          border-radius : 6px;
+          margin-left   : 15px;
+        }
+
+        &.btn-cancel {
+          margin-left : auto;
+        }
+      }
+    }
+  }
+}
