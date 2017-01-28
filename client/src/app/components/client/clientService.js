@@ -43,6 +43,23 @@ class ClientService {
         throw new Error(`Reponse with status ${response.status}`);
       });
   }
+
+  /*
+   * Creates a new client. 'POST /api/client/'
+   *
+   * @param client {Object}, the client's data.
+   *
+   * @return {Promise}, The promise of the created client.
+   */
+  createClient (client) {
+    return this.$http
+      .post(`${this.appConfig.apiUrl}/api/client/`, client)
+      .then( response => {
+        if (response.status === 201)
+          return response.data;
+        throw new Error(`Reponse with status ${response.status}`);
+      });
+  }
 }
 
 app.service('clientService', [
