@@ -43,6 +43,23 @@ class ProviderService {
         throw new Error(`Reponse with status ${response.status}`);
       });
   }
+
+  /*
+   * Creates a new provider. 'POST /api/provider/'
+   *
+   * @param provider {Object}, the provider's data.
+   *
+   * @return {Promise}, The promise of the created provider.
+   */
+  createProvider (provider) {
+    return this.$http
+      .post(`${this.appConfig.apiUrl}/api/provider/`, provider)
+      .then( response => {
+        if (response.status === 201)
+          return response.data;
+        throw new Error(`Reponse with status ${response.status}`);
+      });
+  }
 }
 
 app.service('providerService', [
