@@ -60,6 +60,23 @@ class ClientService {
         throw new Error(`Reponse with status ${response.status}`);
       });
   }
+
+  /*
+   * Updates an existent client. 'PUT /api/client/{id}'
+   *
+   * @param client {Object}, the client's data.
+   *
+   * @return {Promise}, The promise of the updated client.
+   */
+  updateClient (client) {
+    return this.$http
+      .put(`${this.appConfig.apiUrl}/api/client/${client.id}`, client)
+      .then( response => {
+        if (response.status === 200)
+          return response.data;
+        throw new Error(`Reponse with status ${response.status}`);
+      });
+  }
 }
 
 app.service('clientService', [
