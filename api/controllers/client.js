@@ -41,7 +41,8 @@ function getClientData (client) {
   if (client.providers) {
     client.providers.forEach( provider => {
         clientResponse.providers.push({
-            id : provider.id
+            id   : provider.id,
+            name : provider.name
         });
     });
   }
