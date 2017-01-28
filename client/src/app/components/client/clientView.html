@@ -8,7 +8,7 @@
         <i class="fa fa-times-circle" data-ng-show="!!vm.searchField" data-ng-click="vm.searchField=''" aria-hidden="true"></i>
       </div>
       <div class="buttons">
-        <button class="add">New Client</button>
+        <button class="add" ng-click="vm.onNewClientClick()">New Client</button>
       </div>
     </div>
     <div class="table">
@@ -36,16 +36,21 @@
           <span class="cell">{{client.name}}</span>
           <span class="cell">{{client.email}}</span>
           <span class="cell">{{client.phone}}</span>
-          <span class="cell">{{client.providers}}</span>
+          <span class="cell">{{client.providers | providerListOfNamesFilter}}</span>
           <span class="cell cell-small">
-            <a href data-ng-click="vm.editClient(client.id)">Edit</a>
-            <i class="fa fa-trash" data-ng-click="vm.deleteClient(client.id, $index)" aria-hidden="true"></i>
+            <a href data-ng-click="vm.onEditClientClick(client)">Edit</a>
+            <i class="fa fa-trash" data-ng-click="vm.onDeleteClientClick(client)" aria-hidden="true"></i>
           </span>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Modal support for showing errors -->
+<modal-form>
+<div> This will be replaced by the privoder form </div>
+</modal-form>
 
 <!-- Modal support for showing errors -->
 <modal-error></modal-error>
