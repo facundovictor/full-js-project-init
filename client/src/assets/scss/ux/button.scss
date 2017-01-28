@@ -2,4 +2,9 @@ button {
   color        : $color-grey;
   font-size    : $button-font-size;
   font-weight  : bold;
+  transition   : all 0.4s;
+
+  &[disabled] {
+    opacity : 0.5;
+  }
 }
