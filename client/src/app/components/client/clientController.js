@@ -134,6 +134,12 @@ class clientController {
     this.loadFormConfig('edit', true, client);
   }
 
+  /*
+   * Submit the new client / client edition to the API by using the
+   * clientService.
+   *
+   * @param client {Object}, the client instance to be added/edited.
+   */
   onClientSubmit (client) {
     if (this.mode === 'add') {
       client = {
@@ -141,6 +147,7 @@ class clientController {
       };
     }
 
+    // Updates the client with all the form data.
     this.form.fields.forEach( field => {
       client[field.attribute] = field.value;
     });
