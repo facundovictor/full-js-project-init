@@ -1,3 +1,16 @@
+<!--
+  Usage:
+
+  Add an error object to the parent scope. The object should have the next
+  structure :
+
+     error : {
+        visible : true,
+        title   : 'The modal title',
+        message : 'The modal message displayed on the body'
+     }
+-->
+
 <div class="modal-shadow modal-error" data-ng-class="{ 'hide' : !vm.error.visible }">
   <div class="modal-content">
     <div class="modal-header">
