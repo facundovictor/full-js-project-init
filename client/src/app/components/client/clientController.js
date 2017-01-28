@@ -71,23 +71,36 @@ class clientController {
    */
   loadFormConfig (mode = 'add', visible, client) {
     let fields = [{
-          label       : 'Field 1',
+          label       : 'Name',
+          attribute   : 'name',
           type        : 'text',
-          placeholder : 'Some placeholder to be used on the input',
-          value       : 'Input value',
+          placeholder : 'Enter the client name..',
+          required    : true,
+          value       : (client? client.name : null)
         },{
-          label       : 'Field 1',
-          type        : 'text',
-          placeholder : 'Some placeholder to be used on the input',
-          value       : 'Input value'
+          label       : 'Email',
+          attribute   : 'email',
+          type        : 'email',
+          placeholder : 'Enter the client email..',
+          required    : true,
+          value       : (client? client.email : null)
+        },{
+          label       : 'Phone',
+          attribute   : 'phone',
+          type        : 'tel',
+          placeholder : "Client phone: XXX-XXX-XXXX",
+          required    : true,
+          pattern     : "[0-9]{3}-[0-9]{3}-[0-9]{4}",
+          value       : (client? client.phone : null)
         }],
         title         = 'New Client',
         saveText      = 'Add Client',
         deleteVisible = false;
 
     if (mode === 'edit' && client != null) {
-        title = 'Edit Client';
+        title         = 'Edit Client';
         deleteVisible = true;
+        saveText      = 'Save Client';
     }
 
     this.form = {
@@ -99,7 +112,7 @@ class clientController {
         visible : deleteVisible
       },
       save   : {
-        fn   : () => {console.log('SAVING');},
+        fn   : this.onClientSubmit.bind(this, client),
         text : saveText
       }
     };
@@ -119,6 +132,28 @@ class clientController {
    */
   onEditClientClick (client) {
     this.loadFormConfig('edit', true, client);
+  }
+
+  onClientSubmit (client) {
+    if (this.mode === 'add') {
+      client = {
+        providers : []
+      };
+    }
+
+    this.form.fields.forEach( field => {
+      client[field.attribute] = field.value;
+    });
+
+    if (this.mode === 'add') {
+      this.clientService.createClient(client).then( client => {
+          this.clients.push(client);
+      }).catch(this.showError.bind(this));
+    } else {
+      this.clientService.updateClient(client).then( updated_client => {
+          this.clients[this.clients.indexOf(client)] = updated_client;
+      }).catch(this.showError.bind(this));
+    }
   }
 
   /*
