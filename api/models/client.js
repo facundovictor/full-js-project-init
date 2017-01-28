@@ -135,9 +135,7 @@ module.exports = function(sequelize, DataTypes) {
 
           return models.provider.findAll({
             where : {
-              id : {
-                $or : data.providers.map((provider) => provider.id)
-              }
+              id : data.providers.map((provider) => provider.id)
             }
           }).then((providers) => {
             if (providers.length !== data.providers.length) {
