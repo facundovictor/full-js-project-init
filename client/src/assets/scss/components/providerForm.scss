@@ -1,0 +1,67 @@
+.provider-form {
+  display        : flex;
+  padding        : 10px;
+
+  .provider-label {
+    font-weight : bold;
+    height      : $input-height;
+    line-height : $input-height;
+    text-align  : right;
+    width       : 10vw;
+  }
+
+  .provider-body {
+    margin-left : 10px;
+
+    $list-width : calc(28vw - 130px);
+
+    & > input {
+      padding-left : 15px;
+      width        : $list-width;
+    }
+
+    .provider-list {
+      box-shadow : inset 0 0 0px 1px rgba(0, 0, 0, 0.3);
+      margin-top : 10px;
+      max-width  : $list-width;
+
+      .provider-list-item {
+        display: flex;
+
+        p {
+          flex-grow     : 1;
+          height        : $input-height;
+          line-height   : $input-height;
+          margin        : 0;
+          max-width     : calc(28vw - 200px);
+          overflow      : hidden;
+          text-overflow : ellipsis;
+          white-space   : nowrap;
+        }
+
+        input, i {
+          cursor : pointer;
+          margin : auto 5px;
+        }
+
+        .fa-pencil-square-o:hover {
+          color : $color-blue;
+        }
+
+        .fa-trash:hover {
+          color : $color-red;
+        }
+
+        i:last-child {
+          margin-right : 10px;
+        }
+      }
+    }
+  }
+
+  .provider-button {
+    height : 30px;
+    width  : 120px;
+    margin-left : 10px;
+  }
+}
