@@ -1,3 +1,36 @@
+<!--
+  Usage:
+
+  Add a form object to the parent scope. The object should have the next struc
+  -ture :
+
+     form : {
+        visible : true,
+        title   : 'The modal title',
+        fields  : [{
+            label       : 'Field 1',
+            type        : 'text',
+            placeholder : 'Some placeholder to be used on the input',
+            value       : 'Input value'
+        }],
+
+        // Object that represents the delete button
+        delete : {
+            fn      : functionToBeExecuted,
+            text    : 'The text used on the button "delete"',
+            visible : true/false
+        },
+        // Object that represents the save button
+        save : {
+            fn   : functionToBeExecuted,
+            text : 'The text used on the button "save"'
+        }
+     }
+
+  It also supports transclusion. Any transcluded element will be inserted below
+  the form fields.
+-->
+
 <div class="modal-shadow modal-form" data-ng-class="{ 'hide' : !vm.form.visible }">
   <div class="modal-content">
     <div class="modal-header">
