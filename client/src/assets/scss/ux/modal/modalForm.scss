@@ -25,14 +25,14 @@
 
         .field-label {
           font-weight : bold;
-          line-height : 30px;
+          line-height : $input-height;
           text-align  : right;
-          width       : 15vw;
+          width       : 10vw;
         }
         .field-input {
           margin-left  : 10px;
           padding-left : 15px;
-          width      : 20vw;
+          width        : 28vw;
         }
       }
     }
