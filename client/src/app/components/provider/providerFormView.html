@@ -8,11 +8,11 @@
     <div class="provider-body">
         <input type="text" placeholder="Enter new provider name"/>
         <div class="provider-list">
-            <div class="provider-list-item">
+            <div class="provider-list-item" data-ng-repeat="provider in vmProvider.providers">
                 <input type="checkbox"/>
-                <p>Provider Name</p>
-                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                <i class="fa fa-trash" aria-hidden="true"></i>
+                <p>{{provider.name}}</p>
+                <i class="fa fa-pencil-square-o"></i>
+                <i class="fa fa-trash" data-ng-click="vmProvider.onDeleteProviderClick(provider)"></i>
             </div>
         </div>
     </div>
