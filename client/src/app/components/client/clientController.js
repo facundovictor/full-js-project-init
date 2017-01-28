@@ -168,14 +168,19 @@ class clientController {
    * TODO: Move this to a base controller.
    */
   showError (error) {
-    if (error.status <= 0 )
-        error.message = "Can't connect to the server.";
+    let message = 'Unknown error';
 
-    console.log(error);
+    if (error.data)
+      message = error.data.message;
+
+    if (error.status <= 0 )
+      message = "Can't connect to the server.";
+
+    console.log(message, error);
     this.error = {
       visible : true,
       title   : 'Error',
-      message : error.message
+      message
     };
   }
 }
