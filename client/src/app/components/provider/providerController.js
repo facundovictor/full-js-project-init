@@ -11,10 +11,6 @@ class providerController {
     this.providerService = providerService;
     this.$scope = $scope;
 
-    // Save the reference
-    // TODO: Do it trhough event comunication
-    this.parentScope = $scope.$parent.vm;
-
     // Initialize
     this.loadProviderList();
   }
@@ -38,7 +34,8 @@ class providerController {
     this.providerService.deleteProvider(provider.id).then(() => {
       this.providers.splice(this.providers.indexOf(provider), 1);
 
-      this.parentScope.loadClientList();
+      // Aske the parent to reload
+      this.$scope.$emit('client-reload');
     }).catch(this.showError.bind(this));
   }
 

@@ -9,7 +9,7 @@ class errorController {
 
     // Initialize the error data structure
     Object.assign(this, {
-      visible : true,
+      visible : false,
       title   : 'Error',
       message : ''
     });

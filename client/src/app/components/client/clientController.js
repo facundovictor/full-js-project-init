@@ -22,6 +22,9 @@ class clientController {
 
     // Initialize
     this.loadClientList();
+
+    // Load listeners
+    $scope.$on('client-reload', this.loadClientList.bind(this));
   }
 
   /*
