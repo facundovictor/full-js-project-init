@@ -1,4 +1,6 @@
 .modal-error.modal-shadow {
+  z-index : 20;
+
   .modal-content {
     background : $color-red;
     color      : $color-white;

@@ -1,0 +1,27 @@
+<!--
+  Usage:
+
+  Emit an event with an error object. Internally, the errorController manages
+  the error structure in the next format:
+
+     error : {
+        visible : true,
+        title   : 'The modal title',
+        message : 'The modal message displayed on the body'
+     }
+-->
+
+<div class="modal-shadow modal-error" data-ng-class="{ 'hide' : !error.visible }">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">{{error.title}}</h4>
+      <button type="button" class="close" data-ng-click="error.visible=false">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>{{error.message}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-ng-click="error.visible=false">Close</button>
+    </div>
+  </div>
+</div>

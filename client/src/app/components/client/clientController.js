@@ -7,9 +7,9 @@
 'use strict';
 
 class clientController {
-  constructor (clientService, appConfig) {
+  constructor ($scope, clientService) {
     this.clientService = clientService;
-    this.appConfig = appConfig;
+    this.$scope = $scope;
 
     // Default list order
     this.listOrder = {
@@ -165,27 +165,14 @@ class clientController {
 
   /*
    * Displays an error on a modal.
-   * TODO: Move this to a base controller.
    */
   showError (error) {
-    let message = 'Unknown error';
-
-    if (error.data)
-      message = error.data.message;
-
-    if (error.status <= 0 )
-      message = "Can't connect to the server.";
-
-    console.log(message, error);
-    this.error = {
-      visible : true,
-      title   : 'Error',
-      message
-    };
+    this.$scope.$emit('error', error);
   }
 }
 
 app.controller('clientController', [
+  '$scope',
   'clientService',
   clientController
 ]);

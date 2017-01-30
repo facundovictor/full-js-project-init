@@ -7,9 +7,9 @@
 'use strict';
 
 class providerController {
-  constructor ($scope, providerService, appConfig) {
+  constructor ($scope, providerService) {
     this.providerService = providerService;
-    this.appConfig = appConfig;
+    this.$scope = $scope;
 
     // Save the reference
     // TODO: Do it trhough event comunication
@@ -57,10 +57,9 @@ class providerController {
 
   /*
    * Displays an error on a modal.
-   * TODO: Move this to a base controller.
    */
   showError (error) {
-    this.parentScope.showError(error);
+    this.$scope.$emit('error', error);
   }
 }
 
