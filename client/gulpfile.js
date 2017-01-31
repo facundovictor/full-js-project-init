@@ -184,8 +184,8 @@ gulp.task('watch', function () {
 gulp.task('build', [
   'clear',
   'dependencies',
-  'js',
   'html',
+  'js',
   'sass'
 ]);
 

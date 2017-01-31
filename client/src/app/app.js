@@ -5,9 +5,16 @@
  */
 
 // The app will be accessible from all the modules
-var app = angular.module('publicApp', [
-  'ngRoute'
-]).config(function ($routeProvider) {
+var app = angular.module('publicApp', ['ngRoute']);
+
+// APP Configuration
+app.constant('appConfig', {
+  apiUrl      : 'http://localhost:8000',
+  environment : 'development'
+});
+
+// Add route configuration
+app.config(['$routeProvider', $routeProvider => {
   $routeProvider
     .when('/clients', {
       templateUrl  : 'components/client/clientView.html',
@@ -17,10 +24,4 @@ var app = angular.module('publicApp', [
     .otherwise({
       redirectTo : '/clients'
     });
-});
-
-// APP Configuration
-app.constant('appConfig', {
-  apiUrl      : 'http://localhost:8000',
-  environment : 'development'
-});
+}]);
