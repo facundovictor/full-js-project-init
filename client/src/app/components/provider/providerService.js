@@ -60,6 +60,23 @@ class ProviderService {
         throw new Error(`Reponse with status ${response.status}`);
       });
   }
+
+  /*
+   * Updates an existent provider. 'PUT /api/provider/{id}'
+   *
+   * @param provider {Object}, the provider's data.
+   *
+   * @return {Promise}, The promise of the updated provider.
+   */
+  updateProvider (provider) {
+    return this.$http
+      .put(`${this.appConfig.apiUrl}/api/provider/${provider.id}`, provider)
+      .then( response => {
+        if (response.status === 200)
+          return response.data;
+        throw new Error(`Reponse with status ${response.status}`);
+      });
+  }
 }
 
 app.service('providerService', [
