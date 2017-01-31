@@ -13,7 +13,8 @@
   .provider-body {
     margin-left : 10px;
 
-    $list-width : calc(28vw - 130px);
+    $list-width     : calc(28vw - 130px);
+    $icon-list-size : 13px;
 
     & > input {
       padding-left : 15px;
@@ -24,11 +25,15 @@
       box-shadow : inset 0 0 0px 1px rgba(0, 0, 0, 0.3);
       margin-top : 10px;
       max-width  : $list-width;
+      padding    : 2px;
 
       .provider-list-item {
-        display: flex;
+        display  : flex;
+        position : relative;
 
-        p {
+        .provider-name {
+          border        : none;
+          cursor        : default;
           flex-grow     : 1;
           height        : $input-height;
           line-height   : $input-height;
@@ -36,12 +41,38 @@
           max-width     : calc(28vw - 200px);
           overflow      : hidden;
           text-overflow : ellipsis;
+          transition    : all 0.4s;
           white-space   : nowrap;
+
+          -webkit-appearance: none;
+
+          &:focus, &:active {
+            border : none;
+            box-shadow : none;
+          -webkit-appearance: none;
+          }
+
+          &:not([readonly]) {
+            cursor : initial;
+            box-shadow : inset 0px 0px 1px 0px $color-blue;
+
+            & + .fa-times-circle {
+              display : inline;
+            }
+          }
         }
 
-        input, i {
-          cursor : pointer;
-          margin : auto 5px;
+        input[type="checkbox"], i {
+          cursor    : pointer;
+          margin    : auto 5px;
+          min-width : $icon-list-size;
+        }
+
+        .fa-times-circle {
+          display  : none;
+          position : absolute;
+          right    : 52px;
+          top      : calc((100% - #{$icon-list-size})/2)
         }
 
         .fa-pencil-square-o:hover {
