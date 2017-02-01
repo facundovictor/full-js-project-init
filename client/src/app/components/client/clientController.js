@@ -73,7 +73,8 @@ class clientController {
    *                           is equal to 'edit')
    */
   loadFormConfig (mode = 'add', visible, client) {
-    let fields = [{
+    let fields = [
+        {
           label       : 'Name',
           attribute   : 'name',
           type        : 'text',
@@ -95,19 +96,22 @@ class clientController {
           required    : true,
           pattern     : "[0-9]{3}-[0-9]{3}-[0-9]{4}",
           value       : (client? client.phone : null)
-        }],
-        title         = 'New Client',
-        saveText      = 'Add Client',
-        deleteVisible = false;
+        }
+      ],
+      title         = 'New Client',
+      saveText      = 'Add Client',
+      deleteVisible = false,
+      providers     = [];
 
     if (mode === 'edit' && client != null) {
         title         = 'Edit Client';
         deleteVisible = true;
         saveText      = 'Save Client';
+        providers     = client.providers.map( p => p.id );
     }
 
     this.form = {
-      visible, title, mode, fields,
+      visible, title, mode, providers, fields,
 
       delete : {
         fn      : this.onDeleteClientClick.bind(this, client),
@@ -119,6 +123,9 @@ class clientController {
         text : saveText
       }
     };
+
+    // Notify any widget that the form data is loaded
+    this.$scope.$broadcast('form-loaded', this.form);
   }
 
   /*
@@ -144,25 +151,26 @@ class clientController {
    * @param client {Object}, the client instance to be added/edited.
    */
   onClientSubmit (client) {
-    if (this.mode === 'add') {
-      client = {
-        providers : []
-      };
-    }
 
     // Updates the client with all the form data.
     this.form.fields.forEach( field => {
       client[field.attribute] = field.value;
     });
 
+    // Updates the client providers with the form data.
+    client.providers = [];
+    this.form.providers.forEach( id => {
+      client.providers.push({ id });
+    });
+
     if (this.mode === 'add') {
-      this.clientService.createClient(client).then( client => {
-          this.clients.push(client);
-      }).catch(this.showError.bind(this));
+      this.clientService.createClient(client)
+        .then(this.loadClientList.bind(this))
+        .catch(this.showError.bind(this));
     } else {
-      this.clientService.updateClient(client).then( updated_client => {
-          this.clients[this.clients.indexOf(client)] = updated_client;
-      }).catch(this.showError.bind(this));
+      this.clientService.updateClient(client)
+        .then(this.loadClientList.bind(this))
+        .catch(this.showError.bind(this));
     }
   }
 
