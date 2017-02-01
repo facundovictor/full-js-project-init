@@ -1,6 +1,9 @@
 <!--
-  Usage:
+  The provider CRUD widget. It lists the providers, it allows to add a new one,
+  delete one, or even edit the name of one.
 
+  It also allows the user to check those providers that should be assigned to a
+  client.
 -->
 
 <div class="provider-form">
@@ -9,9 +12,13 @@
         <input type="text" placeholder="Enter new provider name" data-ng-model="vmProvider.newProviderName"/>
         <div class="provider-list">
             <div class="provider-list-item" data-ng-repeat="provider in vmProvider.providers">
-                <input type="checkbox"/>
-                <p>{{provider.name}}</p>
-                <i class="fa fa-pencil-square-o"></i>
+                <input type="checkbox" data-ng-model="provider.checked" data-ng-change="vmProvider.onProviderCheckChanged(provider)"/>
+                <input type="text" class="provider-name" placeholder="Enter a name.."
+                       data-ng-model="provider.name"
+                       data-ng-readonly="!provider.editOn"/>
+                <i class="fa fa-times-circle" ng-click="vmProvider.cancelEdition(provider)"></i>
+                <i class="fa fa-pencil-square-o" data-ng-show="!provider.editOn" data-ng-click="vmProvider.startProviderEdition(provider)"></i>
+                <i class="fa fa-floppy-o" data-ng-show="provider.editOn" data-ng-click="vmProvider.saveEditedProvider(provider)"></i>
                 <i class="fa fa-trash" data-ng-click="vmProvider.onDeleteProviderClick(provider)"></i>
             </div>
         </div>

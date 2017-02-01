@@ -4,6 +4,8 @@
  * Angular app for managing clients and providers.
  */
 
+'use strict';
+
 // The app will be accessible from all the modules
 var app = angular.module('publicApp', ['ngRoute']);
 
