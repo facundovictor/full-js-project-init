@@ -152,6 +152,9 @@ class clientController {
    */
   onClientSubmit (client) {
 
+    // If the client isn't set, initialize it to an empty object
+    client = client || {};
+
     // Updates the client with all the form data.
     this.form.fields.forEach( field => {
       client[field.attribute] = field.value;
@@ -163,15 +166,28 @@ class clientController {
       client.providers.push({ id });
     });
 
-    if (this.mode === 'add') {
+    if (this.form.mode === 'add') {
       this.clientService.createClient(client)
-        .then(this.loadClientList.bind(this))
+        .then(this.onClientSaveSuccess.bind(this))
         .catch(this.showError.bind(this));
     } else {
       this.clientService.updateClient(client)
-        .then(this.loadClientList.bind(this))
+        .then(this.onClientSaveSuccess.bind(this))
         .catch(this.showError.bind(this));
     }
+  }
+
+  /*
+   * After the client is successfully saved, the client list needs to be
+   * reloaded, and the form should be closed.
+   */
+  onClientSaveSuccess () {
+
+    // Reload the client list
+    this.loadClientList();
+
+    // Close the form
+    this.form.visible = false;
   }
 
   /*
