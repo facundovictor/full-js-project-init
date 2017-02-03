@@ -11,7 +11,7 @@
     <div class="provider-body">
         <input type="text" placeholder="Enter new provider name" data-ng-model="vmProvider.newProviderName"/>
         <div class="provider-list">
-            <div class="provider-list-item" data-ng-repeat="provider in vmProvider.providers">
+            <div class="provider-list-item" data-ng-repeat="provider in vmProvider.providers track by provider.id">
                 <input type="checkbox" data-ng-model="provider.checked" data-ng-change="vmProvider.onProviderCheckChanged(provider)"/>
                 <input type="text" class="provider-name" placeholder="Enter a name.."
                        data-ng-model="provider.name"
