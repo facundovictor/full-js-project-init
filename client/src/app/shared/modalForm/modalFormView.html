@@ -31,7 +31,7 @@
   the form fields.
 -->
 
-<div class="modal-shadow modal-form" data-ng-class="{ 'hide' : !vm.form.visible }">
+<div class="modal-shadow modal-form" data-ng-show="vm.form.visible">
   <form name="form" class="modal-content" data-ng-submit="vm.form.save.fn()">
     <div class="modal-header">
       <p class="modal-title">{{vm.form.title}}</p>
@@ -54,7 +54,7 @@
               data-ng-click="vm.form.delete.fn(); vm.form.visible=false">
         {{vm.form.delete.text}}
       </button>
-      <button type="reset" class="btn-cancel" data-ng-click="vm.form.visible=false">Cancel</button>
+      <button type="button" class="btn-cancel" data-ng-click="vm.form.visible=false">Cancel</button>
       <button type="submit" data-ng-disabled="form.$pristine || form.$invalid" class="btn-save">{{vm.form.save.text}}</button>
     </div>
   </form>

@@ -38,14 +38,13 @@ class providerController {
     // Retrieve the id list of selected provider
     let selected = form.providers;
 
-    // If the form has data (edit mode)
-    if (selected.length) {
-      // Set the checked status to the selected providers
-      this.providers.forEach( provider => {
-        if (selected.indexOf(provider.id) !== -1)
-          provider.checked = true;
-      });
-    }
+    // Set the checked status to the selected providers
+    this.providers.forEach( provider => {
+      if (selected.indexOf(provider.id) !== -1)
+        provider.checked = true;
+      else
+        provider.checked = false;
+    });
 
     // Saves the reference to the form
     this.form = form;
