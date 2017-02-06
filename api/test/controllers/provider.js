@@ -147,6 +147,25 @@ describe('controllers', function() {
             done();
           });
       });
+
+      it('Should return 400 (Bad request) on missing required parameter', function(done) {
+
+        request(server)
+          .post(`${api_path}provider`)
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            validateValidationError(res.body);
+            validateInvalidRequestParameterError(res.body.errors[0]);
+            validateObjectMissingError(res.body.errors[0].errors[0], 'name');
+            done();
+          });
+      });
     });
 
     describe(`PUT ${api_path}provider/{id}`, function() {
@@ -201,6 +220,10 @@ describe('controllers', function() {
           .expect('Content-Type', /json/)
           .end(function(err, res) {
             should.not.exist(err);
+            res.body.should.be.an.Object();
+            validateValidationError(res.body);
+            validateInvalidRequestParameterError(res.body.errors[0]);
+            validateObjectMissingError(res.body.errors[0].errors[0], 'name');
             done();
           });
       });
@@ -219,6 +242,10 @@ describe('controllers', function() {
           .expect('Content-Type', /json/)
           .end(function(err, res) {
             should.not.exist(err);
+            res.body.should.be.an.Object();
+            validateValidationError(res.body);
+            validateInvalidRequestParameterError(res.body.errors[0]);
+            validateObjectMissingError(res.body.errors[0].errors[0], 'name');
             done();
           });
       });
