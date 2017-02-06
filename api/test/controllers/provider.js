@@ -30,8 +30,63 @@ const isIntegrationTest = process.env.INTEGRATION;
  * @param provider {Object}, Object to validate if it's a provider.
  */
 function validateProvider (provider) {
-    provider.should.have.property('id');
-    provider.should.have.property('name');
+  provider.should.have.property('id');
+  provider.should.have.property('name');
+}
+
+/*
+ * Given a validation error, it validates that it respects the schema
+ *
+ * TODO: Implement this by recovering the schema from swagger, and compare it
+ *       against the real schema.
+ *
+ * @param error {Object}, Object to validate if it's a validation error.
+ */
+function validateValidationError (error) {
+  error.should.have.property('message');
+  error.message.should.be.equal('Validation errors');
+
+  error.should.have.property('errors');
+  error.errors.should.be.an.Array();
+  error.errors.length.should.be.above(0);
+}
+
+/*
+ * Given an invalid request parameter error, it validates that it respects the
+ * schema.
+ *
+ * TODO: Implement this by recovering the schema from swagger, and compare it
+ *       against the real schema.
+ *
+ * @param error {Object}, Object to validate if it's an invalid request para
+ *                        -meter error.
+ */
+function validateInvalidRequestParameterError (error) {
+  error.should.have.property('code');
+  error.should.have.property('errors');
+  error.errors.should.be.an.Array();
+  error.errors.length.should.be.above(0);
+  error.code.should.be.equal('INVALID_REQUEST_PARAMETER');
+
+  error.errors[0].code.should.be.equal('OBJECT_MISSING_REQUIRED_PROPERTY');
+}
+
+/*
+ * Given an missing property error, it validates that it respects the schema.
+ *
+ * TODO: Implement this by recovering the schema from swagger, and compare it
+ *       against the real schema.
+ *
+ * @param error {Object}, Object to validate if it's an object missing required
+ *                        property error.
+ *
+ * @param missingProperty {String}, the name of the missing property.
+ */
+function validateObjectMissingError (error, missingProperty) {
+  error.code.should.be.equal('OBJECT_MISSING_REQUIRED_PROPERTY');
+  error.params.should.be.an.Array();
+  error.params.length.should.be.above(0);
+  error.params.should.containEql(missingProperty);
 }
 
 /* Tests *********************************************************************/
