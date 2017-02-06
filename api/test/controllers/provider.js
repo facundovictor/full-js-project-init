@@ -72,6 +72,7 @@ describe('controllers', function() {
             name : 'Some provider',
           })
           .set('Accept', 'application/json')
+          .set('_mockReturnStatus', '201')
           .expect(201)
           .expect('Content-Type', /json/)
           .end(function(err, res) {

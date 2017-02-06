@@ -83,6 +83,7 @@ describe('controllers', function() {
             }]
           })
           .set('Accept', 'application/json')
+          .set('_mockReturnStatus', '201')
           .expect(201)
           .expect('Content-Type', /json/)
           .end(function(err, res) {
@@ -153,7 +154,7 @@ describe('controllers', function() {
         request(server)
           .delete(`${api_path}client/${client_id}`)
           .set('Accept', 'application/json')
-          // TODO: Fix the mocked API that is returning 500
+          .set('_mockReturnStatus', '204')
           .expect(204)
           .end(function(err, res) {
             should.not.exist(err);
