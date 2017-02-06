@@ -32,7 +32,5 @@ function deleteClient (req, res) {
   if (req.swagger.params.id.value > 0)
     res.sendStatus(204);
   else
-    res.status(404).send({
-      message : 'Trying to update a non-existent client'
-    });
+    res.sendStatus(404);
 }

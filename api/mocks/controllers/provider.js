@@ -30,7 +30,5 @@ function deleteProvider (req, res) {
   if (req.swagger.params.id.value > 0)
     res.sendStatus(204);
   else
-    res.status(404).send({
-      message : 'Trying to update a non-existent provider'
-    });
+    res.sendStatus(404);
 }

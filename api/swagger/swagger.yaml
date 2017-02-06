@@ -154,8 +154,6 @@ paths:
           description: No Content
         "404":
           description: Not Found
-          schema:
-            $ref: "#/definitions/ErrorResponse"
         # responses may fall through to errors
         default:
           description: Error
@@ -266,8 +264,6 @@ paths:
           description: No Content
         "404":
           description: Not Found
-          schema:
-            $ref: "#/definitions/ErrorResponse"
         # responses may fall through to errors
         default:
           description: Error
