@@ -46,7 +46,8 @@ describe('controllers', function() {
 
   describe('client', function() {
 
-    let client_id = 1;
+    let client_id   = 1,
+        provider_id = 5;
 
     describe(`GET ${api_path}client`, function() {
 
@@ -79,7 +80,7 @@ describe('controllers', function() {
             email     : 'some@email.com',
             phone     : '1242342343',
             providers : [{
-              id : 3
+              id : provider_id
             }]
           })
           .set('Accept', 'application/json')
@@ -132,7 +133,7 @@ describe('controllers', function() {
             email     : 'some@email.com',
             phone     : '1242342343',
             providers : [{
-              id : 3
+              id : provider_id
             }]
           })
           .set('Accept', 'application/json')

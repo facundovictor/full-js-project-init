@@ -98,7 +98,7 @@ describe('controllers', function() {
         request(server)
           .put(`${api_path}provider/${provider_id}`)
           .send({
-            id   : 2,
+            id   : provider_id,
             name : 'Some provider',
           })
           .set('Accept', 'application/json')
