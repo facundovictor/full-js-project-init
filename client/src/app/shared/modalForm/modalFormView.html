@@ -1,0 +1,61 @@
+<!--
+  Usage:
+
+  Add a form object to the parent scope. The object should have the next struc
+  -ture :
+
+     form : {
+        visible : true,
+        title   : 'The modal title',
+        fields  : [{
+            label       : 'Field 1',
+            type        : 'text',
+            placeholder : 'Some placeholder to be used on the input',
+            value       : 'Input value'
+        }],
+
+        // Object that represents the delete button
+        delete : {
+            fn      : functionToBeExecuted,
+            text    : 'The text used on the button "delete"',
+            visible : true/false
+        },
+        // Object that represents the save button
+        save : {
+            fn   : functionToBeExecuted,
+            text : 'The text used on the button "save"'
+        }
+     }
+
+  It also supports transclusion. Any transcluded element will be inserted below
+  the form fields.
+-->
+
+<div class="modal-shadow modal-form" data-ng-show="vm.form.visible">
+  <form name="form" class="modal-content" data-ng-submit="vm.form.save.fn()">
+    <div class="modal-header">
+      <p class="modal-title">{{vm.form.title}}</p>
+    </div>
+    <div class="modal-body">
+      <div class="field" data-ng-repeat="field in vm.form.fields">
+        <div class="field-label">{{field.label}}:</div>
+        <input class="field-input"
+               type="{{field.type}}"
+               placeholder="{{field.placeholder}}"
+               data-ng-attr-pattern="{{field.pattern}}"
+               data-ng-model="field.value"
+               data-ng-required="field.required"/>
+      </div>
+      <ng-transclude></ng-transclude>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-delete btn-danger"
+              data-ng-show="vm.form.delete.visible"
+              data-ng-click="vm.form.delete.fn(); vm.form.visible=false">
+        {{vm.form.delete.text}}
+      </button>
+      <button type="button" class="btn-cancel" data-ng-click="vm.form.visible=false">Cancel</button>
+      <button type="submit" data-ng-disabled="form.$pristine || form.$invalid" class="btn-save">{{vm.form.save.text}}</button>
+    </div>
+  </form>
+</div>

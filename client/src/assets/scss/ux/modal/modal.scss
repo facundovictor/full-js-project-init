@@ -1,0 +1,55 @@
+.modal-shadow {
+  background : rgba(0,0,0,0.5);
+  display    : flex;
+  position   : absolute;
+  left       : 0;
+  top        : 0;
+  width      : 100vw;
+  height     : 100vh;
+  z-index    : 10;
+
+  .modal-content {
+    display        : flex;
+    flex-direction : column;
+    margin         : auto;
+    overflow       : hidden;
+
+    max-width  : 30vw;
+    min-width  : 20vw;
+
+    .modal-footer, .modal-header, .model-body {
+      padding : 10px 15px;
+    }
+
+    .modal-header {
+      display    : flex;
+      margin-top : 0;
+      min-height : 40px;
+
+      .close {
+        margin : auto 0px auto auto;
+      }
+    }
+
+    .modal-body {
+      flex-grow : 1;
+      overflow  : auto;
+    }
+
+    .modal-footer {
+      display       : flex;
+      min-height    : 50px;
+      margin-bottom : 0;
+
+      button {
+        margin-right : 15px;
+        padding      : 4px 20px;
+        width        : 120px;
+
+        &:first-child {
+          margin-left : auto;
+        }
+      }
+    }
+  }
+}

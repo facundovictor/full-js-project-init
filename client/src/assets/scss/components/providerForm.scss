@@ -1,0 +1,99 @@
+.provider-form {
+  display        : flex;
+  padding        : 10px;
+
+  .provider-label {
+    font-weight : bold;
+    height      : $input-height;
+    line-height : $input-height;
+    text-align  : right;
+    width       : 10vw;
+  }
+
+  .provider-body {
+    margin-left : 10px;
+
+    $list-width     : calc(28vw - 130px);
+    $icon-list-size : 13px;
+
+    & > input {
+      padding-left : 15px;
+      width        : $list-width;
+    }
+
+    .provider-list {
+      box-shadow : inset 0 0 0px 1px rgba(0, 0, 0, 0.3);
+      margin-top : 10px;
+      max-width  : $list-width;
+      overflow   : hidden;
+      padding    : 2px;
+
+      .provider-list-item {
+        display  : flex;
+        position : relative;
+
+        .provider-name {
+          border        : none;
+          cursor        : default;
+          flex-grow     : 1;
+          height        : $input-height;
+          line-height   : $input-height;
+          margin        : 0;
+          max-width     : calc(28vw - 200px);
+          overflow      : hidden;
+          text-overflow : ellipsis;
+          transition    : all 0.4s;
+          white-space   : nowrap;
+
+          -webkit-appearance: none;
+
+          &:focus, &:active {
+            border : none;
+            box-shadow : none;
+          -webkit-appearance: none;
+          }
+
+          &:not([readonly]) {
+            cursor : initial;
+            box-shadow : inset 0px 0px 1px 0px $color-blue;
+
+            & + .fa-times-circle {
+              display : inline;
+            }
+          }
+        }
+
+        input[type="checkbox"], i {
+          cursor    : pointer;
+          margin    : auto 5px;
+          min-width : $icon-list-size;
+        }
+
+        .fa-times-circle {
+          display  : none;
+          position : absolute;
+          right    : 52px;
+          top      : calc((100% - #{$icon-list-size})/2)
+        }
+
+        i:hover {
+          color : $color-blue;
+        }
+
+        i.fa-trash:hover {
+          color : $color-red;
+        }
+
+        i:last-child {
+          margin-right : 10px;
+        }
+      }
+    }
+  }
+
+  .provider-button {
+    height : 30px;
+    width  : 120px;
+    margin-left : 10px;
+  }
+}

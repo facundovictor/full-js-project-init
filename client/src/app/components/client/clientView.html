@@ -1,0 +1,53 @@
+<div class="list client-list">
+  <div class="title">List of Clients</div>
+  <div class="grid">
+    <div class="toolbar">
+      <div class="toolbar-title">Clients</div>
+      <div class="toolbar-search">
+        <input class="toolbar-search-input" type="text" data-ng-model="vm.searchField" placeholder="Search..."/>
+        <i class="fa fa-times-circle" data-ng-show="!!vm.searchField" data-ng-click="vm.searchField=''" aria-hidden="true"></i>
+      </div>
+      <div class="buttons">
+        <button class="add" ng-click="vm.onNewClientClick()">New Client</button>
+      </div>
+    </div>
+    <div class="table">
+      <div class="header">
+        <span class="column" ng-click="vm.setOrderBy('name')">
+          <p>Name</p>
+          <i class="fa" ng-class="{ 'fa-arrow-down' : vm.listOrder.reverse , 'fa-arrow-up' : !vm.listOrder.reverse, 'hidden' : vm.listOrder.column !== 'name' }" aria-hidden="true"></i>
+        </span>
+        <span class="column" ng-click="vm.setOrderBy('email')">
+          <p>Email</p>
+          <i class="fa" ng-class="{ 'fa-arrow-down' : vm.listOrder.reverse , 'fa-arrow-up' : !vm.listOrder.reverse, 'hidden' : vm.listOrder.column !== 'email' }" aria-hidden="true"></i>
+        </span>
+        <span class="column" ng-click="vm.setOrderBy('phone')">
+          <p>Phone</p>
+          <i class="fa" ng-class="{ 'fa-arrow-down' : vm.listOrder.reverse , 'fa-arrow-up' : !vm.listOrder.reverse, 'hidden' : vm.listOrder.column !== 'phone' }" aria-hidden="true"></i>
+        </span>
+        <span class="column" ng-click="vm.setOrderBy('providers')">
+          <p>Providers</p>
+          <i class="fa" ng-class="{ 'fa-arrow-down' : vm.listOrder.reverse , 'fa-arrow-up' : !vm.listOrder.reverse, 'hidden' : vm.listOrder.column !== 'providers' }" aria-hidden="true"></i>
+        </span>
+        <span class="column column-small"></span>
+      </div>
+      <div class="body">
+        <div class="row" data-ng-repeat="client in vm.clients | orderBy : vm.listOrder.column : vm.listOrder.reverse | filter : vm.searchField">
+          <span class="cell">{{client.name}}</span>
+          <span class="cell">{{client.email}}</span>
+          <span class="cell">{{client.phone}}</span>
+          <span class="cell">{{client.providers | providerListOfNamesFilter}}</span>
+          <span class="cell cell-small">
+            <a href data-ng-click="vm.onEditClientClick(client)">Edit</a>
+            <i class="fa fa-trash" data-ng-click="vm.onDeleteClientClick(client)" aria-hidden="true"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal support for showing errors -->
+<modal-form>
+  <provider-form></provider-form>
+</modal-form>

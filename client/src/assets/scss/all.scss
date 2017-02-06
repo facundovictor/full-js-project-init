@@ -1,0 +1,21 @@
+html, body {
+  font-size  : $font-size;
+  padding    : 0;
+  margin     : 0;
+  max-width  : 100vw;
+  max-height : 100vh;
+  overflow   : hidden;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+* {
+  user-select : none;
+}
+
+input.ng-dirty:required:invalid, input.ng-dirty:focus:invalid {
+  box-shadow : inset 0px 0px 1px $color-red;
+  border     : 1px solid $color-red;
+}

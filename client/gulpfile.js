@@ -16,7 +16,8 @@ const fs = require('fs');
 const gulp         = require('gulp'),
       watch        = require('gulp-watch'),
       concat       = require('gulp-concat'),
-      uglify       = require('gulp-uglify'),
+      uglify       = require('uglify-js'),
+      minifier     = require('gulp-uglify/minifier'),
       sass         = require('gulp-sass'),
       postcss      = require('gulp-postcss'),
       cssnano      = require('gulp-cssnano'),
@@ -64,94 +65,112 @@ gulp.task('connect', connect.server({
 /* js ************************************************************************/
 // Concatenation and minification
 
-const js_src = './src/js/**/*.js';
+const js_src         = 'src/app/**/*.js',
+      app_src        = 'src/app/app.js',
+      services_src   = 'src/app/**/*Service.js',
+      filters_src    = 'src/app/**/*Filter.js',
+      directives_src = 'src/app/**/*Directive.js';
 
 // Concatenation and minification
 gulp.task('js', () => {
-  gulp.src(js_src)
+  // NOTE: The app.js should be first in order to be accessible to controllers
+  gulp.src([
+    app_src,
+    services_src,
+    directives_src,
+    filters_src,
+    js_src
+  ])
     .pipe(concat('app.js'))
-    .pipe(uglify())
-    .pipe(gulp.dest('./public/js/'));
+    .pipe(minifier({}, uglify))
+    .pipe(gulp.dest('public/'));
 });
 
 // Copy the files
 gulp.task('js_reload', () => {
-  gulp.src(js_src)
-    .pipe(gulp.dest('./public/js/'))
+  gulp.src([app_src, services_src, directives_src, js_src])
+    .pipe(concat('app.js'))
+    .pipe(gulp.dest('public/'))
     .pipe(connect.reload());
 });
 
 /* SASS **********************************************************************/
 // Compilation task with connection reload for developing
 
-const sass_src = './src/scss/**/*.scss';
+const sass_src = 'src/assets/scss/**/*.scss',
+      vars_src = 'src/assets/scss/variables.scss';
 
 // Less production build task
 gulp.task('sass', () => {
-  gulp.src(sass_src)
+  gulp.src([vars_src, sass_src])
+    .pipe(concat('all.scss'))
     .pipe(sass().on('error', sass.logError))
     .pipe(postcss([ autoprefixer ]))
     .pipe(cssnano())
     .pipe(concat('all.css'))
-    .pipe(gulp.dest('./public/css/'));
+    .pipe(gulp.dest('public/css/'));
 });
 
 // Quick reload the browser on changes
 gulp.task('sass_reload', () => {
-  const processors = [ autoprefixer ];
-
-  gulp.src(sass_src)
-    .pipe(sass())
-    .pipe(postcss(processors))
-    .pipe(gulp.dest('./public/css/'))
+  gulp.src([vars_src, sass_src])
+    .pipe(concat('all.scss'))
+    .pipe(sass().on('error', sass.logError))
+    .pipe(postcss([ autoprefixer ]))
+    .pipe(concat('all.css'))
+    .pipe(gulp.dest('public/css/'))
     .pipe(connect.reload());
 });
 
 /* HTML **********************************************************************/
-const html_src = './src/html/**/*.html';
+const html_src = 'src/app/**/*.html';
 
 // Copy All dependencies
 gulp.task('html', () => {
   gulp.src([ html_src ], {
-    base: './src/html'
-  }).pipe(gulp.dest('./public/'));
+    base: 'src/app'
+  }).pipe(gulp.dest('public/'));
 });
 
 // Quick reload the browser on changes
 gulp.task('html_reload', () => {
   gulp.src([ html_src ], {
-    base: './src/html'
-  }).pipe(gulp.dest('./public/'))
+    base: 'src/app'
+  }).pipe(gulp.dest('public/'))
     .pipe(connect.reload());
 });
 
 /* Dependencies **************************************************************/
 
 // Bootstrap
-const bootstrap_src = './src/lib/bootstrap-3.3.7/**/*';
+const bootstrap_src = 'src/assets/lib/bootstrap-3.3.7/**/*';
 
 // Font Awesome
-const font_awesome_src = './src/lib/font-awesome-4.7.0/**/*';
+const font_awesome_src = 'src/assets/lib/font-awesome-4.7.0/**/*';
 
 // Angular
-const angular_src = './src/lib/angular.min.js';
+const angular_src = 'src/assets/lib/angular/**/*';
+
+// JQuery
+const jquery_src = 'src/assets/lib/jquery.min.js';
 
 // Copy All dependencies
 gulp.task('dependencies', () => {
   gulp.src([
+    jquery_src,
     angular_src,
     bootstrap_src,
     font_awesome_src
   ], {
-    base: './src/lib'
-  }).pipe(gulp.dest('./public/lib/'));
+    base: 'src/assets/lib'
+  }).pipe(gulp.dest('public/lib/'));
 });
 
 /* Global tasks **************************************************************/
 
 // Clear the public folder
 gulp.task('clear', () => {
-  clearFolder('./public');
+  clearFolder('public');
 });
 
 // Watch task
@@ -165,8 +184,8 @@ gulp.task('watch', function () {
 gulp.task('build', [
   'clear',
   'dependencies',
-  'js',
   'html',
+  'js',
   'sass'
 ]);
 
