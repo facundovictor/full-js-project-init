@@ -29,8 +29,10 @@ module.exports = {
  *        https://github.com/theganyo/swagger-node-runner/issues/79
  */
 function deleteClient (req, res) {
-  if (req.swagger.params.id.value < 100)
+  if (req.swagger.params.id.value > 0)
     res.sendStatus(204);
   else
-    res.sendStatus(404);
+    res.status(404).send({
+      message : 'Trying to update a non-existent client'
+    });
 }

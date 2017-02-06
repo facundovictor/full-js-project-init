@@ -205,6 +205,7 @@ describe('controllers', function() {
           .expect('Content-Type', /json/)
           .end(function(err, res) {
             should.not.exist(err);
+            res.body.should.have.property('message');
             done();
           });
       });
