@@ -70,7 +70,7 @@ describe('controllers', function() {
         request(server)
           .post(`${api_path}provider`)
           .send({
-            name : 'Some provider',
+            name : 'Some provider'
           })
           .set('Accept', 'application/json')
           .set('_mockReturnStatus', '201')
@@ -100,7 +100,7 @@ describe('controllers', function() {
           .put(`${api_path}provider/${provider_id}`)
           .send({
             id   : provider_id,
-            name : 'Some provider',
+            name : 'Some provider'
           })
           .set('Accept', 'application/json')
           .expect(200)
@@ -113,17 +113,48 @@ describe('controllers', function() {
           });
       });
 
-      it("Should return 404 if the id doesn't exist", function(done) {
+      it("Should return 404 (Not found) if the id doesn't exist", function(done) {
 
         request(server)
           .put(`${api_path}provider/${wrong_provider_id}`)
           .send({
             id   : wrong_provider_id,
-            name : 'Some provider',
+            name : 'Some provider'
           })
           .set('Accept', 'application/json')
           .set('_mockReturnStatus', '404')
           .expect(404)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            done();
+          });
+      });
+
+      it("Should return 400 (Bad Request) on empty request body", function(done) {
+
+        request(server)
+          .put(`${api_path}provider/${provider_id}`)
+          .set('Accept', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            done();
+          });
+      });
+
+      it("Should return 400 (Bad Request) on missing required data", function(done) {
+
+        request(server)
+          .put(`${api_path}provider/${provider_id}`)
+          .send({
+            id   : provider_id
+          })
+          .set('Accept', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
           .expect('Content-Type', /json/)
           .end(function(err, res) {
             should.not.exist(err);
