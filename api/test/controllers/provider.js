@@ -40,7 +40,8 @@ describe('controllers', function() {
 
   describe('provider', function() {
 
-    let provider_id = 1;
+    let provider_id       = 1,
+        wrong_provider_id = -1;
 
     describe(`GET ${api_path}provider`, function() {
 
@@ -107,9 +108,25 @@ describe('controllers', function() {
           .end(function(err, res) {
             should.not.exist(err);
             res.body.should.be.an.Object();
-            // TODO: Fix the mocked api that is returning a client instead of
-            //       a provider.
             validateProvider(res.body);
+            done();
+          });
+      });
+
+      it("Should return 404 if the id doesn't exist", function(done) {
+
+        request(server)
+          .put(`${api_path}provider/${wrong_provider_id}`)
+          .send({
+            id   : wrong_provider_id,
+            name : 'Some provider',
+          })
+          .set('Accept', 'application/json')
+          .set('_mockReturnStatus', '404')
+          .expect(404)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
             done();
           });
       });
@@ -122,7 +139,7 @@ describe('controllers', function() {
         request(server)
           .delete(`${api_path}provider/${provider_id}`)
           .set('Accept', 'application/json')
-          // TODO: Fix the mocked API that is returning 500
+          .set('_mockReturnStatus', '204')
           .expect(204)
           .end(function(err, res) {
             should.not.exist(err);
