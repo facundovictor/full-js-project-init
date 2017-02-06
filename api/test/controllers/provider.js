@@ -50,6 +50,7 @@ describe('controllers', function() {
         request(server)
           .get(`${api_path}provider`)
           .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
           .expect(200)
           .expect('Content-Type', /json/)
           .end(function(err, res) {
@@ -73,6 +74,7 @@ describe('controllers', function() {
             name : 'Some provider'
           })
           .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
           .set('_mockReturnStatus', '201')
           .expect(201)
           .expect('Content-Type', /json/)
@@ -103,6 +105,7 @@ describe('controllers', function() {
             name : 'Some provider'
           })
           .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
           .expect(200)
           .expect('Content-Type', /json/)
           .end(function(err, res) {
@@ -122,6 +125,7 @@ describe('controllers', function() {
             name : 'Some provider'
           })
           .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
           .set('_mockReturnStatus', '404')
           .expect(404)
           .expect('Content-Type', /json/)
@@ -136,6 +140,7 @@ describe('controllers', function() {
         request(server)
           .put(`${api_path}provider/${provider_id}`)
           .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
           .set('_mockReturnStatus', '400')
           .expect(400)
           .expect('Content-Type', /json/)
@@ -153,6 +158,7 @@ describe('controllers', function() {
             id   : provider_id
           })
           .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
           .set('_mockReturnStatus', '400')
           .expect(400)
           .expect('Content-Type', /json/)
@@ -170,6 +176,7 @@ describe('controllers', function() {
         request(server)
           .delete(`${api_path}provider/${provider_id}`)
           .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
           .set('_mockReturnStatus', '204')
           .expect(204)
           .end(function(err, res) {
