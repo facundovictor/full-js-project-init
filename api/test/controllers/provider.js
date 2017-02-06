@@ -254,7 +254,7 @@ describe('controllers', function() {
 
     describe(`DELETE ${api_path}provider/{id}`, function() {
 
-      it('Should return return 204', function(done) {
+      it('Should return return 204 (No content) on success', function(done) {
 
         request(server)
           .delete(`${api_path}provider/${provider_id}`)
@@ -265,6 +265,21 @@ describe('controllers', function() {
           .end(function(err, res) {
             should.not.exist(err);
             res.body.should.be.empty();
+            done();
+          });
+      });
+
+      it('Should return return 404 (Not found) on invalid ID', function(done) {
+
+        request(server)
+          .delete(`${api_path}provider/${wrong_provider_id}`)
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '404')
+          .expect(404)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.have.property('message');
             done();
           });
       });
