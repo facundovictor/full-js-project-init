@@ -119,6 +119,7 @@ paths:
           type: string
           in: path
           required: true
+
       responses:
         "200":
           description: Success
@@ -143,6 +144,7 @@ paths:
           type: string
           in: path
           required: true
+
       responses:
         "204":
           description: No Content
@@ -242,6 +244,7 @@ paths:
           type: string
           in: path
           required: true
+
       responses:
         "204":
           description: No Content
@@ -276,7 +279,7 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: "#/definitions/Client"
+            $ref: "#/definitions/Provider"
         # responses may fall through to errors
         default:
           description: Error
