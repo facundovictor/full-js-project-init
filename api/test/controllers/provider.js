@@ -229,6 +229,30 @@ describe('controllers', function() {
             done();
           });
       });
+
+      it("Should return 400 (Bad Request) on longer name property", function(done) {
+
+        request(server)
+          .put(`${api_path}provider/${provider_id}`)
+          .send({
+            id   : provider_id,
+            name : wrong_provider_name
+          })
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAMaxLengthError(error.errors[0], 'name');
+            done();
+          });
+      });
     });
 
     describe(`DELETE ${api_path}provider/{id}`, function() {
