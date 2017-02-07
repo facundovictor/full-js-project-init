@@ -16,8 +16,12 @@ const request = require('supertest');
 const server = require('../../app');
 const api_path = '/api/';
 
+// Test helpers
+const errorValidator = require('../helpers/error_validations');
+
 // Environment variables
 const isIntegrationTest = process.env.INTEGRATION;
+
 
 /* Test helpers **************************************************************/
 
@@ -32,61 +36,9 @@ const isIntegrationTest = process.env.INTEGRATION;
 function validateProvider (provider) {
   provider.should.have.property('id');
   provider.should.have.property('name');
-}
-
-/*
- * Given a validation error, it validates that it respects the schema
- *
- * TODO: Implement this by recovering the schema from swagger, and compare it
- *       against the real schema.
- *
- * @param error {Object}, Object to validate if it's a validation error.
- */
-function validateValidationError (error) {
-  error.should.have.property('message');
-  error.message.should.be.equal('Validation errors');
-
-  error.should.have.property('errors');
-  error.errors.should.be.an.Array();
-  error.errors.length.should.be.above(0);
-}
-
-/*
- * Given an invalid request parameter error, it validates that it respects the
- * schema.
- *
- * TODO: Implement this by recovering the schema from swagger, and compare it
- *       against the real schema.
- *
- * @param error {Object}, Object to validate if it's an invalid request para
- *                        -meter error.
- */
-function validateInvalidRequestParameterError (error) {
-  error.should.have.property('code');
-  error.should.have.property('errors');
-  error.errors.should.be.an.Array();
-  error.errors.length.should.be.above(0);
-  error.code.should.be.equal('INVALID_REQUEST_PARAMETER');
-
-  error.errors[0].code.should.be.equal('OBJECT_MISSING_REQUIRED_PROPERTY');
-}
-
-/*
- * Given an missing property error, it validates that it respects the schema.
- *
- * TODO: Implement this by recovering the schema from swagger, and compare it
- *       against the real schema.
- *
- * @param error {Object}, Object to validate if it's an object missing required
- *                        property error.
- *
- * @param missingProperty {String}, the name of the missing property.
- */
-function validateObjectMissingError (error, missingProperty) {
-  error.code.should.be.equal('OBJECT_MISSING_REQUIRED_PROPERTY');
-  error.params.should.be.an.Array();
-  error.params.length.should.be.above(0);
-  error.params.should.containEql(missingProperty);
+  provider.name.should.be.an.String();
+  provider.name.should.be.not.empty();
+  provider.name.length.should.be.belowOrEqual(50);
 }
 
 /* Tests *********************************************************************/
@@ -95,8 +47,9 @@ describe('controllers', function() {
 
   describe('provider', function() {
 
-    let provider_id       = 1,
-        wrong_provider_id = -1;
+    let provider_id         = 1,
+        wrong_provider_id   = -1,
+        wrong_provider_name = new Array (1000).join('a');
 
     describe(`GET ${api_path}provider`, function() {
 
@@ -160,9 +113,33 @@ describe('controllers', function() {
           .end(function(err, res) {
             should.not.exist(err);
             res.body.should.be.an.Object();
-            validateValidationError(res.body);
-            validateInvalidRequestParameterError(res.body.errors[0]);
-            validateObjectMissingError(res.body.errors[0].errors[0], 'name');
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAnObjectMissingRequiredError(error.errors[0], 'name');
+            done();
+          });
+      });
+
+      it('Should return 400 (Bad request) on longer name parameter', function(done) {
+
+        request(server)
+          .post(`${api_path}provider`)
+          .send({
+            name : wrong_provider_name
+          })
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAMaxLengthError(error.errors[0], 'name');
             done();
           });
       });
@@ -222,9 +199,10 @@ describe('controllers', function() {
           .end(function(err, res) {
             should.not.exist(err);
             res.body.should.be.an.Object();
-            validateValidationError(res.body);
-            validateInvalidRequestParameterError(res.body.errors[0]);
-            validateObjectMissingError(res.body.errors[0].errors[0], 'name');
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAnObjectMissingRequiredError(error.errors[0], 'name');
             done();
           });
       });
@@ -244,9 +222,10 @@ describe('controllers', function() {
           .end(function(err, res) {
             should.not.exist(err);
             res.body.should.be.an.Object();
-            validateValidationError(res.body);
-            validateInvalidRequestParameterError(res.body.errors[0]);
-            validateObjectMissingError(res.body.errors[0].errors[0], 'name');
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAnObjectMissingRequiredError(error.errors[0], 'name');
             done();
           });
       });
@@ -279,7 +258,6 @@ describe('controllers', function() {
           .expect(404)
           .end(function(err, res) {
             should.not.exist(err);
-            res.body.should.have.property('message');
             done();
           });
       });
