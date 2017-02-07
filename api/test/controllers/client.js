@@ -30,14 +30,28 @@ const isIntegrationTest = process.env.INTEGRATION;
  * @param client {Object}, Object to validate if it's a client.
  */
 function validateClientWithProvider (client) {
-    client.should.have.property('name');
-    client.should.have.property('email');
-    client.should.have.property('phone');
-    client.should.have.property('providers');
+  client.should.have.property('name');
+  client.name.should.be.an.String();
+  client.name.should.be.not.empty();
+  client.name.length.should.be.belowOrEqual(50);
 
-    client.providers.forEach( provider => {
-        provider.should.have.property('id');
-    });
+  client.should.have.property('email');
+  client.email.should.be.an.String();
+  client.email.should.be.not.empty();
+  client.email.length.should.be.belowOrEqual(50);
+  client.email.should.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+
+  client.should.have.property('phone');
+  client.phone.should.be.an.String();
+  client.phone.should.be.not.empty();
+  client.phone.length.should.be.belowOrEqual(50);
+  client.phone.should.match(/^\d{3}\-\d{3}\-\d{4}$/);
+
+  client.should.have.property('providers');
+  client.providers.should.be.an.Array();
+  client.providers.forEach( provider => {
+    provider.should.have.property('id');
+  });
 }
 
 /* Tests *********************************************************************/
@@ -46,8 +60,19 @@ describe('controllers', function() {
 
   describe('client', function() {
 
-    let client_id   = 1,
-        provider_id = 5;
+    let client_id          = 1,
+        wrong_client_id    = -1,
+        provider_id        = 5,
+        wrong_provider_id  = -1,
+        client_name        = "Some client",
+        long_string        = new Array(1000).join('a'),
+        wrong_client_name  = long_string,
+        client_email       = "some@email.com",
+        wrong_client_email_long   = long_string,
+        wrong_client_email_format = "unformated-email",
+        client_phone              = "123-123-1546",
+        wrong_client_phone_long   = long_string,
+        wrong_client_phone_format = "12312-412";
 
     describe(`GET ${api_path}client`, function() {
 
@@ -77,9 +102,9 @@ describe('controllers', function() {
         request(server)
           .post(`${api_path}client`)
           .send({
-            name      : 'Some client',
-            email     : 'some@email.com',
-            phone     : '1242342343',
+            name      : client_name,
+            email     : client_email,
+            phone     : client_phone,
             providers : [{
               id : provider_id
             }]
@@ -132,9 +157,9 @@ describe('controllers', function() {
           .put(`${api_path}client/${client_id}`)
           .send({
             id        : client_id,
-            name      : 'Some client',
-            email     : 'some@email.com',
-            phone     : '1242342343',
+            name      : client_name,
+            email     : client_email,
+            phone     : client_phone,
             providers : [{
               id : provider_id
             }]
