@@ -18,7 +18,10 @@ module.exports = {
   shouldBeAValidationError,
   shouldBeAnObjectMissingRequiredError,
   shouldBeAnInvalidRequestParameterError,
-  shouldBeAMaxLengthError
+  shouldBeAListOfObjectMissingRequiredErrors,
+  shouldBeAnInvalidFormatError,
+  shouldBeAMaxLengthError,
+  shouldBeAPatternError
 };
 
 
@@ -67,6 +70,32 @@ function shouldBeAnObjectMissingRequiredError (error, missingProperty) {
 }
 
 /*
+ * Given a list of missing property errors, it validates that it respects the
+ * schema.
+ *
+ * @param errors {Array}, Array of Objectes to be validated if they are missing
+ *                        required property error.
+ *
+ * @param missingProperties {Array}, the name list of the missing properties.
+ */
+function shouldBeAListOfObjectMissingRequiredErrors (errors, missingProperties) {
+  errors.should.be.an.Array();
+  errors.length.should.be.above(0);
+  missingProperties.should.be.an.Array();
+  missingProperties.length.should.be.above(0);
+  errors.length.should.be.equal(missingProperties.length);
+
+  let listOfMissingParams = errors.map( error => {
+    error.code.should.be.equal('OBJECT_MISSING_REQUIRED_PROPERTY');
+    error.params.should.be.an.Array();
+    error.params.length.should.be.equal(1);
+    return error.params[0];
+  });
+
+  missingProperties.should.containDeep(missingProperties);
+}
+
+/*
  * Given a Max Length property error, it validates that it respects the schema.
  *
  * @param error {Object}, Object to validate if it's a max length error.
@@ -75,6 +104,38 @@ function shouldBeAnObjectMissingRequiredError (error, missingProperty) {
  */
 function shouldBeAMaxLengthError (error, propertyInConflict) {
   error.code.should.be.equal('MAX_LENGTH');
+  error.params.should.be.an.Array();
+  error.params.length.should.be.above(0);
+  error.path.should.be.an.Array();
+  error.path.length.should.be.above(0);
+  error.path.should.containEql(propertyInConflict);
+}
+
+/*
+ * Given a pattern check error, it validates that it respects the schema.
+ *
+ * @param error {Object}, Object to validate if it's a pattern check error.
+ *
+ * @param propertyInConflict {String}, the name of the wrong property.
+ */
+function shouldBeAPatternError (error, propertyInConflict) {
+  error.code.should.be.equal('PATTERN');
+  error.params.should.be.an.Array();
+  error.params.length.should.be.above(0);
+  error.path.should.be.an.Array();
+  error.path.length.should.be.above(0);
+  error.path.should.containEql(propertyInConflict);
+}
+
+/*
+ * Given an Invalid Format error, it validates that it respects the schema.
+ *
+ * @param error {Object}, Object to validate if it's an "Invalid format" error.
+ *
+ * @param propertyInConflict {String}, the name of the wrong property.
+ */
+function shouldBeAnInvalidFormatError (error, propertyInConflict) {
+  error.code.should.be.equal('INVALID_FORMAT');
   error.params.should.be.an.Array();
   error.params.length.should.be.above(0);
   error.path.should.be.an.Array();
