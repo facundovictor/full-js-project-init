@@ -427,7 +427,6 @@ describe('controllers', function() {
           .set('Content-Type', 'application/json')
           .set('_mockReturnStatus', '404')
           .expect(404)
-          .expect('Content-Type', /json/)
           .end(function(err, res) {
             should.not.exist(err);
             done();
