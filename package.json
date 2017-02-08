@@ -2,7 +2,7 @@
   "name": "full-js-project-init",
   "version": "0.0.1",
   "description": "A JS web project",
-  "main": "index.js",
+  "main": "api/app.js",
   "dependencies": {
     "express": "^4.14.0",
     "moment": "^2.17.1",
@@ -30,6 +30,7 @@
   },
   "scripts": {
     "server": "node ./api/app.js",
+    "server-mocked": "NODE_CONFIG_DIR=./api/config/ ./node_modules/swagger/bin/swagger.js project start -m ./api/",
     "debug": "node debug ./api/app.js",
     "build": "./node_modules/gulp/bin/gulp.js --gulpfile ./client/gulpfile.js build",
     "dev": "./node_modules/gulp/bin/gulp.js --gulpfile ./client/gulpfile.js development",
