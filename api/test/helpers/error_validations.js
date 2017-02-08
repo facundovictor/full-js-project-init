@@ -21,6 +21,7 @@ module.exports = {
   shouldBeAListOfObjectMissingRequiredErrors,
   shouldBeAnInvalidFormatError,
   shouldBeAMaxLengthError,
+  shouldBeAMinLengthError,
   shouldBeAPatternError
 };
 
@@ -100,10 +101,26 @@ function shouldBeAListOfObjectMissingRequiredErrors (errors, missingProperties) 
  *
  * @param error {Object}, Object to validate if it's a max length error.
  *
- * @param propertyInConflict {String}, the name of the missing property.
+ * @param propertyInConflict {String}, the name of the property in conflict.
  */
 function shouldBeAMaxLengthError (error, propertyInConflict) {
   error.code.should.be.equal('MAX_LENGTH');
+  error.params.should.be.an.Array();
+  error.params.length.should.be.above(0);
+  error.path.should.be.an.Array();
+  error.path.length.should.be.above(0);
+  error.path.should.containEql(propertyInConflict);
+}
+
+/*
+ * Given a Min Length property error, it validates that it respects the schema.
+ *
+ * @param error {Object}, Object to validate if it's a min length error.
+ *
+ * @param propertyInConflict {String}, the name of the property in conflict.
+ */
+function shouldBeAMinLengthError (error, propertyInConflict) {
+  error.code.should.be.equal('MIN_LENGTH');
   error.params.should.be.an.Array();
   error.params.length.should.be.above(0);
   error.path.should.be.an.Array();
