@@ -129,6 +129,8 @@ project
 
 * Build front-end SPA: `npm run build`
 * Start developing the front-end SPA with browser auto-reload: `npm run dev`
+* Running the front-end tests: `npm run test-client`
+* Build front-end SPA and run tests: `npm run build-and-test`
 * Running the server: `npm run server`
 * Running the mock server: `npm run mock-server`
 * Running the server in debug mode: `npm run debug`
