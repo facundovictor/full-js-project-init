@@ -385,6 +385,7 @@ definitions:
       name:
         type: string
         maxLength: 50
+        minLength: 1
 
   # New Provider structure
   NewProvider:
