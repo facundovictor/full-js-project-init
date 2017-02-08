@@ -335,13 +335,16 @@ definitions:
       name:
         type: string
         maxLength: 50
+        minLength: 1
       email:
         type: string
         format: email
         maxLength: 50
+        minLength: 3
       phone:
         type: string
-        maxLength: 50
+        maxLength: 13
+        minLength: 11
         pattern: '^\d{3}-\d{3}-\d{4}$'
       providers:
         $ref: "#/definitions/ProvidersWithOptionalName"
