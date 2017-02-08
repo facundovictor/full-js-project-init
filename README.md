@@ -25,6 +25,9 @@ project
 |   └───swagger
 |   |   |   swagger.yaml
 |   |
+|   └───middleware
+|   |   |   cors.js
+|   |
 |   └───models
 |   |   |   index.js
 |   |   |   client.js
@@ -35,10 +38,18 @@ project
 |   |   |   client.js
 |   |   |   provider.js
 |   |
+|   └───mocks
+|   |   └───controllers
+|   |   |   |   client.js
+|   |   |   |   provider.js
+|   |
 |   └───test
 |       └───controllers
-|           |   client.js
-|           |   provider.js
+|       |   |   client.js
+|       |   |   provider.js
+|       |
+|       └───helpers
+|           |   error_validations.js
 |
 └───client
 |   |   gulpfile.js
@@ -46,20 +57,61 @@ project
 |   └───public
 |   |
 |   └───src
-|       └───lib
-|       |   |   angular.min.js
+|       └───app
+|       |   |   index.html
+|       |   |   app.js
 |       |   |
-|       |   └───bootstrap
-|       |   └───font-awesome
+|       |   └───components
+|       |   |   | 
+|       |   |   └───client
+|       |   |   |   |   clientController.js
+|       |   |   |   |   clientService.js
+|       |   |   |   |   clientView.html
+|       |   |   |
+|       |   |   └───error
+|       |   |   |   |   errorController.js
+|       |   |   |   |   errorDirective.js
+|       |   |   |   |   errorView.html
+|       |   |   |
+|       |   |   └───provider
+|       |   |       |   providerController.js
+|       |   |       |   providerDirective.js
+|       |   |       |   providerFormView.html
+|       |   |       |   providerService.js
+|       |   |
+|       |   └───shared
+|       |       └───filters
+|       |       |   providerListNameFilter.js
+|       |       |
+|       |       └───modalForm
+|       |           |   modalFormDirective.js
+|       |           |   modalFormView.html
+|       |
+|       └───assets
+|       |   └───lib
+|       |       |   jquery.min.js
+|       |       |
+|       |       └───angular
+|       |       └───bootstrap
+|       |       └───font-awesome
 |       |
 |       └───scss
-|       |   |   all.scss
-|       |
-|       └───js
-|       |   |   app.js
-|       |
-|       └───html
-|           |   index.html
+|           |   all.scss
+|           |   variables.scss
+|           |
+|           └───ux
+|           |   |   list.scss
+|           |   |   button.scss
+|           |   |   input.scss
+|           |   |   toolbar.scss
+|           |   |
+|           |   └───modal
+|           |       |   modal.scss
+|           |       |   modalError.scss
+|           |       |   modalForm.scss
+|           |
+|           └───components
+|               |   providerForm.scss
 |
 └───scripts
 |   |   create_mysql_user.sh
