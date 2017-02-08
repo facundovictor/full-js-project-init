@@ -16,6 +16,9 @@ const request = require('supertest');
 const server = require('../../app');
 const api_path = '/api/';
 
+// Test helpers
+const errorValidator = require('../helpers/error_validations');
+
 // Environment variables
 const isIntegrationTest = process.env.INTEGRATION;
 
@@ -65,10 +68,10 @@ describe('controllers', function() {
         provider_id        = 5,
         wrong_provider_id  = -1,
         client_name        = "Some client",
-        long_string        = new Array(1000).join('a'),
+        long_string        = new Array(60).join('a'),
         wrong_client_name  = long_string,
         client_email       = "some@email.com",
-        wrong_client_email_long   = long_string,
+        wrong_client_email_long   = long_string + "@asdasd.com",
         wrong_client_email_format = "unformated-email",
         client_phone              = "123-123-1546",
         wrong_client_phone_long   = long_string,
@@ -125,6 +128,274 @@ describe('controllers', function() {
             if (isIntegrationTest)
               client_id = res.body.id;
 
+            done();
+          });
+      });
+
+      it('Should return 400 (Bad Request) on empty body', function(done) {
+
+        request(server)
+          .post(`${api_path}client`)
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAListOfObjectMissingRequiredErrors(error.errors, [
+              'name', 'email', 'phone', 'providers'
+            ]);
+            done();
+          });
+      });
+
+      it('Should return 400 (Bad Request) on missing name', function(done) {
+
+        request(server)
+          .post(`${api_path}client`)
+          .send({
+            email     : client_email,
+            phone     : client_phone,
+            providers : [{
+              id : provider_id
+            }]
+          })
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAnObjectMissingRequiredError(error.errors[0], 'name');
+            done();
+          });
+      });
+
+      it('Should return 400 (Bad Request) on missing email', function(done) {
+
+        request(server)
+          .post(`${api_path}client`)
+          .send({
+            name      : client_name,
+            phone     : client_phone,
+            providers : [{
+              id : provider_id
+            }]
+          })
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAnObjectMissingRequiredError(error.errors[0], 'email');
+            done();
+          });
+      });
+
+      it('Should return 400 (Bad Request) on missing phone', function(done) {
+
+        request(server)
+          .post(`${api_path}client`)
+          .send({
+            name      : client_name,
+            email     : client_email,
+            providers : [{
+              id : provider_id
+            }]
+          })
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAnObjectMissingRequiredError(error.errors[0], 'phone');
+            done();
+          });
+      });
+
+      it('Should return 400 (Bad Request) on missing providers', function(done) {
+
+        request(server)
+          .post(`${api_path}client`)
+          .send({
+            name  : client_name,
+            email : client_email,
+            phone : client_phone,
+          })
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAnObjectMissingRequiredError(error.errors[0], 'providers');
+            done();
+          });
+      });
+
+      it('Should return 400 (Bad Request) on long name', function(done) {
+
+        request(server)
+          .post(`${api_path}client`)
+          .send({
+            name      : wrong_client_name,
+            email     : client_email,
+            phone     : client_phone,
+            providers : [{
+              id : provider_id
+            }]
+          })
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAMaxLengthError(error.errors[0], 'name');
+            done();
+          });
+      });
+
+      it('Should return 400 (Bad Request) on long email', function(done) {
+
+        request(server)
+          .post(`${api_path}client`)
+          .send({
+            name      : client_name,
+            email     : wrong_client_email_long,
+            phone     : client_phone,
+            providers : [{
+              id : provider_id
+            }]
+          })
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAMaxLengthError(error.errors[0], 'email');
+            done();
+          });
+      });
+
+      it('Should return 400 (Bad Request) on long phone', function(done) {
+
+        request(server)
+          .post(`${api_path}client`)
+          .send({
+            name      : client_name,
+            email     : client_email,
+            phone     : wrong_client_phone_long,
+            providers : [{
+              id : provider_id
+            }]
+          })
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAMaxLengthError(error.errors[0], 'phone');
+            done();
+          });
+      });
+
+      it('Should return 400 (Bad Request) on wrong phone', function(done) {
+
+        request(server)
+          .post(`${api_path}client`)
+          .send({
+            name      : client_name,
+            email     : client_email,
+            phone     : wrong_client_phone_format,
+            providers : [{
+              id : provider_id
+            }]
+          })
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAPatternError(error.errors[0], 'phone');
+            done();
+          });
+      });
+
+      it('Should return 400 (Bad Request) on wrong email', function(done) {
+
+        request(server)
+          .post(`${api_path}client`)
+          .send({
+            name      : client_name,
+            email     : wrong_client_email_format,
+            phone     : client_phone,
+            providers : [{
+              id : provider_id
+            }]
+          })
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAnInvalidFormatError(error.errors[0], 'email');
             done();
           });
       });
