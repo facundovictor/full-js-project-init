@@ -16,8 +16,12 @@ const request = require('supertest');
 const server = require('../../app');
 const api_path = '/api/';
 
+// Test helpers
+const errorValidator = require('../helpers/error_validations');
+
 // Environment variables
 const isIntegrationTest = process.env.INTEGRATION;
+
 
 /* Test helpers **************************************************************/
 
@@ -30,8 +34,11 @@ const isIntegrationTest = process.env.INTEGRATION;
  * @param provider {Object}, Object to validate if it's a provider.
  */
 function validateProvider (provider) {
-    provider.should.have.property('id');
-    provider.should.have.property('name');
+  provider.should.have.property('id');
+  provider.should.have.property('name');
+  provider.name.should.be.an.String();
+  provider.name.should.be.not.empty();
+  provider.name.length.should.be.belowOrEqual(50);
 }
 
 /* Tests *********************************************************************/
@@ -40,7 +47,9 @@ describe('controllers', function() {
 
   describe('provider', function() {
 
-    let provider_id = 1;
+    let provider_id         = 1,
+        wrong_provider_id   = -1,
+        wrong_provider_name = new Array (1000).join('a');
 
     describe(`GET ${api_path}provider`, function() {
 
@@ -49,6 +58,7 @@ describe('controllers', function() {
         request(server)
           .get(`${api_path}provider`)
           .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
           .expect(200)
           .expect('Content-Type', /json/)
           .end(function(err, res) {
@@ -69,9 +79,11 @@ describe('controllers', function() {
         request(server)
           .post(`${api_path}provider`)
           .send({
-            name : 'Some provider',
+            name : 'Some provider'
           })
           .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '201')
           .expect(201)
           .expect('Content-Type', /json/)
           .end(function(err, res) {
@@ -88,6 +100,49 @@ describe('controllers', function() {
             done();
           });
       });
+
+      it('Should return 400 (Bad request) on missing required parameter', function(done) {
+
+        request(server)
+          .post(`${api_path}provider`)
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAnObjectMissingRequiredError(error.errors[0], 'name');
+            done();
+          });
+      });
+
+      it('Should return 400 (Bad request) on longer name parameter', function(done) {
+
+        request(server)
+          .post(`${api_path}provider`)
+          .send({
+            name : wrong_provider_name
+          })
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAMaxLengthError(error.errors[0], 'name');
+            done();
+          });
+      });
     });
 
     describe(`PUT ${api_path}provider/{id}`, function() {
@@ -97,18 +152,104 @@ describe('controllers', function() {
         request(server)
           .put(`${api_path}provider/${provider_id}`)
           .send({
-            id   : 2,
-            name : 'Some provider',
+            id   : provider_id,
+            name : 'Some provider'
           })
           .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
           .expect(200)
           .expect('Content-Type', /json/)
           .end(function(err, res) {
             should.not.exist(err);
             res.body.should.be.an.Object();
-            // TODO: Fix the mocked api that is returning a client instead of
-            //       a provider.
             validateProvider(res.body);
+            done();
+          });
+      });
+
+      it("Should return 404 (Not found) if the id doesn't exist", function(done) {
+
+        request(server)
+          .put(`${api_path}provider/${wrong_provider_id}`)
+          .send({
+            id   : wrong_provider_id,
+            name : 'Some provider'
+          })
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '404')
+          .expect(404)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.have.property('message');
+            done();
+          });
+      });
+
+      it("Should return 400 (Bad Request) on empty request body", function(done) {
+
+        request(server)
+          .put(`${api_path}provider/${provider_id}`)
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAnObjectMissingRequiredError(error.errors[0], 'name');
+            done();
+          });
+      });
+
+      it("Should return 400 (Bad Request) on missing required data", function(done) {
+
+        request(server)
+          .put(`${api_path}provider/${provider_id}`)
+          .send({
+            id   : provider_id
+          })
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAnObjectMissingRequiredError(error.errors[0], 'name');
+            done();
+          });
+      });
+
+      it("Should return 400 (Bad Request) on longer name property", function(done) {
+
+        request(server)
+          .put(`${api_path}provider/${provider_id}`)
+          .send({
+            id   : provider_id,
+            name : wrong_provider_name
+          })
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAMaxLengthError(error.errors[0], 'name');
             done();
           });
       });
@@ -116,16 +257,31 @@ describe('controllers', function() {
 
     describe(`DELETE ${api_path}provider/{id}`, function() {
 
-      it('Should return return 204', function(done) {
+      it('Should return return 204 (No content) on success', function(done) {
 
         request(server)
           .delete(`${api_path}provider/${provider_id}`)
           .set('Accept', 'application/json')
-          // TODO: Fix the mocked API that is returning 500
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '204')
           .expect(204)
           .end(function(err, res) {
             should.not.exist(err);
             res.body.should.be.empty();
+            done();
+          });
+      });
+
+      it('Should return return 404 (Not found) on invalid ID', function(done) {
+
+        request(server)
+          .delete(`${api_path}provider/${wrong_provider_id}`)
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '404')
+          .expect(404)
+          .end(function(err, res) {
+            should.not.exist(err);
             done();
           });
       });

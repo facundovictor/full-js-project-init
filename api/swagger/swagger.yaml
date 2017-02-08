@@ -99,6 +99,10 @@ paths:
           description: Created
           schema:
             $ref: "#/definitions/Client"
+        "400":
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         # responses may fall through to errors
         default:
           description: Error
@@ -119,6 +123,7 @@ paths:
           type: string
           in: path
           required: true
+
       responses:
         "200":
           description: Success
@@ -143,13 +148,12 @@ paths:
           type: string
           in: path
           required: true
+
       responses:
         "204":
           description: No Content
         "404":
           description: Not Found
-          schema:
-            $ref: "#/definitions/ErrorResponse"
         # responses may fall through to errors
         default:
           description: Error
@@ -178,6 +182,14 @@ paths:
           description: Success
           schema:
             $ref: "#/definitions/Client"
+        "400":
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "404":
+          description: Not Found
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         # responses may fall through to errors
         default:
           description: Error
@@ -222,6 +234,10 @@ paths:
           description: Created
           schema:
             $ref: "#/definitions/Provider"
+        "400":
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         # responses may fall through to errors
         default:
           description: Error
@@ -242,13 +258,12 @@ paths:
           type: string
           in: path
           required: true
+
       responses:
         "204":
           description: No Content
         "404":
           description: Not Found
-          schema:
-            $ref: "#/definitions/ErrorResponse"
         # responses may fall through to errors
         default:
           description: Error
@@ -276,7 +291,15 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: "#/definitions/Client"
+            $ref: "#/definitions/Provider"
+        "400":
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "404":
+          description: Not Found
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         # responses may fall through to errors
         default:
           description: Error
@@ -311,10 +334,15 @@ definitions:
     properties:
       name:
         type: string
+        maxLength: 50
       email:
         type: string
+        format: email
+        maxLength: 50
       phone:
         type: string
+        maxLength: 50
+        pattern: '^\d{3}-\d{3}-\d{4}$'
       providers:
         $ref: "#/definitions/ProvidersWithOptionalName"
 
@@ -340,6 +368,7 @@ definitions:
         type: number
       name:
         type: string
+        maxLength: 50
 
   # Provider structure that requires a name
   Provider:
@@ -352,6 +381,7 @@ definitions:
         type: number
       name:
         type: string
+        maxLength: 50
 
   # New Provider structure
   NewProvider:
@@ -360,6 +390,7 @@ definitions:
     type: object
     properties:
       name:
+        maxLength: 50
         type: string
 
 

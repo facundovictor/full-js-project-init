@@ -15,7 +15,7 @@
         "name": "swagger_router",
         "mockMode": false,
         "mockControllersDirs": [
-          "mocks"
+          "mocks/controllers"
         ],
         "controllersDirs": [
           "controllers"
