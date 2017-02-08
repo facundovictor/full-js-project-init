@@ -50,6 +50,7 @@ describe('controllers', function() {
     let provider_id         = 1,
         wrong_provider_id   = -1,
         wrong_provider_name = new Array (1000).join('a');
+        wrong_provider_name_short = '';
 
     describe(`GET ${api_path}provider`, function() {
 
@@ -117,6 +118,29 @@ describe('controllers', function() {
             let error = res.body.errors[0];
             errorValidator.shouldBeAnInvalidRequestParameterError(error);
             errorValidator.shouldBeAnObjectMissingRequiredError(error.errors[0], 'name');
+            done();
+          });
+      });
+
+      it('Should return 400 (Bad request) on shorter name parameter', function(done) {
+
+        request(server)
+          .post(`${api_path}provider`)
+          .send({
+            name : wrong_provider_name_short
+          })
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '400')
+          .expect(400)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            res.body.should.be.an.Object();
+            errorValidator.shouldBeAValidationError(res.body);
+            let error = res.body.errors[0];
+            errorValidator.shouldBeAnInvalidRequestParameterError(error);
+            errorValidator.shouldBeAMinLengthError(error.errors[0], 'name');
             done();
           });
       });
