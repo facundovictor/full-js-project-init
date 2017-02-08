@@ -418,6 +418,21 @@ describe('controllers', function() {
             done();
           });
       });
+
+      it('should return 404 (Not found) on wrong client id', function(done) {
+
+        request(server)
+          .get(`${api_path}client/${wrong_client_id}`)
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('_mockReturnStatus', '404')
+          .expect(404)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            should.not.exist(err);
+            done();
+          });
+      });
     });
 
     describe(`PUT ${api_path}client/{id}`, function() {
