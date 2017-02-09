@@ -172,11 +172,21 @@ gulp.task('dependencies', () => {
 const test_src       = 'test/tests/**/*.js',
       test_conf_path = 'test/protractor.config.js';
 
-gulp.task('protractor', () => {
+gulp.task('start-webdriver-and-test', () => {
   gulp.src([test_src]).pipe( protractor({
     configFile          : test_conf_path,
     args                : ['--baseUtl', 'http://127.0.0.1:8000'],
     autoStartStopServer : true
+  })).on('error', (e) => {
+    console.log(e);
+  });
+});
+
+gulp.task('test', () => {
+  gulp.src([test_src]).pipe( protractor({
+    configFile          : test_conf_path,
+    args                : ['--baseUtl', 'http://127.0.0.1:8000'],
+    autoStartStopServer : false
   })).on('error', (e) => {
     console.log(e);
   });
@@ -219,12 +229,6 @@ gulp.task('development', [
   'connect',
   'reloadable_build',
   'watch'
-]);
-
-// test production build
-gulp.task('test', [
-  'build',
-  'protractor'
 ]);
 
 // Default task
