@@ -42,7 +42,7 @@
     "build": "npm run gulp build",
     "dev": "npm run gulp development",
     "test-client": "npm run gulp test",
-    "build-and-test": "npm run build && npm run test-client",
+    "build-and-test": "npm run build && npm run start-webdriver-and-test",
     "start-webdriver-and-test": "npm run gulp start-webdriver-and-test",
     "webdriver-manager": "./node_modules/gulp-angular-protractor/node_modules/webdriver-manager/bin/webdriver-manager",
     "webdriver": "npm run webdriver-manager start"
