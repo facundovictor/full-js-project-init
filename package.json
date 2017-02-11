@@ -23,6 +23,7 @@
     "gulp-sass": "^3.1.0",
     "gulp-uglify": "^2.0.0",
     "gulp-watch": "^4.3.11",
+    "jasmine-spec-reporter": "^3.2.0",
     "should": "^11.1.2",
     "supertest": "^2.0.1",
     "swagger": "^0.7.5",
