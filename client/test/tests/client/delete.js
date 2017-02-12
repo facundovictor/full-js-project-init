@@ -61,31 +61,36 @@ describe('Client deletion', () => {
   /* DELETION from the EDITION form */
 
   it('DELETION: Tapping on "Delete" should close the form and update the list', () => {
+
     client_elements.count().then( count => {
-      let random_index = Math.floor(Math.random() * count),
-          client_row   = client_elements.get(random_index),
-          edit_button  = client_row.element(by.css('.cell-small a'));
 
-      // The buttons should be displayed
-      expect(edit_button.isDisplayed()).toBeTruthy();
+      // There should exist a row for testing deletion
+      if (count) {
+        let random_index = Math.floor(Math.random() * count),
+            client_row   = client_elements.get(random_index),
+            edit_button  = client_row.element(by.css('.cell-small a'));
 
-      // Open the new client modal form
-      edit_button.click();
+        // The buttons should be displayed
+        expect(edit_button.isDisplayed()).toBeTruthy();
 
-      // The modal form should be visible
-      expect(modal_form.isDisplayed()).toBeTruthy();
+        // Open the new client modal form
+        edit_button.click();
 
-      // The delete button should be displayed
-      expect(delete_button.isDisplayed()).toBeTruthy();
+        // The modal form should be visible
+        expect(modal_form.isDisplayed()).toBeTruthy();
 
-      // Delete the client and close the form
-      delete_button.click();
+        // The delete button should be displayed
+        expect(delete_button.isDisplayed()).toBeTruthy();
 
-      // The modal form shouldn't be visible
-      expect(modal_form.isDisplayed()).toBeFalsy();
+        // Delete the client and close the form
+        delete_button.click();
 
-      // The row counts should be decreased by 1
-      expect(client_elements.count()).toBe( count - 1 );
+        // The modal form shouldn't be visible
+        expect(modal_form.isDisplayed()).toBeFalsy();
+
+        // The row counts should be decreased by 1
+        expect(client_elements.count()).toBe( count - 1 );
+      }
     });
   });
 
