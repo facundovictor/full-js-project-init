@@ -2,10 +2,17 @@
  * Author : Facundo Victor <facundovt@gmail.com>
  *
  * Client view tests
+ *
+ * Refereces:
+ *  http://www.protractortest.org/#/api
+ *  https://jasmine.github.io/edge/introduction
+ *  https://github.com/marak/Faker.js/
  */
 
 'use strict';
 
+
+// Test description
 describe('Client view', () => {
 
   const url          = 'http://localhost:8000',
