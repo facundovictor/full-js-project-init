@@ -69,10 +69,14 @@ describe('Client edit', () => {
     });
   });
 
-  it('EDITION: Clicking on "Edit" should open a client form filled with data', () => {
+  it('EDITION: Clicking on client "Edit" should open a client form filled with the client data', () => {
     client_elements.count().then( count => {
       let random_index  = Math.floor(Math.random() * count),
           client_row    = client_elements.get(random_index),
+          name_cell     = client_row.element(by.binding('client.name')),
+          email_cell    = client_row.element(by.binding('client.email')),
+          phone_cell    = client_row.element(by.binding('client.phone')),
+          provider_cell = client_row.element(by.binding('client.providers')),
           edit_button   = client_row.element(by.css('.cell-small a'));
 
       // The buttons should be displayed
@@ -96,25 +100,53 @@ describe('Client edit', () => {
       // The save button shouldn't be enabled if the form isn't modified
       expect(save_btn.isEnabled()).toBeFalsy();
 
-      // the modal form should have 3 fields
-      expect(modal_form_fields.count()).toBe(3);
+      // The name field and input should be displayed
+      expect(name_field.isDisplayed()).toBeTruthy();
+      expect(name_input.isDisplayed()).toBeTruthy();
 
-      // Validate the fields
-      modal_form_fields.each( field => {
-        let input = field.element(by.model('field.value'));
+      // The email field and input should be displayed
+      expect(email_field.isDisplayed()).toBeTruthy();
+      expect(email_input.isDisplayed()).toBeTruthy();
 
-        // The field should be displayed
-        expect(field.isDisplayed()).toBeTruthy();
-        expect(input.isDisplayed()).toBeTruthy();
-
-        // The field should be empty (New client mode)
-        input.getAttribute('value').then( value => {
-          expect(value.length).toBeGreaterThan(0);
-        });
-      });
+      // The phone field and input should be displayed
+      expect(phone_field.isDisplayed()).toBeTruthy();
+      expect(phone_input.isDisplayed()).toBeTruthy();
 
       // The provider sub-form should be visible
       expect(provider_form.isDisplayed()).toBeTruthy();
+
+      // The form should be filled with the client data
+      name_cell.getText().then( name => {
+        email_cell.getText().then( email => {
+          phone_cell.getText().then( phone => {
+            provider_cell.getText().then( text => {
+              let listed_providers = text.split(', ');
+
+              // The proper name should be loaded
+              expect(name_input.getAttribute('value')).toBe(name);
+
+              // The proper email should be loaded
+              expect(email_input.getAttribute('value')).toBe(email);
+
+              // The proper phone should be loaded
+              expect(phone_input.getAttribute('value')).toBe(phone);
+
+              // Only the providers listed on the row should be checked
+              provider_elements.each( el => {
+                const input_name     = el.element(by.model('provider.name')),
+                      input_checkbox = el.element(by.model('provider.checked'));
+
+                input_name.getAttribute('value').then( value => {
+                  if (listed_providers.includes(value))
+                    expect(input_checkbox.isSelected()).toBeTruthy();
+                  else
+                    expect(input_checkbox.isSelected()).toBeFalsy();
+                });
+              });
+            });
+          });
+        });
+      });
     });
   });
 
