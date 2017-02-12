@@ -32,18 +32,18 @@ describe('Client view', () => {
     expect(browser.getTitle()).toEqual(proper_title);
   });
 
-  it('should be a list of clients', () => {
+  it('Should be a list of clients', () => {
 
     // There should be elements
     expect(client_elements.count()).toBeGreaterThan(0);
 
-    client_elements.each( clientElement => {
-      // let div = clientElement.element(by.css('.row'));
+    client_elements.each( client_element => {
+      // let div = client_element.element(by.css('.row'));
 
-      let name      = clientElement.element(by.binding('client.name')),
-          email     = clientElement.element(by.binding('client.email')),
-          phone     = clientElement.element(by.binding('client.phone')),
-          providers = clientElement.element(by.binding('client.providers'));
+      let name      = client_element.element(by.binding('client.name')),
+          email     = client_element.element(by.binding('client.email')),
+          phone     = client_element.element(by.binding('client.phone')),
+          providers = client_element.element(by.binding('client.providers'));
 
       // Required values should be displayed
       expect(name.isDisplayed()).toBeTruthy();
@@ -79,8 +79,8 @@ describe('Client view', () => {
         expect(count).toBeGreaterThan(amountOfMatchedRows);
 
         // All the elements should have the search_word in it
-        client_elements.each( clientElement => {
-          clientElement.getText().then( text => {
+        client_elements.each( client_element => {
+          client_element.getText().then( text => {
             expect(text.toLowerCase().indexOf(search_word.toLowerCase())).not.toBe(-1);
           });
         });
