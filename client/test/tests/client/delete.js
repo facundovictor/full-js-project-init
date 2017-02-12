@@ -2,10 +2,17 @@
  * Author : Facundo Victor <facundovt@gmail.com>
  *
  * Client delete tests
+ *
+ * Refereces:
+ *  http://www.protractortest.org/#/api
+ *  https://jasmine.github.io/edge/introduction
+ *  https://github.com/marak/Faker.js/
  */
 
 'use strict';
 
+
+// Test description
 describe('Client deletion', () => {
 
   const url      = 'http://localhost:8000',
@@ -13,7 +20,8 @@ describe('Client deletion', () => {
                    ': vm.listOrder.reverse | filter : vm.searchField';
 
   const client_elements = element.all(by.repeater(ngRepeat)),
-        modal_form      = element(by.css('.modal-shadow.modal-form'));
+        modal_form      = element(by.css('.modal-shadow.modal-form')),
+        delete_button   = modal_form.element(by.css('.btn-delete'));
 
   beforeEach(() => {
     browser.get(url);
@@ -39,10 +47,10 @@ describe('Client deletion', () => {
       if (count) {
         let random_index = Math.floor(Math.random() * count),
             client_row   = client_elements.get(random_index),
-            del_button   = client_row.element(by.css('.cell-small i'));
+            del_row_btn  = client_row.element(by.css('.cell-small i'));
 
         // Filter the list by the search word
-        del_button.click();
+        del_row_btn.click();
 
         // The row count should be the same minus 1
         expect(client_elements.count()).toBe( count - 1 );
@@ -56,8 +64,7 @@ describe('Client deletion', () => {
     client_elements.count().then( count => {
       let random_index = Math.floor(Math.random() * count),
           client_row   = client_elements.get(random_index),
-          edit_button  = client_row.element(by.css('.cell-small a')),
-          del_button   = modal_form.element(by.css('.btn-delete'));
+          edit_button  = client_row.element(by.css('.cell-small a'));
 
       // The buttons should be displayed
       expect(edit_button.isDisplayed()).toBeTruthy();
@@ -69,10 +76,10 @@ describe('Client deletion', () => {
       expect(modal_form.isDisplayed()).toBeTruthy();
 
       // The delete button should be displayed
-      expect(del_button.isDisplayed()).toBeTruthy();
+      expect(delete_button.isDisplayed()).toBeTruthy();
 
       // Delete the client and close the form
-      del_button.click();
+      delete_button.click();
 
       // The modal form shouldn't be visible
       expect(modal_form.isDisplayed()).toBeFalsy();
