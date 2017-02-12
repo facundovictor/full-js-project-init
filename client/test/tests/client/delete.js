@@ -8,13 +8,12 @@
 
 describe('Client deletion', () => {
 
-  const url         = 'http://localhost:8000',
-        properTitle = 'Client-Providers',
-        ngRepeat    = 'client in vm.clients | orderBy : vm.listOrder.column '+
-                      ': vm.listOrder.reverse | filter : vm.searchField';
+  const url      = 'http://localhost:8000',
+        ngRepeat = 'client in vm.clients | orderBy : vm.listOrder.column '+
+                   ': vm.listOrder.reverse | filter : vm.searchField';
 
-  const clientElements = element.all(by.repeater(ngRepeat)),
-        modalForm      = element(by.css('.modal-shadow.modal-form'));
+  const client_elements = element.all(by.repeater(ngRepeat)),
+        modal_form      = element(by.css('.modal-shadow.modal-form'));
 
   beforeEach(() => {
     browser.get(url);
@@ -24,8 +23,8 @@ describe('Client deletion', () => {
   /* DELETION */
 
   it('DELETION: Each list row should be removable', () => {
-    clientElements.each( clientElement => {
-      let del = clientElement.element(by.css('.cell-small i'));
+    client_elements.each( client_element => {
+      let del = client_element.element(by.css('.cell-small i'));
 
       // The buttons should be displayed
       expect(del.isDisplayed()).toBeTruthy();
@@ -34,19 +33,19 @@ describe('Client deletion', () => {
 
   it('DELETION: When removing a client, the list should be updated', () => {
 
-    clientElements.count().then( count => {
+    client_elements.count().then( count => {
 
       // There should exist a row for testing deletion
       if (count) {
-        let random_client_index = Math.floor(Math.random() * count),
-            random_client_row   = clientElements.get(random_client_index),
-            delButton           = random_client_row.element(by.css('.cell-small i'));
+        let random_index = Math.floor(Math.random() * count),
+            client_row   = client_elements.get(random_index),
+            del_button   = client_row.element(by.css('.cell-small i'));
 
         // Filter the list by the search word
-        delButton.click();
+        del_button.click();
 
         // The row count should be the same minus 1
-        expect(clientElements.count()).toBe( count - 1 );
+        expect(client_elements.count()).toBe( count - 1 );
       }
     });
   });
@@ -54,32 +53,32 @@ describe('Client deletion', () => {
   /* DELETION from the EDITION form */
 
   it('DELETION: Tapping on "Delete" should close the form and update the list', () => {
-    clientElements.count().then( count => {
-      let random_client_index = Math.floor(Math.random() * count),
-          random_client_row   = clientElements.get(random_client_index),
-          editButton          = random_client_row.element(by.css('.cell-small a')),
-          deleteButton        = modalForm.element(by.css('.btn-delete'));
+    client_elements.count().then( count => {
+      let random_index = Math.floor(Math.random() * count),
+          client_row   = client_elements.get(random_index),
+          edit_button  = client_row.element(by.css('.cell-small a')),
+          del_button   = modal_form.element(by.css('.btn-delete'));
 
       // The buttons should be displayed
-      expect(editButton.isDisplayed()).toBeTruthy();
+      expect(edit_button.isDisplayed()).toBeTruthy();
 
       // Open the new client modal form
-      editButton.click();
+      edit_button.click();
 
       // The modal form should be visible
-      expect(modalForm.isDisplayed()).toBeTruthy();
+      expect(modal_form.isDisplayed()).toBeTruthy();
 
       // The delete button should be displayed
-      expect(deleteButton.isDisplayed()).toBeTruthy();
+      expect(del_button.isDisplayed()).toBeTruthy();
 
       // Delete the client and close the form
-      deleteButton.click();
+      del_button.click();
 
       // The modal form shouldn't be visible
-      expect(modalForm.isDisplayed()).toBeFalsy();
+      expect(modal_form.isDisplayed()).toBeFalsy();
 
       // The row counts should be decreased by 1
-      expect(clientElements.count()).toBe( count - 1 );
+      expect(client_elements.count()).toBe( count - 1 );
     });
   });
 
