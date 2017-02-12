@@ -6,14 +6,14 @@
 
 'use strict';
 
-describe('client screen', () => {
+describe('Client view', () => {
 
-  const url         = 'http://localhost:8000',
-        properTitle = 'Client-Providers',
-        ngRepeat    = 'client in vm.clients | orderBy : vm.listOrder.column '+
-                      ': vm.listOrder.reverse | filter : vm.searchField';
+  const url          = 'http://localhost:8000',
+        proper_title = 'Client-Providers',
+        ng_repeat    = 'client in vm.clients | orderBy : vm.listOrder.column '+
+                       ': vm.listOrder.reverse | filter : vm.searchField';
 
-  const clientElements = element.all(by.repeater(ngRepeat));
+  const client_elements = element.all(by.repeater(ng_repeat));
 
   beforeEach(() => {
     browser.get(url);
@@ -21,21 +21,21 @@ describe('client screen', () => {
 
   /* Listing and Viewing client data */
 
-  it(`Should have the proper title (${properTitle})`, () => {
-    expect(browser.getTitle()).toEqual(properTitle);
+  it(`Should have the proper title (${proper_title})`, () => {
+    expect(browser.getTitle()).toEqual(proper_title);
   });
 
   it('should be a list of clients', () => {
 
     // There should be elements
-    expect(clientElements.count()).toBeGreaterThan(0);
+    expect(client_elements.count()).toBeGreaterThan(0);
 
-    clientElements.each( clientElement => {
+    client_elements.each( clientElement => {
       // let div = clientElement.element(by.css('.row'));
 
-      let name  = clientElement.element(by.binding('client.name')),
-          email = clientElement.element(by.binding('client.email')),
-          phone = clientElement.element(by.binding('client.phone')),
+      let name      = clientElement.element(by.binding('client.name')),
+          email     = clientElement.element(by.binding('client.email')),
+          phone     = clientElement.element(by.binding('client.phone')),
           providers = clientElement.element(by.binding('client.providers'));
 
       // Required values should be displayed
@@ -52,29 +52,29 @@ describe('client screen', () => {
   });
 
   it('The list of clients should support filtering', () => {
-    let searchField = element(by.model('vm.searchField')),
-        searchWord  = 'Some';
+    let search_field = element(by.model('vm.searchField')),
+        search_word  = 'Some';
 
     // Count the amount of rows that contains the searched word
-    clientElements.reduce( (accumulator, el) => {
+    client_elements.reduce( (accumulator, el) => {
       return el.getText().then( text => {
-        return accumulator + (text.toLowerCase().indexOf(searchWord.toLowerCase()) !== -1);
+        return accumulator + (text.toLowerCase().indexOf(search_word.toLowerCase()) !== -1);
       });
     }, 0).then( amountOfMatchedRows => {
 
       // There should be elements
-      clientElements.count().then( count => {
+      client_elements.count().then( count => {
 
         // Filter the list by the search word
-        searchField.sendKeys(searchWord);
+        search_field.sendKeys(search_word);
 
         // The amount of matched rows should be equal to the filtered count of rows
         expect(count).toBeGreaterThan(amountOfMatchedRows);
 
-        // All the elements should have the searchWord in it
-        clientElements.each( clientElement => {
+        // All the elements should have the search_word in it
+        client_elements.each( clientElement => {
           clientElement.getText().then( text => {
-            expect(text.toLowerCase().indexOf(searchWord.toLowerCase())).not.toBe(-1);
+            expect(text.toLowerCase().indexOf(search_word.toLowerCase())).not.toBe(-1);
           });
         });
       });
