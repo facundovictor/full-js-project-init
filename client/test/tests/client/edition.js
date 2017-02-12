@@ -2,10 +2,20 @@
  * Author : Facundo Victor <facundovt@gmail.com>
  *
  * Client edit tests
+ *
+ * Refereces:
+ *  http://www.protractortest.org/#/api
+ *  https://jasmine.github.io/edge/introduction
+ *  https://github.com/marak/Faker.js/
  */
 
 'use strict';
 
+
+// Import a faker library for getting name, phone and emails
+const faker = require('faker');
+
+// Test description
 describe('Client edit', () => {
 
   const url              = 'http://localhost:8000',
@@ -16,10 +26,33 @@ describe('Client edit', () => {
                              'der.id';
 
   const client_elements   = element.all(by.repeater(client_ng_repeat)),
-        provider_elements = element.all(by.repeater(provider_ng_repeat)),
         modal_form        = element(by.css('.modal-shadow.modal-form')),
+
+        // Modal form inner elements
         modal_form_fields = element.all(by.repeater('field in vm.form.fields')),
-        provider_form     = element(by.css('.modal-shadow.modal-form .provider-form'));
+        save_btn          = modal_form.element(by.css('.btn-save')),
+        cancel_button     = modal_form.element(by.css('.btn-cancel')),
+        delete_button     = modal_form.element(by.css('.btn-delete')),
+        name_field        = modal_form_fields.first(),
+        name_input        = name_field.element(by.model('field.value')),
+        email_field       = modal_form_fields.get(1),
+        email_input       = email_field.element(by.model('field.value')),
+        phone_field       = modal_form_fields.get(2),
+        phone_input       = phone_field.element(by.model('field.value')),
+
+        // Provider form elements
+        provider_form     = element(by.css('.modal-shadow.modal-form .provider-form')),
+        provider_elements = element.all(by.repeater(provider_ng_repeat));
+
+
+  const new_name    = faker.name.findName('Protractor').substr(0, 50),
+        new_email   = faker.internet.email('protractor').substr(0, 50),
+        new_phone   = faker.phone.phoneNumberFormat(), // Format : XXX-XXX-XXXX
+        wrong_phone = faker.phone.phoneNumberFormat(1),
+        wrong_email = 'wrong.email@com@wrong.domain@wrong!',
+        wrong_name  = "",
+        empty_email = "",
+        empty_phone = '';
 
   beforeEach(() => {
     browser.get(url);
@@ -40,10 +73,7 @@ describe('Client edit', () => {
     client_elements.count().then( count => {
       let random_index  = Math.floor(Math.random() * count),
           client_row    = client_elements.get(random_index),
-          edit_button   = client_row.element(by.css('.cell-small a')),
-          save_btn      = modal_form.element(by.css('.btn-save')),
-          cancel_button = modal_form.element(by.css('.btn-cancel')),
-          delete_button = modal_form.element(by.css('.btn-delete'));
+          edit_button   = client_row.element(by.css('.cell-small a'));
 
       // The buttons should be displayed
       expect(edit_button.isDisplayed()).toBeTruthy();
@@ -88,7 +118,7 @@ describe('Client edit', () => {
     });
   });
 
-  it('EDITION: Tapping on "Cancel" should close the edit form', () => {
+  it('EDITION: Clicking on "Cancel" should close the edit form', () => {
     client_elements.count().then( count => {
       let random_index  = Math.floor(Math.random() * count),
           client_row    = client_elements.get(random_index),
@@ -119,12 +149,7 @@ describe('Client edit', () => {
     client_elements.count().then( count => {
       let random_index = Math.floor(Math.random() * count),
           client_row   = client_elements.get(random_index),
-          name_cell    = client_row.element(by.binding('client.name')),
-          edit_button  = client_row.element(by.css('.cell-small a')),
-          save_btn     = modal_form.element(by.css('.btn-save')),
-          name_field   = modal_form_fields.first(),
-          name_input   = name_field.element(by.model('field.value')),
-          wrong_name   = "";
+          edit_button  = client_row.element(by.css('.cell-small a'));
 
       // The buttons should be displayed
       expect(edit_button.isDisplayed()).toBeTruthy();
@@ -170,11 +195,7 @@ describe('Client edit', () => {
     client_elements.count().then( count => {
       let random_index = Math.floor(Math.random() * count),
           client_row   = client_elements.get(random_index),
-          edit_button  = client_row.element(by.css('.cell-small a')),
-          save_btn     = modal_form.element(by.css('.btn-save')),
-          name_field   = modal_form_fields.first(),
-          name_input   = name_field.element(by.model('field.value')),
-          new_name     = `New name ${random_index} (from protractor)`;
+          edit_button  = client_row.element(by.css('.cell-small a'));
 
       // The buttons should be displayed
       expect(edit_button.isDisplayed()).toBeTruthy();
@@ -235,12 +256,7 @@ describe('Client edit', () => {
     client_elements.count().then( count => {
       let random_index = Math.floor(Math.random() * count),
           client_row   = client_elements.get(random_index),
-          email_cell   = client_row.element(by.binding('client.email')),
-          edit_button  = client_row.element(by.css('.cell-small a')),
-          save_btn     = modal_form.element(by.css('.btn-save')),
-          email_field  = modal_form_fields.get(1),
-          email_input  = email_field.element(by.model('field.value')),
-          empty_email  = "";
+          edit_button  = client_row.element(by.css('.cell-small a'));
 
       // The buttons should be displayed
       expect(edit_button.isDisplayed()).toBeTruthy();
@@ -286,12 +302,7 @@ describe('Client edit', () => {
     client_elements.count().then( count => {
       let random_index = Math.floor(Math.random() * count),
           client_row   = client_elements.get(random_index),
-          email_cell   = client_row.element(by.binding('client.email')),
-          edit_button  = client_row.element(by.css('.cell-small a')),
-          save_btn     = modal_form.element(by.css('.btn-save')),
-          email_field  = modal_form_fields.get(1),
-          email_input  = email_field.element(by.model('field.value')),
-          wrong_email  = "wrong.email@com@wrong.domain@wrong!";
+          edit_button  = client_row.element(by.css('.cell-small a'));
 
       // The buttons should be displayed
       expect(edit_button.isDisplayed()).toBeTruthy();
@@ -337,11 +348,7 @@ describe('Client edit', () => {
     client_elements.count().then( count => {
       let random_index = Math.floor(Math.random() * count),
           client_row   = client_elements.get(random_index),
-          edit_button  = client_row.element(by.css('.cell-small a')),
-          save_btn     = modal_form.element(by.css('.btn-save')),
-          email_field  = modal_form_fields.get(1),
-          email_input  = email_field.element(by.model('field.value')),
-          new_email    = `protractor_test_${random_index}@email.com`;
+          edit_button  = client_row.element(by.css('.cell-small a'));
 
       // The buttons should be displayed
       expect(edit_button.isDisplayed()).toBeTruthy();
@@ -402,12 +409,7 @@ describe('Client edit', () => {
     client_elements.count().then( count => {
       let random_index = Math.floor(Math.random() * count),
           client_row   = client_elements.get(random_index),
-          phone_cell   = client_row.element(by.binding('client.phone')),
-          edit_button  = client_row.element(by.css('.cell-small a')),
-          save_btn     = modal_form.element(by.css('.btn-save')),
-          phone_field  = modal_form_fields.get(2),
-          phone_input  = phone_field.element(by.model('field.value')),
-          empty_phone  = "";
+          edit_button  = client_row.element(by.css('.cell-small a'));
 
       // The buttons should be displayed
       expect(edit_button.isDisplayed()).toBeTruthy();
@@ -453,12 +455,7 @@ describe('Client edit', () => {
     client_elements.count().then( count => {
       let random_index = Math.floor(Math.random() * count),
           client_row   = client_elements.get(random_index),
-          phone_cell   = client_row.element(by.binding('client.phone')),
-          edit_button  = client_row.element(by.css('.cell-small a')),
-          save_btn     = modal_form.element(by.css('.btn-save')),
-          phone_field  = modal_form_fields.get(2),
-          phone_input  = phone_field.element(by.model('field.value')),
-          wrong_phone  = "213-1442-5435"; // It shuold respect XXX-XXX-XXXX
+          edit_button  = client_row.element(by.css('.cell-small a'));
 
       // The buttons should be displayed
       expect(edit_button.isDisplayed()).toBeTruthy();
@@ -504,11 +501,7 @@ describe('Client edit', () => {
     client_elements.count().then( count => {
       let random_index = Math.floor(Math.random() * count),
           client_row   = client_elements.get(random_index),
-          edit_button  = client_row.element(by.css('.cell-small a')),
-          save_btn     = modal_form.element(by.css('.btn-save')),
-          phone_field  = modal_form_fields.get(2),
-          phone_input  = phone_field.element(by.model('field.value')),
-          newPhone     = `${random_index % 10}11-111-1111`;
+          edit_button  = client_row.element(by.css('.cell-small a'));
 
       // The buttons should be displayed
       expect(edit_button.isDisplayed()).toBeTruthy();
@@ -537,10 +530,10 @@ describe('Client edit', () => {
       });
 
       // Set the new value
-      phone_input.clear().sendKeys(newPhone);
+      phone_input.clear().sendKeys(new_phone);
 
       // The current value should match the new value
-      expect(phone_input.getAttribute('value')).toBe(newPhone);
+      expect(phone_input.getAttribute('value')).toBe(new_phone);
 
       // The new value should be valid
       expect(phone_input.getAttribute('class')).not.toContain('ng-invalid');
@@ -559,7 +552,7 @@ describe('Client edit', () => {
       client_elements.reduce( (isPresent, row) => {
         const phone_cell = row.element(by.binding('client.phone'));
         return phone_cell.getText().then( text => {
-          return isPresent || (text === newPhone);
+          return isPresent || (text === new_phone);
         });
       }, false).then( isPresent => expect(isPresent).toBeTruthy() );
     });
@@ -569,8 +562,7 @@ describe('Client edit', () => {
     client_elements.count().then( count => {
       let random_index = Math.floor(Math.random() * count),
           client_row   = client_elements.get(random_index),
-          edit_button  = client_row.element(by.css('.cell-small a')),
-          save_btn     = modal_form.element(by.css('.btn-save'));
+          edit_button  = client_row.element(by.css('.cell-small a'));
 
       // The buttons should be displayed
       expect(edit_button.isDisplayed()).toBeTruthy();

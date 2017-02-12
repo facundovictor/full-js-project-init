@@ -2,12 +2,20 @@
  * Author : Facundo Victor <facundovt@gmail.com>
  *
  * Client creation tests
+ *
+ * Refereces:
+ *  http://www.protractortest.org/#/api
+ *  https://jasmine.github.io/edge/introduction
+ *  https://github.com/marak/Faker.js/
  */
 
 'use strict';
 
+
+// Import a faker library for getting name, phone and emails
 const faker = require('faker');
 
+// Test description
 describe('Client add', () => {
 
   const url              = 'http://localhost:8000',
