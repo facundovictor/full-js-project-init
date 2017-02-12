@@ -8,17 +8,18 @@
 
 describe('Client edit', () => {
 
-  const url         = 'http://localhost:8000',
-        properTitle = 'Client-Providers',
-        ngRepeat    = 'client in vm.clients | orderBy : vm.listOrder.column '+
-                      ': vm.listOrder.reverse | filter : vm.searchField';
+  const url              = 'http://localhost:8000',
+        client_ng_repeat = 'client in vm.clients | orderBy : vm.listOrder.col'+
+                           'umn : vm.listOrder.reverse | filter : vm.searchFi'+
+                           'eld',
+        provider_ng_repeat = 'provider in vmProvider.providers track by provi'+
+                             'der.id';
 
-  const clientElements  = element.all(by.repeater(ngRepeat)),
-        modalForm       = element(by.css('.modal-shadow.modal-form')),
-        modalFormFields = element.all(by.repeater('field in vm.form.fields')),
-        providerForm    = element(by.css('.modal-shadow.modal-form .provider-form'));
-
-  const EC = protractor.ExpectedConditions;
+  const client_elements   = element.all(by.repeater(client_ng_repeat)),
+        provider_elements = element.all(by.repeater(provider_ng_repeat)),
+        modal_form        = element(by.css('.modal-shadow.modal-form')),
+        modal_form_fields = element.all(by.repeater('field in vm.form.fields')),
+        provider_form     = element(by.css('.modal-shadow.modal-form .provider-form'));
 
   beforeEach(() => {
     browser.get(url);
@@ -27,8 +28,8 @@ describe('Client edit', () => {
   /* EDITION */
 
   it('EDITION: Each list row should be editable', () => {
-    clientElements.each( clientElement => {
-      let edit = clientElement.element(by.css('.cell-small a'));
+    client_elements.each( client_element => {
+      let edit = client_element.element(by.css('.cell-small a'));
 
       // The buttons should be displayed
       expect(edit.isDisplayed()).toBeTruthy();
@@ -36,37 +37,40 @@ describe('Client edit', () => {
   });
 
   it('EDITION: Clicking on "Edit" should open a client form filled with data', () => {
-    clientElements.count().then( count => {
-      let random_client_index = Math.floor(Math.random() * count),
-          random_client_row   = clientElements.get(random_client_index),
-          editButton          = random_client_row.element(by.css('.cell-small a')),
-          saveButton          = modalForm.element(by.css('.btn-save')),
-          cancelButton        = modalForm.element(by.css('.btn-cancel')),
-          deleteButton        = modalForm.element(by.css('.btn-delete'));
+    client_elements.count().then( count => {
+      let random_index  = Math.floor(Math.random() * count),
+          client_row    = client_elements.get(random_index),
+          edit_button   = client_row.element(by.css('.cell-small a')),
+          save_btn      = modal_form.element(by.css('.btn-save')),
+          cancel_button = modal_form.element(by.css('.btn-cancel')),
+          delete_button = modal_form.element(by.css('.btn-delete'));
 
       // The buttons should be displayed
-      expect(editButton.isDisplayed()).toBeTruthy();
+      expect(edit_button.isDisplayed()).toBeTruthy();
 
       // Open the new client modal form
-      editButton.click();
+      edit_button.click();
 
       // The modal form should be visible
-      expect(modalForm.isDisplayed()).toBeTruthy();
+      expect(modal_form.isDisplayed()).toBeTruthy();
 
       // The cancel button should be displayed
-      expect(cancelButton.isDisplayed()).toBeTruthy();
+      expect(cancel_button.isDisplayed()).toBeTruthy();
+
+      // The delete button should be displayed
+      expect(delete_button.isDisplayed()).toBeTruthy();
 
       // The save button should be displayed
-      expect(saveButton.isDisplayed()).toBeTruthy();
+      expect(save_btn.isDisplayed()).toBeTruthy();
 
       // The save button shouldn't be enabled if the form isn't modified
-      expect(saveButton.isEnabled()).toBeFalsy();
+      expect(save_btn.isEnabled()).toBeFalsy();
 
       // the modal form should have 3 fields
-      expect(modalFormFields.count()).toBe(3);
+      expect(modal_form_fields.count()).toBe(3);
 
       // Validate the fields
-      modalFormFields.each( field => {
+      modal_form_fields.each( field => {
         let input = field.element(by.model('field.value'));
 
         // The field should be displayed
@@ -80,392 +84,565 @@ describe('Client edit', () => {
       });
 
       // The provider sub-form should be visible
-      expect(providerForm.isDisplayed()).toBeTruthy();
+      expect(provider_form.isDisplayed()).toBeTruthy();
     });
   });
 
   it('EDITION: Tapping on "Cancel" should close the edit form', () => {
-    clientElements.count().then( count => {
-      let random_client_index = Math.floor(Math.random() * count),
-          random_client_row   = clientElements.get(random_client_index),
-          editButton          = random_client_row.element(by.css('.cell-small a')),
-          cancelButton        = modalForm.element(by.css('.btn-cancel'));
+    client_elements.count().then( count => {
+      let random_index  = Math.floor(Math.random() * count),
+          client_row    = client_elements.get(random_index),
+          edit_button   = client_row.element(by.css('.cell-small a')),
+          cancel_button = modal_form.element(by.css('.btn-cancel'));
 
       // The buttons should be displayed
-      expect(editButton.isDisplayed()).toBeTruthy();
+      expect(edit_button.isDisplayed()).toBeTruthy();
 
       // Open the new client modal form
-      editButton.click();
+      edit_button.click();
 
       // The modal form should be visible
-      expect(modalForm.isDisplayed()).toBeTruthy();
+      expect(modal_form.isDisplayed()).toBeTruthy();
 
       // The cancel button should be displayed
-      expect(cancelButton.isDisplayed()).toBeTruthy();
+      expect(cancel_button.isDisplayed()).toBeTruthy();
 
       // Close the form
-      cancelButton.click();
+      cancel_button.click();
 
       // The modal form shouldn't be visible
-      expect(modalForm.isDisplayed()).toBeFalsy();
+      expect(modal_form.isDisplayed()).toBeFalsy();
     });
   });
 
   it('EDITION: Setting a wrong name should mark the input as invalid', () => {
-    clientElements.count().then( count => {
-      let random_client_index = Math.floor(Math.random() * count),
-          random_client_row   = clientElements.get(random_client_index),
-          nameCell            = random_client_row.element(by.binding('client.name')),
-          editButton          = random_client_row.element(by.css('.cell-small a')),
-          saveButton          = modalForm.element(by.css('.btn-save')),
-          nameField           = modalFormFields.first(),
-          nameInput           = nameField.element(by.model('field.value')),
-          wrongName           = "";
+    client_elements.count().then( count => {
+      let random_index = Math.floor(Math.random() * count),
+          client_row   = client_elements.get(random_index),
+          name_cell    = client_row.element(by.binding('client.name')),
+          edit_button  = client_row.element(by.css('.cell-small a')),
+          save_btn     = modal_form.element(by.css('.btn-save')),
+          name_field   = modal_form_fields.first(),
+          name_input   = name_field.element(by.model('field.value')),
+          wrong_name   = "";
 
       // The buttons should be displayed
-      expect(editButton.isDisplayed()).toBeTruthy();
+      expect(edit_button.isDisplayed()).toBeTruthy();
 
       // Open the new client modal form
-      editButton.click();
+      edit_button.click();
 
       // The modal form should be visible
-      expect(modalForm.isDisplayed()).toBeTruthy();
+      expect(modal_form.isDisplayed()).toBeTruthy();
 
       // The save button should be displayed
-      expect(saveButton.isDisplayed()).toBeTruthy();
+      expect(save_btn.isDisplayed()).toBeTruthy();
 
       // The save button shouldn't be enabled if the form isn't modified
-      expect(saveButton.isEnabled()).toBeFalsy();
+      expect(save_btn.isEnabled()).toBeFalsy();
 
       // the modal form should have 3 fields
-      expect(modalFormFields.count()).toBe(3);
+      expect(modal_form_fields.count()).toBe(3);
 
       // The field should be the name field
-      nameField.getText().then( text => expect(text.toLowerCase()).toContain('name') );
+      name_field.getText().then( text => expect(text.toLowerCase()).toContain('name') );
 
       // The current value shouldn't be empty
-      nameInput.getAttribute('value').then( value => {
+      name_input.getAttribute('value').then( value => {
         expect(value.length).toBeGreaterThan(0);
       });
 
       // Set the new value
-      nameInput.clear().sendKeys(wrongName);
+      name_input.clear().sendKeys(wrong_name);
 
       // The current value should match the new value
-      expect(nameInput.getAttribute('value')).toBe(wrongName);
+      expect(name_input.getAttribute('value')).toBe(wrong_name);
 
       // The new value should be valid
-      expect(nameInput.getAttribute('class')).toContain('ng-invalid');
+      expect(name_input.getAttribute('class')).toContain('ng-invalid');
 
       // The save button shouldn't be enabled if the form isn't valid
-      expect(saveButton.isEnabled()).toBeFalsy();
+      expect(save_btn.isEnabled()).toBeFalsy();
     });
   });
 
   it('EDITION: Editing the name should update the row', () => {
-    clientElements.count().then( count => {
-      let random_client_index = Math.floor(Math.random() * count),
-          random_client_row   = clientElements.get(random_client_index),
-          editButton          = random_client_row.element(by.css('.cell-small a')),
-          saveButton          = modalForm.element(by.css('.btn-save')),
-          nameField           = modalFormFields.first(),
-          nameInput           = nameField.element(by.model('field.value')),
-          newName             = `New name ${random_client_index} (from protractor)`;
+    client_elements.count().then( count => {
+      let random_index = Math.floor(Math.random() * count),
+          client_row   = client_elements.get(random_index),
+          edit_button  = client_row.element(by.css('.cell-small a')),
+          save_btn     = modal_form.element(by.css('.btn-save')),
+          name_field   = modal_form_fields.first(),
+          name_input   = name_field.element(by.model('field.value')),
+          new_name     = `New name ${random_index} (from protractor)`;
 
       // The buttons should be displayed
-      expect(editButton.isDisplayed()).toBeTruthy();
+      expect(edit_button.isDisplayed()).toBeTruthy();
 
       // Open the new client modal form
-      editButton.click();
+      edit_button.click();
 
       // The modal form should be visible
-      expect(modalForm.isDisplayed()).toBeTruthy();
+      expect(modal_form.isDisplayed()).toBeTruthy();
 
       // The save button should be displayed
-      expect(saveButton.isDisplayed()).toBeTruthy();
+      expect(save_btn.isDisplayed()).toBeTruthy();
 
       // The save button shouldn't be enabled if the form isn't modified
-      expect(saveButton.isEnabled()).toBeFalsy();
+      expect(save_btn.isEnabled()).toBeFalsy();
 
       // the modal form should have 3 fields
-      expect(modalFormFields.count()).toBe(3);
+      expect(modal_form_fields.count()).toBe(3);
 
       // The field should be the name field
-      nameField.getText().then( text => expect(text.toLowerCase()).toContain('name') );
+      name_field.getText().then( text => expect(text.toLowerCase()).toContain('name') );
 
       // The current value shouldn't be empty
-      nameInput.getAttribute('value').then( value => {
+      name_input.getAttribute('value').then( value => {
         expect(value.length).toBeGreaterThan(0);
       });
 
       // Set the new value
-      nameInput.clear().sendKeys(newName);
+      name_input.clear().sendKeys(new_name);
 
       // The current value should match the new value
-      expect(nameInput.getAttribute('value')).toBe(newName);
+      expect(name_input.getAttribute('value')).toBe(new_name);
 
       // The new value should be valid
-      expect(nameInput.getAttribute('class')).not.toContain('ng-invalid');
+      expect(name_input.getAttribute('class')).not.toContain('ng-invalid');
 
       // The save button shouldn't be enabled if the form isn't valid
-      expect(saveButton.isEnabled()).toBeTruthy();
+      expect(save_btn.isEnabled()).toBeTruthy();
 
       // Save the client and close the form
-      saveButton.click();
+      save_btn.click();
 
       // The modal form shouldn't be visible
-      expect(modalForm.isDisplayed()).toBeFalsy();
+      expect(modal_form.isDisplayed()).toBeFalsy();
 
       // The list should be updated and sorted with the new name, but it must
       // be present.
-      clientElements.reduce( (isPresent, row) => {
-        const nameCell = row.element(by.binding('client.name'));
-        return nameCell.getText().then( text => {
-          return isPresent || (text === newName);
+      client_elements.reduce( (isPresent, row) => {
+        const name_cell = row.element(by.binding('client.name'));
+        return name_cell.getText().then( text => {
+          return isPresent || (text === new_name);
         });
       }, 0).then( isPresent => expect(isPresent).toBeTruthy() );
     });
   });
 
   it('EDITION: Setting an empty email should mark the input as invalid', () => {
-    clientElements.count().then( count => {
-      let random_client_index = Math.floor(Math.random() * count),
-          random_client_row   = clientElements.get(random_client_index),
-          emailCell           = random_client_row.element(by.binding('client.email')),
-          editButton          = random_client_row.element(by.css('.cell-small a')),
-          saveButton          = modalForm.element(by.css('.btn-save')),
-          emailField          = modalFormFields.get(1),
-          emailInput          = emailField.element(by.model('field.value')),
-          emptyEmail          = "";
+    client_elements.count().then( count => {
+      let random_index = Math.floor(Math.random() * count),
+          client_row   = client_elements.get(random_index),
+          email_cell   = client_row.element(by.binding('client.email')),
+          edit_button  = client_row.element(by.css('.cell-small a')),
+          save_btn     = modal_form.element(by.css('.btn-save')),
+          email_field  = modal_form_fields.get(1),
+          email_input  = email_field.element(by.model('field.value')),
+          empty_email  = "";
 
       // The buttons should be displayed
-      expect(editButton.isDisplayed()).toBeTruthy();
+      expect(edit_button.isDisplayed()).toBeTruthy();
 
       // Open the new client modal form
-      editButton.click();
+      edit_button.click();
 
       // The modal form should be visible
-      expect(modalForm.isDisplayed()).toBeTruthy();
+      expect(modal_form.isDisplayed()).toBeTruthy();
 
       // The save button should be displayed
-      expect(saveButton.isDisplayed()).toBeTruthy();
+      expect(save_btn.isDisplayed()).toBeTruthy();
 
       // The save button shouldn't be enabled if the form isn't modified
-      expect(saveButton.isEnabled()).toBeFalsy();
+      expect(save_btn.isEnabled()).toBeFalsy();
 
       // the modal form should have 3 fields
-      expect(modalFormFields.count()).toBe(3);
+      expect(modal_form_fields.count()).toBe(3);
 
       // The field should be the email field
-      emailField.getText().then( text => expect(text.toLowerCase()).toContain('email') );
+      email_field.getText().then( text => expect(text.toLowerCase()).toContain('email') );
 
       // The current value shouldn't be empty
-      emailInput.getAttribute('value').then( value => {
+      email_input.getAttribute('value').then( value => {
         expect(value.length).toBeGreaterThan(0);
       });
 
       // Set the new value
-      emailInput.clear().sendKeys(emptyEmail);
+      email_input.clear().sendKeys(empty_email);
 
       // The current value should match the new value
-      expect(emailInput.getAttribute('value')).toBe(emptyEmail);
+      expect(email_input.getAttribute('value')).toBe(empty_email);
 
       // The new value should be valid
-      expect(emailInput.getAttribute('class')).toContain('ng-invalid');
+      expect(email_input.getAttribute('class')).toContain('ng-invalid');
 
       // The save button shouldn't be enabled if the form isn't valid
-      expect(saveButton.isEnabled()).toBeFalsy();
+      expect(save_btn.isEnabled()).toBeFalsy();
     });
   });
 
   it('EDITION: Setting a wrong email should mark the input as invalid', () => {
-    clientElements.count().then( count => {
-      let random_client_index = Math.floor(Math.random() * count),
-          random_client_row   = clientElements.get(random_client_index),
-          emailCell           = random_client_row.element(by.binding('client.email')),
-          editButton          = random_client_row.element(by.css('.cell-small a')),
-          saveButton          = modalForm.element(by.css('.btn-save')),
-          emailField          = modalFormFields.get(1),
-          emailInput          = emailField.element(by.model('field.value')),
-          wrongEmail          = "wrong.email@com@wrong.domain@wrong!";
+    client_elements.count().then( count => {
+      let random_index = Math.floor(Math.random() * count),
+          client_row   = client_elements.get(random_index),
+          email_cell   = client_row.element(by.binding('client.email')),
+          edit_button  = client_row.element(by.css('.cell-small a')),
+          save_btn     = modal_form.element(by.css('.btn-save')),
+          email_field  = modal_form_fields.get(1),
+          email_input  = email_field.element(by.model('field.value')),
+          wrong_email  = "wrong.email@com@wrong.domain@wrong!";
 
       // The buttons should be displayed
-      expect(editButton.isDisplayed()).toBeTruthy();
+      expect(edit_button.isDisplayed()).toBeTruthy();
 
       // Open the new client modal form
-      editButton.click();
+      edit_button.click();
 
       // The modal form should be visible
-      expect(modalForm.isDisplayed()).toBeTruthy();
+      expect(modal_form.isDisplayed()).toBeTruthy();
 
       // The save button should be displayed
-      expect(saveButton.isDisplayed()).toBeTruthy();
+      expect(save_btn.isDisplayed()).toBeTruthy();
 
       // The save button shouldn't be enabled if the form isn't modified
-      expect(saveButton.isEnabled()).toBeFalsy();
+      expect(save_btn.isEnabled()).toBeFalsy();
 
       // the modal form should have 3 fields
-      expect(modalFormFields.count()).toBe(3);
+      expect(modal_form_fields.count()).toBe(3);
 
       // The field should be the email field
-      emailField.getText().then( text => expect(text.toLowerCase()).toContain('email') );
+      email_field.getText().then( text => expect(text.toLowerCase()).toContain('email') );
 
       // The current value shouldn't be empty
-      emailInput.getAttribute('value').then( value => {
+      email_input.getAttribute('value').then( value => {
         expect(value.length).toBeGreaterThan(0);
       });
 
       // Set the new value
-      emailInput.clear().sendKeys(wrongEmail);
+      email_input.clear().sendKeys(wrong_email);
 
       // The current value should match the new value
-      expect(emailInput.getAttribute('value')).toBe(wrongEmail);
+      expect(email_input.getAttribute('value')).toBe(wrong_email);
 
       // The new value should be valid
-      expect(emailInput.getAttribute('class')).toContain('ng-invalid');
+      expect(email_input.getAttribute('class')).toContain('ng-invalid');
 
       // The save button shouldn't be enabled if the form isn't valid
-      expect(saveButton.isEnabled()).toBeFalsy();
+      expect(save_btn.isEnabled()).toBeFalsy();
     });
   });
 
   it('EDITION: Editing the email should update the row', () => {
-    clientElements.count().then( count => {
-      let random_client_index = Math.floor(Math.random() * count),
-          random_client_row   = clientElements.get(random_client_index),
-          editButton          = random_client_row.element(by.css('.cell-small a')),
-          saveButton          = modalForm.element(by.css('.btn-save')),
-          emailField          = modalFormFields.get(1),
-          emailInput          = emailField.element(by.model('field.value')),
-          newEmail            = `protractor_test_${random_client_index}@email.com`;
+    client_elements.count().then( count => {
+      let random_index = Math.floor(Math.random() * count),
+          client_row   = client_elements.get(random_index),
+          edit_button  = client_row.element(by.css('.cell-small a')),
+          save_btn     = modal_form.element(by.css('.btn-save')),
+          email_field  = modal_form_fields.get(1),
+          email_input  = email_field.element(by.model('field.value')),
+          new_email    = `protractor_test_${random_index}@email.com`;
 
       // The buttons should be displayed
-      expect(editButton.isDisplayed()).toBeTruthy();
+      expect(edit_button.isDisplayed()).toBeTruthy();
 
       // Open the new client modal form
-      editButton.click();
+      edit_button.click();
 
       // The modal form should be visible
-      expect(modalForm.isDisplayed()).toBeTruthy();
+      expect(modal_form.isDisplayed()).toBeTruthy();
 
       // The save button should be displayed
-      expect(saveButton.isDisplayed()).toBeTruthy();
+      expect(save_btn.isDisplayed()).toBeTruthy();
 
       // The save button shouldn't be enabled if the form isn't modified
-      expect(saveButton.isEnabled()).toBeFalsy();
+      expect(save_btn.isEnabled()).toBeFalsy();
 
       // the modal form should have 3 fields
-      expect(modalFormFields.count()).toBe(3);
+      expect(modal_form_fields.count()).toBe(3);
 
       // The field should be the email field
-      emailField.getText().then( text => expect(text.toLowerCase()).toContain('email') );
+      email_field.getText().then( text => expect(text.toLowerCase()).toContain('email') );
 
       // The current value shouldn't be empty
-      emailInput.getAttribute('value').then( value => {
+      email_input.getAttribute('value').then( value => {
         expect(value.length).toBeGreaterThan(0);
       });
 
       // Set the new value
-      emailInput.clear().sendKeys(newEmail);
+      email_input.clear().sendKeys(new_email);
 
       // The current value should match the new value
-      expect(emailInput.getAttribute('value')).toBe(newEmail);
+      expect(email_input.getAttribute('value')).toBe(new_email);
 
       // The new value should be valid
-      expect(emailInput.getAttribute('class')).not.toContain('ng-invalid');
+      expect(email_input.getAttribute('class')).not.toContain('ng-invalid');
 
       // The save button shouldn't be enabled if the form isn't valid
-      expect(saveButton.isEnabled()).toBeTruthy();
+      expect(save_btn.isEnabled()).toBeTruthy();
 
       // Save the client and close the form
-      saveButton.click();
+      save_btn.click();
 
       // The modal form shouldn't be visible
-      expect(modalForm.isDisplayed()).toBeFalsy();
+      expect(modal_form.isDisplayed()).toBeFalsy();
 
       // The list should be updated and sorted with the new email, but it must
       // be present.
-      clientElements.reduce( (isPresent, row) => {
-        const emailCell = row.element(by.binding('client.email'));
-        return emailCell.getText().then( text => {
-          return isPresent || (text === newEmail);
+      client_elements.reduce( (isPresent, row) => {
+        const email_cell = row.element(by.binding('client.email'));
+        return email_cell.getText().then( text => {
+          return isPresent || (text === new_email);
         });
       }, 0).then( isPresent => expect(isPresent).toBeTruthy() );
     });
   });
 
+  it('EDITION: Setting an empty phone should mark the input as invalid', () => {
+    client_elements.count().then( count => {
+      let random_index = Math.floor(Math.random() * count),
+          client_row   = client_elements.get(random_index),
+          phone_cell   = client_row.element(by.binding('client.phone')),
+          edit_button  = client_row.element(by.css('.cell-small a')),
+          save_btn     = modal_form.element(by.css('.btn-save')),
+          phone_field  = modal_form_fields.get(2),
+          phone_input  = phone_field.element(by.model('field.value')),
+          empty_phone  = "";
 
+      // The buttons should be displayed
+      expect(edit_button.isDisplayed()).toBeTruthy();
 
-  // it('Clicking on "New Client" should open a new empty client form', () => {
-  //   let newClientButton = element(by.css('.buttons .add'));
-  //
-  //   // The button should be available
-  //   expect(newClientButton.isDisplayed()).toBeTruthy();
-  //
-  //   // Open the new client modal form
-  //   newClientButton.click();
-  //
-  //   // The modal form should be visible
-  //   expect(modalForm.isDisplayed()).toBeTruthy();
-  //
-  //   // the modal form should have 3 fields
-  //   expect(modalFormFields.count()).toBe(3);
-  //
-  //   // Validate the fields
-  //   modalFormFields.each( field => {
-  //     let input = field.element(by.model('field.value'));
-  //
-  //     // The field should be displayed
-  //     expect(field.isDisplayed()).toBeTruthy();
-  //     expect(input.isDisplayed()).toBeTruthy();
-  //
-  //     // The field should be empty (New client mode)
-  //     input.getAttribute('value').then( value => expect(value.length).toBe(0) );
-  //   });
-  //
-  //   // The provider sub-form should be visible
-  //   expect(providerForm.isDisplayed()).toBeTruthy();
-  // });
+      // Open the new client modal form
+      edit_button.click();
 
+      // The modal form should be visible
+      expect(modal_form.isDisplayed()).toBeTruthy();
 
+      // The save button should be displayed
+      expect(save_btn.isDisplayed()).toBeTruthy();
 
+      // The save button shouldn't be enabled if the form isn't modified
+      expect(save_btn.isEnabled()).toBeFalsy();
 
+      // the modal form should have 3 fields
+      expect(modal_form_fields.count()).toBe(3);
 
+      // The field should be the phone field
+      phone_field.getText().then( text => expect(text.toLowerCase()).toContain('phone') );
 
-      // let cells = clientElement.all(by.css('.row .cell'));
-      //
-      // cells.each( cell => {
-      //   
-      //   // Should be displayed
-      //   expect(cell.isDisplayed()).toBeTruthy();
-      //
-      //
-      //
-      //   // Should have a value
-      //   cell.getText().then( text => {
-      //     console.log(text);
-      //     expect(text.length).toBeGreaterThan(0)
-      //   });
-      // });
+      // The current value shouldn't be empty
+      phone_input.getAttribute('value').then( value => {
+        expect(value.length).toBeGreaterThan(0);
+      });
 
-      // let cells = div.element(by.css('.cell'));
+      // Set the new value
+      phone_input.clear().sendKeys(empty_phone);
 
-      // div.getInnerHtml().then( html => {
-      //   console.log(html);
-      // });
+      // The current value should match the new value
+      expect(phone_input.getAttribute('value')).toBe(empty_phone);
 
-      // clientElement.each( clientAttr => {
-      //   clientAtter.getText().then( text => console.log(text) );
-      // });
-    // element(by.model('todoList.todoText')).sendKeys('write first protractor test');
-    // element(by.css('[value="add"]')).click();
+      // The new value should be valid
+      expect(phone_input.getAttribute('class')).toContain('ng-invalid');
 
-    // var todoList = element.all(by.repeater('todo in todoList.todos'));
-    // expect(todoList.count()).toEqual(3);
-    // expect(todoList.get(2).getText()).toEqual('write first protractor test');
-    //
-    // // You wrote your first test, cross it off the list
-    // todoList.get(2).element(by.css('input')).click();
-    // var completedAmount = element.all(by.css('.done-true'));
-    // expect(completedAmount.count()).toEqual(2);
+      // The save button shouldn't be enabled if the form isn't valid
+      expect(save_btn.isEnabled()).toBeFalsy();
+    });
+  });
+
+  it('EDITION: Setting a wrong phone should mark the input as invalid', () => {
+    client_elements.count().then( count => {
+      let random_index = Math.floor(Math.random() * count),
+          client_row   = client_elements.get(random_index),
+          phone_cell   = client_row.element(by.binding('client.phone')),
+          edit_button  = client_row.element(by.css('.cell-small a')),
+          save_btn     = modal_form.element(by.css('.btn-save')),
+          phone_field  = modal_form_fields.get(2),
+          phone_input  = phone_field.element(by.model('field.value')),
+          wrong_phone  = "213-1442-5435"; // It shuold respect XXX-XXX-XXXX
+
+      // The buttons should be displayed
+      expect(edit_button.isDisplayed()).toBeTruthy();
+
+      // Open the new client modal form
+      edit_button.click();
+
+      // The modal form should be visible
+      expect(modal_form.isDisplayed()).toBeTruthy();
+
+      // The save button should be displayed
+      expect(save_btn.isDisplayed()).toBeTruthy();
+
+      // The save button shouldn't be enabled if the form isn't modified
+      expect(save_btn.isEnabled()).toBeFalsy();
+
+      // the modal form should have 3 fields
+      expect(modal_form_fields.count()).toBe(3);
+
+      // The field should be the phone field
+      phone_field.getText().then( text => expect(text.toLowerCase()).toContain('phone') );
+
+      // The current value shouldn't be empty
+      phone_input.getAttribute('value').then( value => {
+        expect(value.length).toBeGreaterThan(0);
+      });
+
+      // Set the new value
+      phone_input.clear().sendKeys(wrong_phone);
+
+      // The current value should match the new value
+      expect(phone_input.getAttribute('value')).toBe(wrong_phone);
+
+      // The new value should be valid
+      expect(phone_input.getAttribute('class')).toContain('ng-invalid');
+
+      // The save button shouldn't be enabled if the form isn't valid
+      expect(save_btn.isEnabled()).toBeFalsy();
+    });
+  });
+
+  it('EDITION: Editing the phone should update the row', () => {
+    client_elements.count().then( count => {
+      let random_index = Math.floor(Math.random() * count),
+          client_row   = client_elements.get(random_index),
+          edit_button  = client_row.element(by.css('.cell-small a')),
+          save_btn     = modal_form.element(by.css('.btn-save')),
+          phone_field  = modal_form_fields.get(2),
+          phone_input  = phone_field.element(by.model('field.value')),
+          newPhone     = `${random_index % 10}11-111-1111`;
+
+      // The buttons should be displayed
+      expect(edit_button.isDisplayed()).toBeTruthy();
+
+      // Open the new client modal form
+      edit_button.click();
+
+      // The modal form should be visible
+      expect(modal_form.isDisplayed()).toBeTruthy();
+
+      // The save button should be displayed
+      expect(save_btn.isDisplayed()).toBeTruthy();
+
+      // The save button shouldn't be enabled if the form isn't modified
+      expect(save_btn.isEnabled()).toBeFalsy();
+
+      // the modal form should have 3 fields
+      expect(modal_form_fields.count()).toBe(3);
+
+      // The field should be the phone field
+      phone_field.getText().then( text => expect(text.toLowerCase()).toContain('phone') );
+
+      // The current value shouldn't be empty
+      phone_input.getAttribute('value').then( value => {
+        expect(value.length).toBeGreaterThan(0);
+      });
+
+      // Set the new value
+      phone_input.clear().sendKeys(newPhone);
+
+      // The current value should match the new value
+      expect(phone_input.getAttribute('value')).toBe(newPhone);
+
+      // The new value should be valid
+      expect(phone_input.getAttribute('class')).not.toContain('ng-invalid');
+
+      // The save button shouldn't be enabled if the form isn't valid
+      expect(save_btn.isEnabled()).toBeTruthy();
+
+      // Save the client and close the form
+      save_btn.click();
+
+      // The modal form shouldn't be visible
+      expect(modal_form.isDisplayed()).toBeFalsy();
+
+      // The list should be updated and sorted with the new phone, but it must
+      // be present.
+      client_elements.reduce( (isPresent, row) => {
+        const phone_cell = row.element(by.binding('client.phone'));
+        return phone_cell.getText().then( text => {
+          return isPresent || (text === newPhone);
+        });
+      }, false).then( isPresent => expect(isPresent).toBeTruthy() );
+    });
+  });
+
+  it('EDITION: Editing the checked properties should update the row', () => {
+    client_elements.count().then( count => {
+      let random_index = Math.floor(Math.random() * count),
+          client_row   = client_elements.get(random_index),
+          edit_button  = client_row.element(by.css('.cell-small a')),
+          save_btn     = modal_form.element(by.css('.btn-save'));
+
+      // The buttons should be displayed
+      expect(edit_button.isDisplayed()).toBeTruthy();
+
+      // Open the new client modal form
+      edit_button.click();
+
+      // The modal form should be visible
+      expect(modal_form.isDisplayed()).toBeTruthy();
+
+      // The save button should be displayed
+      expect(save_btn.isDisplayed()).toBeTruthy();
+
+      // The save button shouldn't be enabled if the form isn't modified
+      expect(save_btn.isEnabled()).toBeFalsy();
+
+      // The provider sub-form should be visible
+      expect(provider_form.isDisplayed()).toBeTruthy();
+
+      // Change the provider checkboxes and return a list of statuses
+      provider_elements.map( provider => {
+        let checkbox   = provider.element(by.model('provider.checked')),
+            name_input = provider.element(by.model('provider.name')),
+            change_it  = (Math.random() >= 0.5);
+
+        // Change the checkbox status if apply
+        if (change_it)
+          checkbox.click();
+
+        return {
+          name    : name_input.getAttribute('value'),
+          checked : checkbox.isSelected(),
+          changed : change_it
+        };
+      }).then( providers => {
+
+        // Recover if there was a change in the selected providers
+        let changed = providers.reduce((changed, provider) => {
+          return changed || provider.changed;
+        }, false);
+
+        if (changed) {
+          // The save button should be enabled if there was changes
+          expect(save_btn.isEnabled()).toBeTruthy();
+
+          // Save the changes and close the form
+          save_btn.click();
+
+          // The modal form shouldn't be visible
+          expect(modal_form.isDisplayed()).toBeFalsy();
+
+          // The list should be a list containing the checked providers
+          client_elements.reduce( (isPresent, row) => {
+            const provider_cell = row.element(by.binding('client.providers | providerListOfNamesFilter'));
+            return provider_cell.getText().then( text => {
+              let listed_providers = text.split(', ');
+
+              // Check if all the providers are present only if checked
+              let found = providers.reduce(( found, provider ) => {
+                let contained = listed_providers.indexOf(provider.name) !== -1;
+
+                if (provider.checked)
+                  return found && contained;
+                else
+                  return found && !contained;
+              }, true);
+
+              return isPresent || found;
+            });
+          }, false).then( isPresent => expect(isPresent).toBeTruthy() );
+        }
+      });
+    });
+  });
 });
