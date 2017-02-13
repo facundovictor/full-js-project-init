@@ -4,7 +4,7 @@ A web test using Node, Express, Swagger, Angular, Sequelize, MySQL
 ### Initial notes
 So far, I'm building the initial structure using:
 - NodeJS 7.4.0
-- npm 4.0.5
+- npm 4.2.0
 - MySQL 5.6.30
 
 ### Project directory strcture
