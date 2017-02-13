@@ -15,15 +15,11 @@
 // Test description
 describe('Provider view', () => {
 
-  const url              = 'http://localhost:8000',
-        client_ng_repeat = 'client in vm.clients | orderBy : vm.listOrder.col'+
-                           'umn : vm.listOrder.reverse | filter : vm.searchFi'+
-                           'eld',
+  const url                = 'http://localhost:8000',
         provider_ng_repeat = 'provider in vmProvider.providers track by provi'+
                              'der.id';
 
-  const client_elements   = element.all(by.repeater(client_ng_repeat)),
-        new_client_button = element(by.css('.buttons .add')),
+  const new_client_button = element(by.css('.buttons .add')),
         modal_form        = element(by.css('.modal-shadow.modal-form')),
 
         // Provider form elements
@@ -50,7 +46,6 @@ describe('Provider view', () => {
     expect(provider_elements.count()).toBeGreaterThan(0);
 
     provider_elements.each( provider_element => {
-      // let div = clientElement.element(by.css('.row'));
 
       let input_name    = provider_element.element(by.model('provider.name')),
           input_checked = provider_element.element(by.model('provider.checked')),
