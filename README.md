@@ -57,61 +57,76 @@ project
 |   └───public
 |   |
 |   └───src
-|       └───app
-|       |   |   index.html
-|       |   |   app.js
-|       |   |
-|       |   └───components
-|       |   |   | 
-|       |   |   └───client
-|       |   |   |   |   clientController.js
-|       |   |   |   |   clientService.js
-|       |   |   |   |   clientView.html
-|       |   |   |
-|       |   |   └───error
-|       |   |   |   |   errorController.js
-|       |   |   |   |   errorDirective.js
-|       |   |   |   |   errorView.html
-|       |   |   |
-|       |   |   └───provider
-|       |   |       |   providerController.js
-|       |   |       |   providerDirective.js
-|       |   |       |   providerFormView.html
-|       |   |       |   providerService.js
-|       |   |
-|       |   └───shared
-|       |       └───filters
-|       |       |   providerListNameFilter.js
-|       |       |
-|       |       └───modalForm
-|       |           |   modalFormDirective.js
-|       |           |   modalFormView.html
+|   |   └───app
+|   |   |   |   index.html
+|   |   |   |   app.js
+|   |   |   |
+|   |   |   └───components
+|   |   |   |   | 
+|   |   |   |   └───client
+|   |   |   |   |   |   clientController.js
+|   |   |   |   |   |   clientService.js
+|   |   |   |   |   |   clientView.html
+|   |   |   |   |
+|   |   |   |   └───error
+|   |   |   |   |   |   errorController.js
+|   |   |   |   |   |   errorDirective.js
+|   |   |   |   |   |   errorView.html
+|   |   |   |   |
+|   |   |   |   └───provider
+|   |   |   |       |   providerController.js
+|   |   |   |       |   providerDirective.js
+|   |   |   |       |   providerFormView.html
+|   |   |   |       |   providerService.js
+|   |   |   |
+|   |   |   └───shared
+|   |   |       └───filters
+|   |   |       |   providerListNameFilter.js
+|   |   |       |
+|   |   |       └───modalForm
+|   |   |           |   modalFormDirective.js
+|   |   |           |   modalFormView.html
+|   |   |
+|   |   └───assets
+|   |   |   └───lib
+|   |   |       |   jquery.min.js
+|   |   |       |
+|   |   |       └───angular
+|   |   |       └───bootstrap
+|   |   |       └───font-awesome
+|   |   |
+|   |   └───scss
+|   |       |   all.scss
+|   |       |   variables.scss
+|   |       |
+|   |       └───ux
+|   |       |   |   list.scss
+|   |       |   |   button.scss
+|   |       |   |   input.scss
+|   |       |   |   toolbar.scss
+|   |       |   |
+|   |       |   └───modal
+|   |       |       |   modal.scss
+|   |       |       |   modalError.scss
+|   |       |       |   modalForm.scss
+|   |       |
+|   |       └───components
+|   |           |   providerForm.scss
+|   |
+|   |
+|   └───test
+|       |   protractor.config.js
 |       |
-|       └───assets
-|       |   └───lib
-|       |       |   jquery.min.js
-|       |       |
-|       |       └───angular
-|       |       └───bootstrap
-|       |       └───font-awesome
-|       |
-|       └───scss
-|           |   all.scss
-|           |   variables.scss
-|           |
-|           └───ux
-|           |   |   list.scss
-|           |   |   button.scss
-|           |   |   input.scss
-|           |   |   toolbar.scss
-|           |   |
-|           |   └───modal
-|           |       |   modal.scss
-|           |       |   modalError.scss
-|           |       |   modalForm.scss
-|           |
-|           └───components
-|               |   providerForm.scss
+|       └───client
+|       |   |   creation.js
+|       |   |   delete.js
+|       |   |   edition.js
+|       |   |   view.js
+|       └───provider
+|           |   creation.js
+|           |   delete.js
+|           |   edition.js
+|           |   view.js
 |
 └───scripts
 |   |   create_mysql_user.sh
