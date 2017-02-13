@@ -77,11 +77,13 @@ class providerController {
    * @param providerName {String}, The name of the new provider.
    */
   onAddProviderClick (providerName) {
-    this.providerService.createProvider({
-      name : providerName
-    }).then( provider => {
-      this.providers.push(provider);
-    }).catch(this.showError);
+    if (providerName) {
+      this.providerService.createProvider({
+        name : providerName
+      }).then( provider => {
+        this.providers.push(provider);
+      }).catch(this.showError);
+    }
   }
 
   /*
@@ -150,20 +152,22 @@ class providerController {
    * @param provider {Object}, the provider to be edited.
    */
   saveEditedProvider (provider) {
-    this.providerService.updateProvider(provider).then( updated_provider => {
+    if (provider.name) {
+      this.providerService.updateProvider(provider).then( updated_provider => {
 
-      // Save the changes to the current object (And persist the checked state)
-      Object.assign(provider, {
-        name   : updated_provider.name,
-        editOn : false
+        // Save the changes to the current object (And persist the checked state)
+        Object.assign(provider, {
+          name   : updated_provider.name,
+          editOn : false
+        });
+
+        // Ask the parent to reload
+        this.$scope.$emit('client-reload');
+      }).catch( error => {
+        this.cancelEdition(provider);
+        this.showError.call(this, error);
       });
-
-      // Ask the parent to reload
-      this.$scope.$emit('client-reload');
-    }).catch( error => {
-      this.cancelEdition(provider);
-      this.showError.call(this, error);
-    });
+    }
   }
 
   /*

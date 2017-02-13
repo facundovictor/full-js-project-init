@@ -129,6 +129,10 @@ project
 
 * Build front-end SPA: `npm run build`
 * Start developing the front-end SPA with browser auto-reload: `npm run dev`
+* Start the webdriver: `npm run webdriver`
+* Running the front-end tests: `npm run test-client`
+* Start the webdrvier and run the tests: `npm run start-webdriver-and-test`
+* Build the SPA, start the webdriver, run tests and stop the webdriver: `npm run build-and-test`
 * Running the server: `npm run server`
 * Running the mock server: `npm run mock-server`
 * Running the server in debug mode: `npm run debug`

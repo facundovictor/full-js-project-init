@@ -21,7 +21,8 @@ const gulp         = require('gulp'),
       sass         = require('gulp-sass'),
       postcss      = require('gulp-postcss'),
       cssnano      = require('gulp-cssnano'),
-      autoprefixer = require('autoprefixer');
+      autoprefixer = require('autoprefixer'),
+      protractor   = require('gulp-angular-protractor');
 
 /* Helpers *******************************************************************/
 
@@ -164,6 +165,31 @@ gulp.task('dependencies', () => {
   ], {
     base: 'src/assets/lib'
   }).pipe(gulp.dest('public/lib/'));
+});
+
+/* Tests *********************************************************************/
+
+const test_src       = 'test/tests/**/*.js',
+      test_conf_path = 'test/protractor.config.js';
+
+gulp.task('start-webdriver-and-test', () => {
+  gulp.src([test_src]).pipe( protractor({
+    configFile          : test_conf_path,
+    args                : ['--baseUtl', 'http://127.0.0.1:8000'],
+    autoStartStopServer : true
+  })).on('error', (e) => {
+    console.log(e);
+  });
+});
+
+gulp.task('test', () => {
+  gulp.src([test_src]).pipe( protractor({
+    configFile          : test_conf_path,
+    args                : ['--baseUtl', 'http://127.0.0.1:8000'],
+    autoStartStopServer : false
+  })).on('error', (e) => {
+    console.log(e);
+  });
 });
 
 /* Global tasks **************************************************************/

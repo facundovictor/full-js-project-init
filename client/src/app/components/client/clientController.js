@@ -126,6 +126,10 @@ class clientController {
 
     // Notify any widget that the form data is loaded
     this.$scope.$broadcast('form-loaded', this.form);
+
+    // If the scope contains the form, reset it
+    if (this.$scope.form)
+      this.$scope.form.$setPristine()
   }
 
   /*
