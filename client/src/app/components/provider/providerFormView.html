@@ -15,10 +15,14 @@
                 <input type="checkbox" data-ng-model="provider.checked" data-ng-change="vmProvider.onProviderCheckChanged(provider)"/>
                 <input type="text" class="provider-name" placeholder="Enter a name.."
                        data-ng-model="provider.name"
+                       data-ng-required="required"
                        data-ng-readonly="!provider.editOn"/>
                 <i class="fa fa-times-circle btn-small-cancel" ng-click="vmProvider.cancelEdition(provider)"></i>
                 <i class="fa fa-pencil-square-o btn-small-edit" data-ng-show="!provider.editOn" data-ng-click="vmProvider.startProviderEdition(provider)"></i>
-                <i class="fa fa-floppy-o btn-small-save" data-ng-show="provider.editOn" data-ng-click="vmProvider.saveEditedProvider(provider)"></i>
+                <i class="fa fa-floppy-o btn-small-save"
+                   data-ng-show="provider.editOn"
+                   data-ng-click="vmProvider.saveEditedProvider(provider)"
+                   data-ng-disabled="!provider.name"></i>
                 <i class="fa fa-trash btn-small-delete" data-ng-click="vmProvider.onDeleteProviderClick(provider)"></i>
             </div>
         </div>

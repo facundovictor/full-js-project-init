@@ -2,3 +2,9 @@ input {
   height       : $input-height;
   padding-left : 15px;
 }
+
+input.ng-dirty:required:invalid, input.ng-dirty:focus:invalid,
+input[data-ng-required].ng-empty.ng-dirty {
+  box-shadow : inset 0px 0px 1px $color-red !important;
+  border     : 1px solid $color-red !important;
+}

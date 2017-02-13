@@ -81,7 +81,12 @@
         }
 
         i.fa-trash:hover {
-          color : $color-red;
+          color  : $color-red;
+        }
+
+        i[disabled] {
+          color  : $color-red;
+          cursor : not-allowed;
         }
 
         i:last-child {
