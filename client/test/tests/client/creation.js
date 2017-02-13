@@ -581,11 +581,11 @@ describe('Client add', () => {
                 name_cell     = row.element(by.binding('client.name')),
                 email_cell    = row.element(by.binding('client.email')),
                 phone_cell    = row.element(by.binding('client.phone'));
-          
+
           return name_cell.getText().then( name => {
             return email_cell.getText().then( email => {
               return phone_cell.getText().then( phone => {
-                
+
                 return provider_cell.getText().then( text => {
                     let listed_providers = text.split(', ');
 

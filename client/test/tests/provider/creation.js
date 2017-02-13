@@ -1,7 +1,7 @@
 /*
  * Author : Facundo Victor <facundovt@gmail.com>
  *
- * Provider view tests
+ * Provider creation tests
  *
  * Refereces:
  *  http://www.protractortest.org/#/api
@@ -62,10 +62,10 @@ describe('Provider creation', () => {
 
     // The new provider input should be displayed
     expect(new_provider_input.isDisplayed()).toBeTruthy();
-    
+
     // The add provider button should be displayed
     expect(add_provider_btn.isDisplayed()).toBeTruthy();
-    
+
     // The add provider button should be disabled
     expect(add_provider_btn.isEnabled()).toBeFalsy();
 
@@ -94,16 +94,16 @@ describe('Provider creation', () => {
 
     // The new provider input should be displayed
     expect(new_provider_input.isDisplayed()).toBeTruthy();
-    
+
     // The add provider button should be displayed
     expect(add_provider_btn.isDisplayed()).toBeTruthy();
-    
+
     // The add provider button should be disabled
     expect(add_provider_btn.isEnabled()).toBeFalsy();
 
     // Set the wrong name
     new_provider_input.clear().sendKeys(new_name);
-    
+
     // The add provider button should be disabled
     expect(add_provider_btn.isEnabled()).toBeTruthy();
   });
