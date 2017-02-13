@@ -12,9 +12,6 @@
 'use strict';
 
 
-// Import a faker library for getting name, phone and emails
-const faker = require('faker');
-
 // Test description
 describe('Provider deletion', () => {
 
@@ -31,13 +28,7 @@ describe('Provider deletion', () => {
 
         // Provider form elements
         provider_form      = element(by.css('.modal-shadow.modal-form .provider-form')),
-        provider_elements  = element.all(by.repeater(provider_ng_repeat)),
-        new_provider_input = element(by.model('vmProvider.newProviderName')),
-        add_provider_btn   = element(by.css('.provider-button'));
-
-  const name_seed  = Math.floor(Math.random() * 100),
-        new_name   = faker.name.findName('Protractor-'+name_seed).substr(0, 40),
-        wrong_name = "";
+        provider_elements  = element.all(by.repeater(provider_ng_repeat));
 
   beforeEach(() => {
     browser.get(url);
@@ -52,6 +43,9 @@ describe('Provider deletion', () => {
 
     // The form should be visible
     expect(modal_form.isDisplayed()).toBeTruthy();
+
+    // The provider form should be visible
+    expect(provider_form.isDisplayed()).toBeTruthy();
 
     // There should be elements
     expect(provider_elements.count()).toBeGreaterThan(0);
@@ -88,6 +82,9 @@ describe('Provider deletion', () => {
 
     // The form should be visible
     expect(modal_form.isDisplayed()).toBeTruthy();
+
+    // The provider form should be visible
+    expect(provider_form.isDisplayed()).toBeTruthy();
 
     // There should be elements
     expect(provider_elements.count()).toBeGreaterThan(0);
@@ -134,7 +131,7 @@ describe('Provider deletion', () => {
                 let providers = text.split(', ');
                 return amount + +providers.includes(value);
               });
-            }, 0).then( count => expect(count).toBeLessThan(rowsWithProvider));
+            }, 0).then( count => expect(count).not.toBeGreaterThan(rowsWithProvider));
           });
         });
       }
