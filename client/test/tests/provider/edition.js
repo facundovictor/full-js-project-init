@@ -166,11 +166,96 @@ describe('Provider edition', () => {
       // Update the input value
       input_name.clear().sendKeys(wrong_name);
 
+      // The input should contain the new value
+      expect(input_name.getAttribute('value')).toBe(wrong_name);
+
       // The input should be invalid
       expect(input_name.getAttribute('class')).toContain('ng-invalid');
 
       // The save button shouldn't be visible
       expect(save_btn.getAttribute('disabled')).toBeTruthy();
+    });
+  });
+
+  it('EDITION: Setting a new provider name and canceling should reset the input', () => {
+
+    // Open the new client button
+    new_client_button.click();
+
+    // The form should be visible
+    expect(modal_form.isDisplayed()).toBeTruthy();
+
+    // There should be elements
+    expect(provider_elements.count()).toBeGreaterThan(0);
+
+    provider_elements.count().then( count => {
+      let random_index = Math.floor(Math.random() * count),
+          provider_el  = provider_elements.get(random_index),
+          input_name    = provider_el.element(by.model('provider.name')),
+          edit_btn      = provider_el.element(by.css('.btn-small-edit')),
+          save_btn      = provider_el.element(by.css('.btn-small-save')),
+          cancel_btn    = provider_el.element(by.css('.btn-small-cancel'));
+
+      // Required values should be displayed
+      expect(input_name.isDisplayed()).toBeTruthy();
+
+      // The provider shouldn't be editable
+      expect(input_name.getAttribute('readonly')).toBeTruthy();
+
+      // The cancel button shouldn't be visible
+      expect(cancel_btn.isDisplayed()).toBeFalsy();
+
+      // The save button shouldn't be visible
+      expect(save_btn.isDisplayed()).toBeFalsy();
+
+      // The edit button shouldn't be visible
+      expect(edit_btn.isDisplayed()).toBeTruthy();
+
+      // Start provider edition
+      edit_btn.click();
+
+      // The provider should be editable
+      expect(input_name.getAttribute('readonly')).toBeFalsy();
+
+      // The edit button should be hidden
+      expect(edit_btn.isDisplayed()).toBeFalsy();
+
+      // The cancel button should be shown
+      expect(cancel_btn.isDisplayed()).toBeTruthy();
+
+      // The save button shouldn't be visible
+      expect(save_btn.isDisplayed()).toBeTruthy();
+
+
+      input_name.getAttribute('value').then( value => {
+
+        // Update the input value
+        input_name.clear().sendKeys(new_name);
+
+        // The input should be invalid
+        expect(input_name.getAttribute('class')).not.toContain('ng-invalid');
+
+        // The input should contain the new value
+        expect(input_name.getAttribute('value')).toBe(new_name);
+
+        // The save button shouldn't be visible
+        expect(save_btn.getAttribute('disabled')).toBeFalsy();
+
+        // Save the new provider name
+        cancel_btn.click();
+
+        // The save button should be hidden
+        expect(save_btn.isDisplayed()).toBeFalsy();
+
+        // The cancel button should be hidden
+        expect(cancel_btn.isDisplayed()).toBeFalsy();
+
+        // The input should be readonly again
+        expect(input_name.getAttribute('readonly')).toBeTruthy();
+
+        // The input should contain the old value
+        expect(input_name.getAttribute('value')).toBe(value);
+      });
     });
   });
 
@@ -276,7 +361,7 @@ describe('Provider edition', () => {
           input_name   = provider_el.element(by.model('provider.name')),
           edit_btn     = provider_el.element(by.css('.btn-small-edit')),
           save_btn     = provider_el.element(by.css('.btn-small-save'));
-       
+
       // Required values should be displayed
       expect(input_name.isDisplayed()).toBeTruthy();
 
@@ -311,13 +396,13 @@ describe('Provider edition', () => {
             return amount + +providers.includes(value);
           });
         }, 0).then( rowsWithProvider => {
-        
+
           // Update the input value
           input_name.clear().sendKeys(new_name);
 
           // The input should be invalid
           expect(input_name.getAttribute('class')).not.toContain('ng-invalid');
-          
+
           // The input should contain the new value
           expect(input_name.getAttribute('value')).toBe(new_name);
 
