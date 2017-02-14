@@ -14,7 +14,7 @@ So far, I'm building the initial structure using:
 - npm 4.2.0
 - MySQL 5.6.30
 
-### Project directory strcture
+### Project directory structure
 
 Structure in development..
 
