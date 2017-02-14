@@ -1,6 +1,13 @@
 # full-js-project-init
 A web test using Node, Express, Swagger, Angular, Sequelize, MySQL
 
+### Content
+- [Initial Notes](https://github.com/facundovictor/full-js-project-init#initial-notes)
+- [Project directory strcture](https://github.com/facundovictor/full-js-project-init#project-directory-structure)
+- [NPM Scripts](https://github.com/facundovictor/full-js-project-init#npm-scripts)
+- [Database Migrations](https://github.com/facundovictor/full-js-project-init#database-migrations)
+- [MySQL quick stup on fedora](https://github.com/facundovictor/full-js-project-init#mysql-quick-setup-on-fedora)
+
 ### Initial notes
 So far, I'm building the initial structure using:
 - NodeJS 7.4.0
