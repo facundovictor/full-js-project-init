@@ -147,7 +147,7 @@ project
         |   20170115014801-add-dummy-data.js
 ```
 
-### Scripts
+### NPM Scripts
 
 * Build front-end SPA: `npm run build`
 * Start developing the front-end SPA with browser auto-reload: `npm run dev`
