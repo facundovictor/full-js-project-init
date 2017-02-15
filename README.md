@@ -93,7 +93,7 @@ NOTE: It doesn't mean that it won't work in older/newer versions.
 
     1. Open the script `./scripts/create_mysql_user.sh` for edition:
 
-        ```
+        ```bash
         USER="root"
         DB="web_development"
         DB_USER="web_user"
@@ -118,7 +118,7 @@ NOTE: It doesn't mean that it won't work in older/newer versions.
 5.  Configure the API to access the database (Using the credentials set above)
     by opening the file `database/config.json` for edition:
 
-        ```
+        ```javascript
         {
           "development": {
             "username": "web_user",
