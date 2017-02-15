@@ -9,27 +9,27 @@
     "mysql": "^2.12.0",
     "sequelize": "^3.29.0",
     "swagger-express-mw": "^0.7.0",
-    "umzug": "^1.11.0"
-  },
-  "devDependencies": {
-    "autoprefixer": "^6.6.1",
     "commander": "^2.9.0",
-    "faker": "^3.1.0",
+    "umzug": "^1.11.0",
     "gulp": "^3.9.1",
-    "gulp-angular-protractor": "^0.3.0",
     "gulp-concat": "^2.6.1",
-    "gulp-connect-multi": "^1.0.8",
     "gulp-cssnano": "^2.1.2",
     "gulp-postcss": "^6.3.0",
     "gulp-sass": "^3.1.0",
     "gulp-uglify": "^2.0.0",
     "gulp-watch": "^4.3.11",
+    "gulp-angular-protractor": "^0.3.0",
+    "gulp-connect-multi": "^1.0.8",
+    "autoprefixer": "^6.6.1",
+    "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"
+  },
+  "devDependencies": {
+    "faker": "^3.1.0",
     "jasmine-spec-reporter": "^3.2.0",
     "should": "^11.1.2",
     "supertest": "^2.0.1",
     "swagger": "^0.7.5",
-    "swagger-editor": "^2.10.4",
-    "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"
+    "swagger-editor": "^2.10.4"
   },
   "scripts": {
     "server": "node ./api/app.js",
