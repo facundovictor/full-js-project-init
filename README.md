@@ -2,17 +2,163 @@
 A web test using Node, Express, Swagger, Angular, Sequelize, MySQL
 
 ### Content
-- [Initial Notes](https://github.com/facundovictor/full-js-project-init#initial-notes)
+- [Requirements](https://github.com/facundovictor/full-js-project-init#requirements)
+- [Quick Setup](https://github.com/facundovictor/full-js-project-init#quick-setup)
+- [Quick Setup for Development](https://github.com/facundovictor/full-js-project-init#quick-setup-for-development)
 - [Project directory strcture](https://github.com/facundovictor/full-js-project-init#project-directory-structure)
 - [NPM Scripts](https://github.com/facundovictor/full-js-project-init#npm-scripts)
 - [Database Migrations](https://github.com/facundovictor/full-js-project-init#database-migrations)
-- [MySQL quick stup on fedora](https://github.com/facundovictor/full-js-project-init#mysql-quick-setup-on-fedora)
+- [MySQL quick setup on fedora](https://github.com/facundovictor/full-js-project-init#mysql-quick-setup-on-fedora)
 
-### Initial notes
-So far, I'm building the initial structure using:
+### Requirements
+The following versions was being used for building this boilerplate
 - NodeJS 7.4.0
 - npm 4.2.0
 - MySQL 5.6.30
+
+NOTE: It doesn't mean that it won't work in older/newer versions.
+
+### Quick Setup
+
+1.  Install MySQL and start it ([For more help](MySQL quick setup on fedora](https://github.com/facundovictor/full-js-project-init#mysql-quick-setup-on-fedora))
+2.  Create the database.
+    For quick setup, the script `./scripts/create_mysql_user.sh` can be used:
+
+    1. Open the script `./scripts/create_mysql_user.sh` for edition:
+
+        ```
+        USER="root"
+        DB="web_development"
+        DB_USER="web_user"
+        DB_PASS="web.."
+        CLIENT_HOST="localhost"
+        ```
+
+        Note: The data used in this file will be needed for configuring the API.
+
+    2. Execute the script:
+
+        `./scripts/create_database_and_user.sh`
+
+3.  Clone this repo
+
+    `git clone git@github.com:facundovictor/full-js-project-init.git`
+
+4.  Install the dependencies
+
+    `npm install --production`
+
+5.  Configure the API to access the database (Using the credentials set above)
+    by opening the file `database/config.json` for edition:
+
+        ```
+        {
+          "development": {
+            "username": "web_user",
+            "password": "web..",
+            "database": "web_development",
+            "host": "127.0.0.1",
+            "port": 3306,
+            "dialect": "mysql"
+          }
+        }
+        ```
+
+6.  Run the migrations
+
+    `npm run migration -- --up`
+
+    Note : For more info read --> [Database Migrations](https://github.com/facundovictor/full-js-project-init#database-migrations)
+
+7.  Configure the API if needed. By default it listen on `localhost:8000`, but
+    it can be changed in the file `api/config/default.json`.
+
+8.  Configure the client's API target. By default is `localhost:8000`, but it
+    can be changed in the file `client/src/app/app.js`.
+
+9.  Build *less*, compress all *HTML*, *JS* and *CSS*, and move it to *public*:
+
+    `npm run build`
+
+10. Start the API
+
+    `npm run server`
+
+
+### Quick Setup for Development
+
+1.  Install MySQL and start it ([For more help](MySQL quick setup on fedora](https://github.com/facundovictor/full-js-project-init#mysql-quick-setup-on-fedora))
+2.  Create the database.
+    For quick setup, the script `./scripts/create_mysql_user.sh` can be used:
+
+    1. Open the script `./scripts/create_mysql_user.sh` for edition:
+
+        ```
+        USER="root"
+        DB="web_development"
+        DB_USER="web_user"
+        DB_PASS="web.."
+        CLIENT_HOST="localhost"
+        ```
+
+        Note: The data used in this file will be needed for configuring the API.
+
+    2. Execute the script:
+
+        `./scripts/create_database_and_user.sh`
+
+3.  Clone this repo
+
+    `git clone git@github.com:facundovictor/full-js-project-init.git`
+
+4.  Install the dependencies
+
+    `npm install`
+
+5.  Configure the API to access the database (Using the credentials set above)
+    by opening the file `database/config.json` for edition:
+
+        ```
+        {
+          "development": {
+            "username": "web_user",
+            "password": "web..",
+            "database": "web_development",
+            "host": "127.0.0.1",
+            "port": 3306,
+            "dialect": "mysql"
+          }
+        }
+        ```
+
+6.  Run the migrations
+
+    `npm run migration -- --up`
+
+    Note : For more info read --> [Database Migrations](https://github.com/facundovictor/full-js-project-init#database-migrations)
+
+7.  Configure the API if needed. By default it listen on `localhost:8000`, but
+    it can be changed in the file `api/config/default.json`.
+
+8.  Start the API
+
+    `npm run server`
+
+9.  Configure the client's API target. By default is `localhost:8000`, but it
+    can be changed in the file `client/src/app/app.js`.
+
+10. Open a browser to start developing immediately with hot-reload (the script
+    watches the changes, updates the browser tap with the minimum changes
+    required). It's prepared for avoid losing productivity.
+
+    `npm run dev`
+
+
+NOTES: See the [NPM Scripts](https://github.com/facundovictor/full-js-project-init#npm-scripts) for:
+    - Start a mocked server.
+    - Run back-end tests against a mocked server.
+    - Run back-end tests against the real API with real data.
+    - Run the front-end tests with protractor.
 
 ### Project directory structure
 
