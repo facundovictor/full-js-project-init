@@ -11,14 +11,14 @@ module.exports = {
     return new Promise((resolve, reject) => {
       let sql = `
         INSERT INTO client(name, email, phone) VALUES
-            ('Client 1', 'client1@gmail.com', '+54-9291-4444441'),
-            ('Client 2', 'client2@gmail.com', '+54-9291-4444442'),
-            ('Client 3', 'client3@gmail.com', '+54-9291-4444443'),
-            ('Client 4', 'client4@gmail.com', '+54-9291-4444444'),
-            ('Client 5', 'client5@gmail.com', '+54-9291-4444445'),
-            ('Client 6', 'client6@gmail.com', '+54-9291-4444446'),
-            ('Client 7', 'client7@gmail.com', '+54-9291-4444447'),
-            ('Client 8', 'client8@gmail.com', '+54-9291-4444448');
+            ('Client 1', 'client1@gmail.com', '254-991-4444'),
+            ('Client 2', 'client2@gmail.com', '254-991-4444'),
+            ('Client 3', 'client3@gmail.com', '254-991-4444'),
+            ('Client 4', 'client4@gmail.com', '254-991-4444'),
+            ('Client 5', 'client5@gmail.com', '254-991-4444'),
+            ('Client 6', 'client6@gmail.com', '254-991-4444'),
+            ('Client 7', 'client7@gmail.com', '254-991-4444'),
+            ('Client 8', 'client8@gmail.com', '254-991-4444');
 
         INSERT INTO provider(name) VALUES
             ('Provider 1'),
