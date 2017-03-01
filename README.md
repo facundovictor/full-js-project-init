@@ -1,5 +1,11 @@
 # full-js-project-init
-A web test using Node, Express, Swagger, Angular, Sequelize, MySQL
+A web init project using Node, Express, Swagger, Angular, Sequelize, MySQL.
+
+#### TODOs:
+- Add alternative clients (Vue.JS, Angular2 with pure JS, React).
+- Add auto-rename js/css files on each new version for avoid caching.
+- Add multiple-env support.
+- Separate migration script to its own repo.
 
 ### Content
 - [Requirements](https://github.com/facundovictor/full-js-project-init#requirements)
@@ -38,7 +44,7 @@ NOTE: It doesn't mean that it won't work in older/newer versions.
 
     2. Execute the script:
 
-        `./scripts/create_database_and_user.sh`
+        `./scripts/create_mysql_user.sh`
 
 3.  Clone this repo
 
